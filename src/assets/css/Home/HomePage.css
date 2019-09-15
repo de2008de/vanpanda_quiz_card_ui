@@ -1,0 +1,5 @@
+.HomePage .headerContainer {
+    display: flex;
+    justify-content: left;
+    margin: 2rem 1.5rem;
+}

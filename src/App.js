@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import AppShell from "./components/AppShell/AppShell";
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import WCTheme from './theme/WCTheme';

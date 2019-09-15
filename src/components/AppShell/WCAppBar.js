@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
 
 const WCAppBar = () => {
     const classes = useStyles();
-
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -31,7 +30,7 @@ const WCAppBar = () => {
                         <BookOutlined />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        <Box>大温熊猫读书</Box>
+                        <Box textAlign="center">大温熊猫读书</Box>
                     </Typography>
                     <IconButton className={classes.menuButton} color="inherit">
                         <SearchIcon />
