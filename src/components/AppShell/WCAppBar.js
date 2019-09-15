@@ -31,7 +31,7 @@ const WCAppBar = () => {
                         <BookOutlined />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        <Box fontFamily="'Noto Sans SC'">大温熊猫</Box>
+                        <Box>大温熊猫读书</Box>
                     </Typography>
                     <IconButton className={classes.menuButton} color="inherit">
                         <SearchIcon />
