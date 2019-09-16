@@ -1,6 +1,5 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
-import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -15,21 +14,16 @@ const useStyles = makeStyles(theme => ({
         fontSize: "0.6rem",
         fontWeight: "bold",
         color: theme.palette.text.secondary,
-        backgroundColor: "inherit"
-    },
-    button: {
-        padding: "0",
-        margin: "0.2rem"
+        backgroundColor: "inherit",
+        padding: "0.3rem",
+        margin: "0.2rem",
+        display: "inline-block"
     }
 }));
 
 const ConceptCard = props => {
     const classes = useStyles();
-    return (
-        <Button className={classes.button} size="small" color="primary">
-            <Card className={classes.card}>{props.content}</Card>
-        </Button>
-    );
+    return <Card className={classes.card}>{props.content}</Card>;
 };
 
 export default ConceptCard;

@@ -3,7 +3,6 @@ import Card from "@material-ui/core/Card";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Box from "@material-ui/core/Box";
 import WCBadge from "../Badge/WCBadge";
@@ -36,34 +35,34 @@ const WCCard = props => {
     const classes = useStyles();
     const [conceptCards, setConceptCards] = useState([
         {
-            content: "What is Demand definition",
-
+            id: 1,
+            content: "What is Demand definition"
         },
         {
+            id: 2,
             content: "What is Supply definition"
         },
         {
+            id: 3,
             content: "What is surplus"
         },
         {
+            id: 4,
             content: "What is equilibrium"
         }
     ]);
+
     const loadConceptCards = () => {
         const aConceptCards = [];
-        conceptCards.forEach((conceptCard) => {
-            const oConceptCard = <ConceptCard content={conceptCard.content} />;
+        conceptCards.forEach(conceptCard => {
+            const oConceptCard = <ConceptCard key={conceptCard.id} content={conceptCard.content} />;
             aConceptCards.push(oConceptCard);
         });
-        return (
-            <div>
-                {aConceptCards}
-            </div>
-        );
-    }
+        return <div>{aConceptCards}</div>;
+    };
 
     return (
-        <Card className={classes.card}>
+        <Card className={classes.card + " WCCard"}>
             <CardActionArea>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
@@ -75,8 +74,9 @@ const WCCard = props => {
                         </Box>
                     </Typography>
                     <Box className={classes.infoBar}>
-                        <WCBadge content={6} color="secondary" /> <span style={{margin: "0.3rem"}}>Key Concepts</span>
-                        <div style={{flexGrow: "1"}}></div>
+                        <WCBadge content={4} color="primary" />{" "}
+                        <span style={{ margin: "0.3rem" }}>Key Concepts</span>
+                        <div style={{ flexGrow: "1" }}></div>
                         <img className={classes.svg} src={SFUlogoSVG} />
                     </Box>
                 </CardContent>

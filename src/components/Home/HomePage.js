@@ -2,17 +2,26 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import WCCard from "../Card/WCCard";
+import { Link } from "react-router-dom";
 
 import "../../assets/css/Home/HomePage.css";
 
-const HomePage = () => {
+const HomePage = props => {
     const loadStudyCards = () => {
-        return (
-            <WCCard
-                title="ECON 103"
-                content="Chapter 1: Demand and Supply"
-            ></WCCard>
+        const aStudyCards = [];
+        const oStudyCard = (
+            <Link to={"/detail/" + 1} className="cardLink">
+                <WCCard
+                    key={1}
+                    title="ECON 103"
+                    content="Chapter 1: Demand and Supply"
+                ></WCCard>
+            </Link>
         );
+        for (let i = 0; i < 2; i++) {
+            aStudyCards.push(oStudyCard);
+        }
+        return aStudyCards;
     };
 
     return (
