@@ -1,13 +1,15 @@
 import React from 'react';
 import WCAppBar from './WCAppBar';
-import HomePage from '../Home/HomePage';
+import WCRouter from '../Route/WCRouter';
 import '../../assets/css/AppShell/AppShell.css';
+import WCAppFooter from './WCAppFooter';
 
 const AppShell = () => {
     return (
         <div className="AppShell">
             <WCAppBar />
-            <HomePage />
+            <WCRouter />
+            <WCAppFooter />
         </div>
     );
 }

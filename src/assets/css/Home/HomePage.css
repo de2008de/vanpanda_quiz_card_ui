@@ -3,3 +3,7 @@
     justify-content: left;
     margin: 1rem 1.5rem;
 }
+
+a.cardLink {
+    text-decoration: none;
+}

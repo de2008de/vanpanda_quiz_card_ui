@@ -10,7 +10,12 @@ import BookOutlined from "@material-ui/icons/BookOutlined";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
+        zIndex: 200,
+        position: "sticky",
+        top: 0,
+        left: 0,
+        width: "100%"
     },
     menuButton: {
         marginRight: "0"
