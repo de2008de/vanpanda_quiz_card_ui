@@ -2,30 +2,28 @@ import { createMuiTheme } from "@material-ui/core/styles";
 
 const WCTheme = createMuiTheme({
     typography: {
-        useNextVariants: true
+        useNextVariants: true,
+        fontFamily: "'Noto Sans SC', sans-serif"
     },
     palette: {
         primary: {
-            light: "#54d2e3",
-            main: "#24bed6",
-            dark: "#1d99a9",
+            light: "#50c5f7",
+            main: "#00abf4",
+            dark: "#008ad1",
             contrastText: "#fff"
         },
         secondary: {
-            light: "#f2492d",
-            main: "#d63b24",
-            dark: "#bc2f1b",
+            light: "#ff6a34",
+            main: "#f44900",
+            dark: "#d93a00",
             contrastText: "#fff"
         },
         error: {
-            light: "#f96c77",
-            main: "#ff0736",
-            dark: "#d2001a",
+            light: "#fc3f5f",
+            main: "#f40045",
+            dark: "#d50036",
             contrastText: "#fff"
         }
-    },
-    typography: {
-        fontFamily: "'Noto Sans SC', sans-serif"
     },
     shape: {
         borderRadius: 8
