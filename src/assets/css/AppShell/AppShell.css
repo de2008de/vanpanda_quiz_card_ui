@@ -1,0 +1,10 @@
+body {
+    background-color: #ECE8E5
+}
+
+.App {
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
