@@ -31,30 +31,17 @@ const useStyles = makeStyles({
 
 const readingFontFamily = "'Noto Serif', serif";
 
-const WCCard = props => {
+const oSchoolList = {
+    "sfu": SFUlogoSVG,
+    "ubc": null
+};
+
+const StudyCard = props => {
     const classes = useStyles();
-    const [conceptCards, setConceptCards] = useState([
-        {
-            id: 1,
-            content: "What is Demand definition"
-        },
-        {
-            id: 2,
-            content: "What is Supply definition"
-        },
-        {
-            id: 3,
-            content: "What is surplus"
-        },
-        {
-            id: 4,
-            content: "What is equilibrium"
-        }
-    ]);
 
     const loadConceptCards = () => {
         const aConceptCards = [];
-        conceptCards.forEach(conceptCard => {
+        props.conceptCards.forEach(conceptCard => {
             const oConceptCard = <ConceptCard key={conceptCard.id} content={conceptCard.content} />;
             aConceptCards.push(oConceptCard);
         });
@@ -62,7 +49,7 @@ const WCCard = props => {
     };
 
     return (
-        <Card className={classes.card + " WCCard"}>
+        <Card className={classes.card + " StudyCard"}>
             <CardActionArea>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
@@ -74,10 +61,10 @@ const WCCard = props => {
                         </Box>
                     </Typography>
                     <Box className={classes.infoBar}>
-                        <WCBadge content={4} color="primary" />{" "}
+                        <WCBadge content={props.numConcepts} color="primary" />{" "}
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img className={classes.svg} src={SFUlogoSVG} />
+                        <img className={classes.svg} src={oSchoolList[props.school]} />
                     </Box>
                 </CardContent>
                 <div className={classes.conceptCardContainer}>
@@ -88,4 +75,4 @@ const WCCard = props => {
     );
 };
 
-export default WCCard;
+export default StudyCard;
