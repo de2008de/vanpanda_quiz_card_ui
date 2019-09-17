@@ -70,7 +70,7 @@ const WCCard = props => {
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
                         <Box fontFamily={readingFontFamily} component="span">
-                            {props.content}
+                            {props.subtitle}
                         </Box>
                     </Typography>
                     <Box className={classes.infoBar}>

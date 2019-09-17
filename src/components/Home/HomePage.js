@@ -14,7 +14,7 @@ const HomePage = props => {
                 <StudyCard
                     key={1}
                     title="ECON 103"
-                    content="Chapter 1: Demand and Supply"
+                    subtitle="Chapter 1: Demand and Supply"
                 ></StudyCard>
             </Link>
         );
