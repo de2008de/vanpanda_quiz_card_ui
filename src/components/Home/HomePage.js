@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import WCCard from "../Card/WCCard";
+import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
 
 import "../../assets/css/Home/HomePage.css";
@@ -11,11 +11,11 @@ const HomePage = props => {
         const aStudyCards = [];
         const oStudyCard = (
             <Link to={"/detail/" + 1} className="cardLink">
-                <WCCard
+                <StudyCard
                     key={1}
                     title="ECON 103"
                     content="Chapter 1: Demand and Supply"
-                ></WCCard>
+                ></StudyCard>
             </Link>
         );
         for (let i = 0; i < 2; i++) {
