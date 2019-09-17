@@ -26,6 +26,19 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+// Mock up data
+const aKeyPoints = [
+    {
+        content: "Demand refers to consumers' desire to purchase goods and services at given prices."
+    },
+    {
+        content: "Demand refers to consumers' desire to purchase goods and services at given prices."
+    },
+    {
+        content: "Demand refers to consumers' desire to purchase goods and services at given prices."
+    }
+];
+
 const DetailPage = props => {
     const classes = useStyles();
 
@@ -57,10 +70,10 @@ const DetailPage = props => {
                 </div>
             </div>
             <div className="content">
-                <DetailCard />
-                <DetailCard />
-                <DetailCard />
-                <DetailCard />
+                <DetailCard title={"What is Demand definition?"} keyPoints={aKeyPoints} />
+                <DetailCard title={"What is Demand definition?"} keyPoints={aKeyPoints} />
+                <DetailCard title={"What is Demand definition?"} keyPoints={aKeyPoints} />
+                <DetailCard title={"What is Demand definition?"} keyPoints={aKeyPoints} />
             </div>
         </div>
     );
