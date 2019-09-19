@@ -14,11 +14,14 @@ class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            studyCards: []
+            studyCards: [],
+            numCourses: 0,
+            numKeyConcepts: 0
         };
     }
     getStudyCards = iPageNumber => {
         const aStudyCardComponents = [];
+        let numKeyConcepts = 0;
         axios
             .get(ServerConfig.api.ip + getStudyCardApi + "?page=" + iPageNumber)
             .then(response => {
@@ -35,10 +38,13 @@ class HomePage extends Component {
                             />
                         </Link>
                     );
+                    numKeyConcepts += oStudyCard.conceptCards.length;
                     aStudyCardComponents.push(oStudyCardComponent);
                 });
                 this.setState({
-                    studyCards: aStudyCardComponents
+                    studyCards: aStudyCardComponents,
+                    numCourses: aStudyCards.length,
+                    numKeyConcepts: numKeyConcepts
                 });
             });
     };
@@ -60,7 +66,7 @@ class HomePage extends Component {
                         </Typography>
                         <Typography color="textSecondary">
                             <Box component="span">
-                                2 courses: 25 key concepts
+                                {this.state.numCourses + " courses: " + this.state.numKeyConcepts + " key concepts"}
                             </Box>
                         </Typography>
                     </div>
