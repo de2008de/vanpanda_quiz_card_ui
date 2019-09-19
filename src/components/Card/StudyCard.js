@@ -42,7 +42,7 @@ const StudyCard = props => {
     const loadConceptCards = () => {
         const aConceptCards = [];
         props.conceptCards.forEach(conceptCard => {
-            const oConceptCard = <ConceptCard key={conceptCard.id} content={conceptCard.content} />;
+            const oConceptCard = <ConceptCard key={conceptCard.id} content={conceptCard.title} />;
             aConceptCards.push(oConceptCard);
         });
         return <div>{aConceptCards}</div>;
@@ -61,7 +61,7 @@ const StudyCard = props => {
                         </Box>
                     </Typography>
                     <Box className={classes.infoBar}>
-                        <WCBadge content={props.numConcepts} color="primary" />{" "}
+                        <WCBadge content={props.conceptCards.length} color="primary" />{" "}
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
                         <img className={classes.svg} src={oSchoolList[props.school]} />
