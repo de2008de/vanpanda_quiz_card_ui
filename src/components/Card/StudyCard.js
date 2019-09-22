@@ -6,7 +6,8 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Box from "@material-ui/core/Box";
 import WCBadge from "../Badge/WCBadge";
-import SFUlogoSVG from "../../assets/svg/sfu_logo.svg";
+import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
+import UBCLogoSVG from "../../assets/svg/ubc_logo.svg";
 import ConceptCard from "./ConceptCard";
 
 const useStyles = makeStyles({
@@ -32,8 +33,8 @@ const useStyles = makeStyles({
 const readingFontFamily = "'Noto Serif', serif";
 
 const oSchoolList = {
-    "sfu": SFUlogoSVG,
-    "ubc": null
+    "sfu": SFULogoSVG,
+    "ubc": UBCLogoSVG
 };
 
 const StudyCard = props => {
