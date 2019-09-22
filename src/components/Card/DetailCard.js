@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const DetailCard = () => {
+const DetailCard = props => {
     const classes = useStyles();
 
     // TODO: Will need to load bookmarked state from data source
@@ -48,36 +48,23 @@ const DetailCard = () => {
         <div className={classes.card + " DetailCard"}>
             <div className={classes.content}>
                 <div className={classes.contentTitle}>
-                    <Typography variant="h6">
-                        {"What is Demand definition?"}
-                    </Typography>
+                    <Typography variant="h6">{props.title}</Typography>
                 </div>
                 <div className={classes.contentParagraph}>
-                    <Typography variant="body1">
-                        <ul>
-                            <li>
-                                {
-                                    "Demand refers to consumers' desire to purchase goods and services at given prices."
-                                }
-                            </li>
-                            <li>
-                                {
-                                    "Demand can mean either market demand for a specific good or aggregate demand for the total of all goods in an economy."
-                                }
-                            </li>
-                            <li>
-                                {
-                                    "Demand, along with supply, determines the actual prices of goods and the volume of goods that changes hands in a market."
-                                }
-                            </li>
-                        </ul>
-                    </Typography>
+                    <Typography variant="body1">{props.content}</Typography>
                 </div>
             </div>
             <div className={classes.footer}>
                 <div style={{ flexGrow: "1" }}></div>
-                <div className={classes.chipContainer} style={{visibility: bookmarked ? "visible" : "hidden", transition: bookmarked ? "all 1s linear" : "", opacity: bookmarked ? "1" : "0"}}>
-                    <Chip 
+                <div
+                    className={classes.chipContainer}
+                    style={{
+                        visibility: bookmarked ? "visible" : "hidden",
+                        transition: bookmarked ? "all 1s linear" : "",
+                        opacity: bookmarked ? "1" : "0"
+                    }}
+                >
+                    <Chip
                         icon={<BookmarkIcon />}
                         label={"Added to bookmark"}
                         variant="outlined"

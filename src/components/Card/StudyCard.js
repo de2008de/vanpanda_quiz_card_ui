@@ -6,7 +6,8 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Box from "@material-ui/core/Box";
 import WCBadge from "../Badge/WCBadge";
-import SFUlogoSVG from "../../assets/svg/sfu_logo.svg";
+import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
+import UBCLogoSVG from "../../assets/svg/ubc_logo.svg";
 import ConceptCard from "./ConceptCard";
 
 const useStyles = makeStyles({
@@ -31,38 +32,25 @@ const useStyles = makeStyles({
 
 const readingFontFamily = "'Noto Serif', serif";
 
-const WCCard = props => {
+const oSchoolList = {
+    "sfu": SFULogoSVG,
+    "ubc": UBCLogoSVG
+};
+
+const StudyCard = props => {
     const classes = useStyles();
-    const [conceptCards, setConceptCards] = useState([
-        {
-            id: 1,
-            content: "What is Demand definition"
-        },
-        {
-            id: 2,
-            content: "What is Supply definition"
-        },
-        {
-            id: 3,
-            content: "What is surplus"
-        },
-        {
-            id: 4,
-            content: "What is equilibrium"
-        }
-    ]);
 
     const loadConceptCards = () => {
         const aConceptCards = [];
-        conceptCards.forEach(conceptCard => {
-            const oConceptCard = <ConceptCard key={conceptCard.id} content={conceptCard.content} />;
+        props.conceptCards.forEach(conceptCard => {
+            const oConceptCard = <ConceptCard key={conceptCard.id} content={conceptCard.title} />;
             aConceptCards.push(oConceptCard);
         });
         return <div>{aConceptCards}</div>;
     };
 
     return (
-        <Card className={classes.card + " WCCard"}>
+        <Card className={classes.card + " StudyCard"}>
             <CardActionArea>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
@@ -70,14 +58,14 @@ const WCCard = props => {
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
                         <Box fontFamily={readingFontFamily} component="span">
-                            {props.content}
+                            {props.subtitle}
                         </Box>
                     </Typography>
                     <Box className={classes.infoBar}>
-                        <WCBadge content={4} color="primary" />{" "}
+                        <WCBadge content={props.conceptCards.length} color="primary" />{" "}
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img className={classes.svg} src={SFUlogoSVG} />
+                        <img className={classes.svg} src={oSchoolList[props.school]} />
                     </Box>
                 </CardContent>
                 <div className={classes.conceptCardContainer}>
@@ -88,4 +76,4 @@ const WCCard = props => {
     );
 };
 
-export default WCCard;
+export default StudyCard;

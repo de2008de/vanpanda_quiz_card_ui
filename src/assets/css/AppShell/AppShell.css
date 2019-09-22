@@ -3,8 +3,13 @@ body {
 }
 
 .App {
-    min-height: 100vh;
-    max-height: 100vh;
+    height: calc(100vh - 4rem);
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.AppShell {
+    height: calc(100vh - 4rem);
     overflow-y: scroll;
     overflow-x: hidden;
 }
