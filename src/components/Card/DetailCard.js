@@ -44,23 +44,6 @@ const DetailCard = props => {
         setBookmarked(newBookmarkState);
     };
 
-    const loadkeyPoints = () => {
-        const aKeyPoints = [];
-        props.keyPoints.forEach((oKeyPoint) => {
-            const oPoint = (
-                <li>
-                    {oKeyPoint.content}
-                </li>
-            );
-            aKeyPoints.push(oPoint);
-        });
-        return (
-            <ul>
-                {aKeyPoints}
-            </ul>
-        );
-    }
-
     return (
         <div className={classes.card + " DetailCard"}>
             <div className={classes.content}>
@@ -68,9 +51,7 @@ const DetailCard = props => {
                     <Typography variant="h6">{props.title}</Typography>
                 </div>
                 <div className={classes.contentParagraph}>
-                    <Typography variant="body1">
-                        {loadkeyPoints()}
-                    </Typography>
+                    <Typography variant="body1">{props.content}</Typography>
                 </div>
             </div>
             <div className={classes.footer}>

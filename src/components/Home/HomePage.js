@@ -5,6 +5,7 @@ import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
 import ServerConfig from "../../configs/ServerConfig";
 import axios from "axios";
+import vanpandaLogo from "../../assets/svg/vanpanda_logo_filled2.svg";
 
 import "../../assets/css/Home/HomePage.css";
 
@@ -18,6 +19,18 @@ class HomePage extends Component {
             numCourses: 0,
             numKeyConcepts: 0
         };
+        this.classes = {
+            logoContainer: {
+                display: "flex",
+                justifyContent: "center",
+                position: "absolute",
+                top: "-1rem",
+                right: 0
+            },
+            logo: {
+                width: "6rem"
+            }
+        };
     }
     getStudyCards = iPageNumber => {
         const aStudyCardComponents = [];
@@ -28,7 +41,11 @@ class HomePage extends Component {
                 const aStudyCards = response.data.data;
                 aStudyCards.forEach(oStudyCard => {
                     const oStudyCardComponent = (
-                        <Link to={"/detail/" + oStudyCard.id} className="cardLink" key={oStudyCard.id}>
+                        <Link
+                            to={"/detail/" + oStudyCard.id}
+                            className="cardLink"
+                            key={oStudyCard.id}
+                        >
                             <StudyCard
                                 key={oStudyCard.id}
                                 title={oStudyCard.title}
@@ -57,7 +74,7 @@ class HomePage extends Component {
         return (
             <div className="HomePage">
                 <div className="headerContainer">
-                    <div>
+                    <div style={{position: "relative", width: "100%"}}>
                         <Typography variant="h5">
                             <Box fontWeight="bold">Today's</Box>
                         </Typography>
@@ -66,9 +83,15 @@ class HomePage extends Component {
                         </Typography>
                         <Typography color="textSecondary">
                             <Box component="span">
-                                {this.state.numCourses + " courses: " + this.state.numKeyConcepts + " key concepts"}
+                                {this.state.numCourses +
+                                    " courses: " +
+                                    this.state.numKeyConcepts +
+                                    " key concepts"}
                             </Box>
                         </Typography>
+                        <Box style={this.classes.logoContainer}>
+                            <img src={vanpandaLogo} style={this.classes.logo} />
+                        </Box>
                     </div>
                 </div>
                 <div className="content">{this.state.studyCards}</div>
