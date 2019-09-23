@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { makeStyles, Typography, Box } from "@material-ui/core";
 import WCBadge from "../Badge/WCBadge";
-import SFUlogoSVG from "../../assets/svg/sfu_logo.svg";
+import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
+import UBCLogoSVG from "../../assets/svg/ubc_logo.svg";
 import DetailCard from "../Card/DetailCard";
+import qs from "query-string";
+import axios from "axios";
+import ServerConfig from "../../configs/ServerConfig";
+
+const sStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -26,15 +32,50 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-// Mock up data
-const content =
-    "Demand refers to consumers' desire to purchase goods and services at given prices.\n Demand refers to consumers' desire to purchase goods and services at given prices. ";
-
 const DetailPage = props => {
     const classes = useStyles();
+    const studyCardId = qs.parse(props.location.search).id;
+    const [studyCard, setStudyCard] = useState({});
+
+    const getStudyCardById = id => {
+        axios
+            .get(ServerConfig.api.ip + sStudyCardApi + "/" + id)
+            .then(response => {
+                const studyCard = response.data.data;
+                setStudyCard(studyCard);
+            })
+            .catch(() => {});
+    };
+
+    useEffect(() => {
+        getStudyCardById(studyCardId);
+    }, []);
 
     const backArrowOnClickHandler = () => {
         props.history.goBack();
+    };
+
+    const schoolLogos = {
+        sfu: SFULogoSVG,
+        ubc: UBCLogoSVG
+    };
+
+    const loadConceptCards = () => {
+        const aDetailCards = [];
+        if (!studyCard.conceptCards) {
+            return;
+        }
+        studyCard.conceptCards.forEach(oConceptCard => {
+            const oDetailCard = (
+                <DetailCard
+                    key={oConceptCard.id}
+                    title={oConceptCard.title}
+                    content={oConceptCard.content}
+                />
+            );
+            aDetailCards.push(oDetailCard);
+        });
+        return aDetailCards;
     };
 
     return (
@@ -48,36 +89,29 @@ const DetailPage = props => {
                 </div>
                 <div className={classes.headerTitleContainer}>
                     {/* This should be retrieved from data source */}
-                    <Typography variant="h5">ECON 103</Typography>
+                    <Typography variant="h5">{studyCard.title}</Typography>
                     <Typography variant="subtitle1" color="textSecondary">
-                        Chapter 1: Demand and Supply
+                        {studyCard.subtitle}
                     </Typography>
                     <Box className={classes.infoBar}>
-                        <WCBadge content={4} color="primary" />{" "}
+                        <WCBadge
+                            content={
+                                studyCard.conceptCards
+                                    ? studyCard.conceptCards.length
+                                    : 0
+                            }
+                            color="primary"
+                        />
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img className={classes.svg} src={SFUlogoSVG} />
+                        <img
+                            className={classes.svg}
+                            src={schoolLogos[studyCard.school]}
+                        />
                     </Box>
                 </div>
             </div>
-            <div className="content">
-                <DetailCard
-                    title={"What is Demand definition?"}
-                    content={content}
-                />
-                <DetailCard
-                    title={"What is Demand definition?"}
-                    content={content}
-                />
-                <DetailCard
-                    title={"What is Demand definition?"}
-                    content={content}
-                />
-                <DetailCard
-                    title={"What is Demand definition?"}
-                    content={content}
-                />
-            </div>
+            <div className="content">{loadConceptCards()}</div>
         </div>
     );
 };
