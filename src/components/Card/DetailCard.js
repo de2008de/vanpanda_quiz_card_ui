@@ -10,10 +10,13 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "#fff",
         padding: "0.5rem",
         margin: "1.5rem 0.5rem",
-        borderRadius: "1rem 0.1rem 1rem 0.3rem"
+        borderRadius: "1rem 0.1rem 1rem 0.3rem",
+        borderWidth: "0.1rem",
+        borderStyle: "solid",
+        borderColor: theme.palette.primary.main
     },
     content: {
-        backgroundColor: "#F2F5FA",
+        backgroundColor: theme.palette.primary.light,
         borderRadius: "inherit",
         padding: "1rem"
     },
