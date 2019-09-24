@@ -42,7 +42,7 @@ class HomePage extends Component {
                 aStudyCards.forEach(oStudyCard => {
                     const oStudyCardComponent = (
                         <Link
-                            to={"/detail/" + oStudyCard.id}
+                            to={"/detail" + "?id=" + oStudyCard.id}
                             className="cardLink"
                             key={oStudyCard.id}
                         >

@@ -10,11 +10,15 @@ import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
 import UBCLogoSVG from "../../assets/svg/ubc_logo.svg";
 import ConceptCard from "./ConceptCard";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     card: {
         width: "90%",
         minHeight: "12rem",
-        margin: "1rem auto"
+        margin: "1rem auto",
+        backgroundColor: "#fff",
+        borderColor: theme.palette.primary.main,
+        borderWidth: "0.1rem",
+        borderStyle: "solid"
     },
     svg: {
         width: "3rem"
@@ -25,10 +29,10 @@ const useStyles = makeStyles({
         alignItems: "center"
     },
     conceptCardContainer: {
-        backgroundColor: "#F7F6F4",
+        backgroundColor: theme.palette.primary.light,
         padding: "0.3rem 0.6rem"
     }
-});
+}));
 
 const readingFontFamily = "'Noto Serif', serif";
 

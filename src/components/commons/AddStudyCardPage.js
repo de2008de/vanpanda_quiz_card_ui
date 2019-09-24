@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
         position: "relative"
     },
     conceptCardInnerInput: {
-        backgroundColor: "#F2F5FA",
+        backgroundColor: theme.palette.primary.light,
         borderRadius: "inherit",
         padding: "1rem 1.5rem 1rem 1rem"
     },
