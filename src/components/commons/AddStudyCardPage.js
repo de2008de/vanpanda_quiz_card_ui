@@ -10,6 +10,7 @@ import Box from "@material-ui/core/Box";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import ServerConfig from "../../configs/ServerConfig";
+import { doAuthentication } from "../../utils/auth";
 
 const postStudyCardApi = "/api/v1/card/studycard";
 
@@ -51,6 +52,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AddStudyCardPage = props => {
+    doAuthentication(props.history);
     const classes = useStyles();
     const [input, setInput] = useState({
         title: "",

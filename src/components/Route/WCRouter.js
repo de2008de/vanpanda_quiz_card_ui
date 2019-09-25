@@ -5,6 +5,7 @@ import HomePage from "../Home/HomePage";
 import BookmarkPage from "../commons/BookmarkPage";
 import AddStudyCardPage from '../commons/AddStudyCardPage';
 import SuccessPage from "../commons/SuccessPage";
+import LoginPage from "../commons/LoginPage";
 
 const WCRouter = () => {
     return (
@@ -15,6 +16,7 @@ const WCRouter = () => {
                 <Route path="/bookmarks" component={BookmarkPage} />
                 <Route path="/addStudyCard" component={AddStudyCardPage} />
                 <Route path="/success" component={SuccessPage} />
+                <Route path="/login" component={LoginPage} />
                 <Redirect to="/" />
             </Switch>
         </div>
