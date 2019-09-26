@@ -7,6 +7,7 @@ import AddStudyCardPage from '../commons/AddStudyCardPage';
 import SuccessPage from "../commons/SuccessPage";
 import LoginPage from "../commons/LoginPage";
 import SignUpPage from "../commons/SignUpPage";
+import ProfilePage from "../commons/ProfilePage";
 
 const WCRouter = () => {
     return (
@@ -19,6 +20,7 @@ const WCRouter = () => {
                 <Route path="/success" component={SuccessPage} />
                 <Route path="/login" component={LoginPage} />
                 <Route path="/signup" component={SignUpPage} />
+                <Route path="/profile" component={ProfilePage} />
                 <Redirect to="/" />
             </Switch>
         </div>

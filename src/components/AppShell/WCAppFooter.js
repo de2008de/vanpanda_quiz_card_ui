@@ -2,6 +2,7 @@ import React from "react";
 import HomeIcon from "@material-ui/icons/Home";
 import BookmarksIcon from "@material-ui/icons/Bookmarks";
 import EditIcon from '@material-ui/icons/Edit';
+import PersonIcon from '@material-ui/icons/Person';
 import { Link } from "react-router-dom";
 import "../../assets/css/AppShell/WCAppFooter.css";
 
@@ -16,6 +17,9 @@ const WCAppFooter = () => {
             </Link>
             <Link to="/addStudyCard">
                 <EditIcon color="primary" />
+            </Link>
+            <Link to="/profile">
+                <PersonIcon color="primary" />
             </Link>
         </div>
     );
