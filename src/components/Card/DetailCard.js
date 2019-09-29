@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import BookmarksIcon from "@material-ui/icons/Bookmarks";
 import BookmarkIcon from "@material-ui/icons/Bookmark";
+import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import Chip from "@material-ui/core/Chip";
+import axios from "axios";
+import ServerConfig from "../../configs/ServerConfig";
+import { isAuthenticated } from "../../utils/auth";
+
+const bookmarkApi = "/api/v1/bookmark";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -36,15 +41,84 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+const ADDED_TO_BOOKMARK_TEXT = "Added to bookmark";
+const REMOVED_TO_BOOKMARK_TEXT = "Removed bookmark";
+const PLEASE_LOGIN_TEXT = "Please login to add bookmark";
+
 const DetailCard = props => {
     const classes = useStyles();
-
-    // TODO: Will need to load bookmarked state from data source
     const [bookmarked, setBookmarked] = useState(false);
+    const [chipText, setChipText] = useState("");
+    const [isChipVisible, setIsChipVisible] = useState(false);
+
+    // Since our initial bookmarked state relies on props.bookmarked,
+    // we need to use side effect to update our state so that it will re-render
+    // and prevent infinite re-rendering
+    useEffect(() => {
+        if (props.bookmarked) {
+            setBookmarked(true);
+        }
+    }, [props.bookmarked]);
 
     const bookmarkOnClickHandler = () => {
-        const newBookmarkState = !bookmarked;
-        setBookmarked(newBookmarkState);
+        if (!isAuthenticated()) {
+            setChipText(PLEASE_LOGIN_TEXT);
+            setIsChipVisible(true);
+            return;
+        }
+
+        const headers = {
+            token: window.localStorage.getItem("token")
+        };
+
+        if (!bookmarked) {
+            axios
+                .post(
+                    ServerConfig.api.ip + bookmarkApi,
+                    {
+                        concept_card_id: props.id
+                    },
+                    { headers: headers }
+                )
+                .then(() => {
+                    setBookmarked(true);
+                    setChipText(ADDED_TO_BOOKMARK_TEXT);
+                    setIsChipVisible(true);
+                });
+        } else {
+            axios
+                .delete(ServerConfig.api.ip + bookmarkApi, {
+                    headers: headers,
+                    data: {
+                        concept_card_id: props.id
+                    }
+                })
+                .then(() => {
+                    setBookmarked(false);
+                    setChipText(REMOVED_TO_BOOKMARK_TEXT);
+                    setIsChipVisible(true);
+                });
+        }
+    };
+
+    const getBookmarkedIcon = () => {
+        if (bookmarked) {
+            return (
+                <BookmarkIcon
+                    fontSize="large"
+                    color="secondary"
+                    onClick={bookmarkOnClickHandler}
+                />
+            );
+        } else {
+            return (
+                <BookmarkBorderIcon
+                    fontSize="large"
+                    color="primary"
+                    onClick={bookmarkOnClickHandler}
+                />
+            );
+        }
     };
 
     return (
@@ -62,23 +136,19 @@ const DetailCard = props => {
                 <div
                     className={classes.chipContainer}
                     style={{
-                        visibility: bookmarked ? "visible" : "hidden",
-                        transition: bookmarked ? "all 1s linear" : "",
-                        opacity: bookmarked ? "1" : "0"
+                        visibility: isChipVisible ? "visible" : "hidden",
+                        transition: isChipVisible ? "all 1s linear" : "",
+                        opacity: isChipVisible ? "1" : "0"
                     }}
                 >
                     <Chip
                         icon={<BookmarkIcon />}
-                        label={"Added to bookmark"}
+                        label={chipText}
                         variant="outlined"
                         color="secondary"
                     />
                 </div>
-                <BookmarksIcon
-                    fontSize="large"
-                    color="primary"
-                    onClick={bookmarkOnClickHandler}
-                />
+                {getBookmarkedIcon()}
             </div>
         </div>
     );

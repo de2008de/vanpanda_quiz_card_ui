@@ -10,6 +10,7 @@ import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 
 const sStudyCardApi = "/api/v1/card/studycard";
+const bookmarkApi = "/api/v1/bookmark";
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -36,6 +37,7 @@ const DetailPage = props => {
     const classes = useStyles();
     const studyCardId = qs.parse(props.location.search).id;
     const [studyCard, setStudyCard] = useState({});
+    const [bookmarks, setBookmarks] = useState({});
 
     const getStudyCardById = id => {
         axios
@@ -47,9 +49,28 @@ const DetailPage = props => {
             .catch(() => {});
     };
 
+    const getBookmarks = () => {
+        const headers = {
+            token: window.localStorage.getItem("token")
+        };
+        axios
+            .get(ServerConfig.api.ip + bookmarkApi, {
+                headers: headers
+            })
+            .then(response => {
+                const bookmarks = response.data.data.bookmarks;
+                const bookmarkMap = {};
+                bookmarks.forEach(oBookmark => {
+                    bookmarkMap[oBookmark.conceptCardId] = oBookmark;
+                });
+                setBookmarks(bookmarkMap);
+            });
+    };
+
     useEffect(() => {
         getStudyCardById(studyCardId);
-    }, []);
+        getBookmarks();
+    }, [studyCardId]);
 
     const backArrowOnClickHandler = () => {
         props.history.goBack();
@@ -68,7 +89,9 @@ const DetailPage = props => {
         studyCard.conceptCards.forEach(oConceptCard => {
             const oDetailCard = (
                 <DetailCard
+                    id={oConceptCard.id}
                     key={oConceptCard.id}
+                    bookmarked={bookmarks[oConceptCard.id] ? true : false}
                     title={oConceptCard.title}
                     content={oConceptCard.content}
                 />
