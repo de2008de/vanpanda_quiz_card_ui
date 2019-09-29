@@ -107,6 +107,7 @@ const DetailPage = props => {
                         <img
                             className={classes.svg}
                             src={schoolLogos[studyCard.school]}
+                            alt="school_logo"
                         />
                     </Box>
                 </div>

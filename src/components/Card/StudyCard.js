@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -69,7 +69,7 @@ const StudyCard = props => {
                         <WCBadge content={props.conceptCards.length} color="primary" />{" "}
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img className={classes.svg} src={oSchoolList[props.school]} />
+                        <img className={classes.svg} src={oSchoolList[props.school]}  alt="school_logo" />
                     </Box>
                 </CardContent>
                 <div className={classes.conceptCardContainer}>

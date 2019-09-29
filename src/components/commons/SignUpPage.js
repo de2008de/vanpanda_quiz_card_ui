@@ -100,7 +100,8 @@ const SignUpPage = props => {
     };
     const loadErrorMessages = () => {
         const aErrorChips = [];
-        for (let key in errorMessages) {
+        let key;
+        for (key in errorMessages) {
             const oChip = (
                 <div key={key}>
                     <Chip
@@ -175,7 +176,7 @@ const SignUpPage = props => {
                     </Fab>
                 </Box>
                 {loadErrorMessages()}
-                <img src={vanPandaLogo} className={classes.logo} />
+                <img src={vanPandaLogo} className={classes.logo} alt="vanpanda_logo" />
             </form>
         </div>
     );

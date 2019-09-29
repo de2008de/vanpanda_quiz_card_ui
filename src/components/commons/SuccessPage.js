@@ -38,7 +38,7 @@ const SuccessPage = () => {
                 Thank you! Success!
             </Box>
             <Box className={classes.logoContainer}>
-                <img src={vanpandaLogo} className={classes.logo} />
+                <img src={vanpandaLogo} className={classes.logo} alt="vanpanda_logo" />
             </Box>
         </div>
     );

@@ -42,7 +42,7 @@ class HomePage extends Component {
                 aStudyCards.forEach(oStudyCard => {
                     const oStudyCardComponent = (
                         <Link
-                            to={"/detail" + "?id=" + oStudyCard.id}
+                            to={"/detail?id=" + oStudyCard.id}
                             className="cardLink"
                             key={oStudyCard.id}
                         >
@@ -90,7 +90,7 @@ class HomePage extends Component {
                             </Box>
                         </Typography>
                         <Box style={this.classes.logoContainer}>
-                            <img src={vanpandaLogo} style={this.classes.logo} />
+                            <img src={vanpandaLogo} style={this.classes.logo} alt="vanpanda_logo" />
                         </Box>
                     </div>
                 </div>

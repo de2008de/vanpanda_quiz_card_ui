@@ -9,5 +9,7 @@ export function isAuthenticated() {
 export const doAuthentication = (history) => {
     if (!isAuthenticated()) {
         history.push("/login");
+        return false;
     }
+    return true;
 };
