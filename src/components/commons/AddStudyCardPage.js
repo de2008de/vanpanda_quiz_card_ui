@@ -94,7 +94,8 @@ const AddStudyCardPage = props => {
             ubc: "University of British Columbia"
         };
         const aReturnOptions = [];
-        for (let key in oOptions) {
+        let key;
+        for (key in oOptions) {
             const oOptionComponent = (
                 <MenuItem key={key} value={key}>
                     {oOptions[key]}

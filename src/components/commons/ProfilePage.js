@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { doAuthentication } from "../../utils/auth";
+import { doAuthentication, isAuthenticated } from "../../utils/auth";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
 import ServerConfig from "../../configs/ServerConfig";
@@ -48,10 +48,13 @@ const ProfilePage = props => {
         username: "",
         email: ""
     });
-    const getRequestHeader = {
-        token: window.localStorage.getItem("token")
-    };
     useEffect(() => {
+        const getRequestHeader = {
+            token: window.localStorage.getItem("token")
+        };
+        if (!isAuthenticated()) {
+            return;
+        }
         axios
             .get(ServerConfig.api.ip + userProfileApi, {
                 headers: getRequestHeader
@@ -66,7 +69,7 @@ const ProfilePage = props => {
                     };
                 });
             });
-    });
+    }, []);
     const [isLogingOut, setIsLogingOut] = useState(false);
     const onLogoutHandler = () => {
         setIsLogingOut(true);
