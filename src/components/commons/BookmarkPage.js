@@ -28,7 +28,7 @@ const BookmarkPage = props => {
 
     // TODO: Add paging to get all bookmarks
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isAuthenticated()) {
             return;
         }
         const headers = {
