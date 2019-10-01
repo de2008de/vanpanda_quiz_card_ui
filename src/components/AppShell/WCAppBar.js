@@ -46,7 +46,7 @@ const WCAppBar = () => {
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
                         <Box component="span" className={classes.titleSpan}>
-                            大温熊猫读书 <img style={{ width: "2rem", marginLeft: "0.5rem" }} src={vanpandaLogo} />
+                            大温熊猫读书 <img style={{ width: "2rem", marginLeft: "0.5rem" }} src={vanpandaLogo} alt="vanpanda_logo" />
                         </Box>
                     </Typography>
                     <IconButton className={classes.menuButton} color="inherit">

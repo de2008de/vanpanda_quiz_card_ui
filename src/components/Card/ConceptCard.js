@@ -10,7 +10,6 @@ const useStyles = makeStyles(theme => ({
         width: "5rem",
         height: "3rem",
         textAlign: "left",
-        padding: "0.1rem",
         fontSize: "0.6rem",
         fontWeight: "bold",
         color: theme.palette.text.secondary,
