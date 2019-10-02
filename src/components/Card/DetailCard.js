@@ -72,6 +72,9 @@ const DetailCard = props => {
         };
 
         if (!bookmarked) {
+            setBookmarked(true);
+            setChipText(ADDED_TO_BOOKMARK_TEXT);
+            setIsChipVisible(true);
             axios
                 .post(
                     ServerConfig.api.ip + bookmarkApi,
@@ -80,12 +83,12 @@ const DetailCard = props => {
                     },
                     { headers: headers }
                 )
-                .then(() => {
-                    setBookmarked(true);
-                    setChipText(ADDED_TO_BOOKMARK_TEXT);
-                    setIsChipVisible(true);
-                });
+                .then(() => {})
+                .catch(() => {});
         } else {
+            setBookmarked(false);
+            setChipText(REMOVED_TO_BOOKMARK_TEXT);
+            setIsChipVisible(true);
             axios
                 .delete(ServerConfig.api.ip + bookmarkApi, {
                     headers: headers,
@@ -93,11 +96,8 @@ const DetailCard = props => {
                         concept_card_id: props.id
                     }
                 })
-                .then(() => {
-                    setBookmarked(false);
-                    setChipText(REMOVED_TO_BOOKMARK_TEXT);
-                    setIsChipVisible(true);
-                });
+                .then(() => {})
+                .catch(() => {});
         }
     };
 
