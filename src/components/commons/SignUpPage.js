@@ -9,7 +9,7 @@ import ServerConfig from "../../configs/ServerConfig";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Chip from "@material-ui/core/Chip";
 import ErrorIcon from "@material-ui/icons/Error";
-import vanPandaLogo from "../../assets/svg/vanpanda_logo_filled.svg";
+import vanPandaLogo from "../../assets/svg/new_vanpanda_logo_draft.svg";
 
 const userSignUpApi = "/api/v1/user/signup";
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(1)
     },
     logo: {
-        width: "3rem",
+        width: "4rem",
         position: "absolute",
         bottom: 0,
         right: 0

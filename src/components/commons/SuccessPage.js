@@ -2,7 +2,7 @@ import React from "react";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
-import vanpandaLogo from "../../assets/svg/vanpanda_logo_filled2.svg";
+import vanpandaLogo from "../../assets/svg/new_vanpanda_logo_draft.svg";
 
 const useStyles = makeStyles(theme => ({
     iconContainer: {
