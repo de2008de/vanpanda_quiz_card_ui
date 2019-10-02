@@ -42,12 +42,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProfilePage = props => {
-    doAuthentication(props.history);
+    const [isLogout, setIsLogout] = useState(false);
+    useEffect(() => {
+        doAuthentication(props.history);
+    }, [isLogout, props.history]);
+
     const classes = useStyles();
     const [userProfile, setUserProfile] = useState({
         username: "",
         email: ""
     });
+
     useEffect(() => {
         const getRequestHeader = {
             token: window.localStorage.getItem("token")
@@ -70,11 +75,10 @@ const ProfilePage = props => {
                 });
             });
     }, []);
-    const [isLogingOut, setIsLogingOut] = useState(false);
+
     const onLogoutHandler = () => {
-        setIsLogingOut(true);
         window.localStorage.removeItem("token");
-        setIsLogingOut(false);
+        setIsLogout(true);
     };
     return (
         <div className="ProfilePage">
@@ -121,7 +125,6 @@ const ProfilePage = props => {
                     aria-label="logout"
                     className={classes.logout}
                     onClick={onLogoutHandler}
-                    disabled={isLogingOut ? true : false}
                 >
                     Logout
                 </Fab>

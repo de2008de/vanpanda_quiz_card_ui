@@ -8,6 +8,7 @@ import DetailCard from "../Card/DetailCard";
 import qs from "query-string";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
+import { isAuthenticated } from "../../utils/auth";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 const bookmarkApi = "/api/v1/bookmark";
@@ -69,7 +70,9 @@ const DetailPage = props => {
 
     useEffect(() => {
         getStudyCardById(studyCardId);
-        getBookmarks();
+        if (isAuthenticated()) {
+            getBookmarks();
+        }
     }, [studyCardId]);
 
     const backArrowOnClickHandler = () => {
