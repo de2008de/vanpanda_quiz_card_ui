@@ -5,7 +5,7 @@ import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
 import ServerConfig from "../../configs/ServerConfig";
 import axios from "axios";
-import vanpandaLogo from "../../assets/svg/vanpanda_logo_filled2.svg";
+import vanpandaLogo from "../../assets/svg/new_vanpanda_logo_draft.svg";
 
 import "../../assets/css/Home/HomePage.css";
 
@@ -28,7 +28,8 @@ class HomePage extends Component {
                 right: 0
             },
             logo: {
-                width: "6rem"
+                width: "6rem",
+                marginTop: "1rem"
             }
         };
     }
