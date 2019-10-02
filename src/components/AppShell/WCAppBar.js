@@ -7,7 +7,6 @@ import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import BookOutlined from "@material-ui/icons/BookOutlined";
-import vanpandaLogo from "../../assets/svg/vanpanda_logo_white.svg";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -46,7 +45,7 @@ const WCAppBar = () => {
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
                         <Box component="span" className={classes.titleSpan}>
-                            大温熊猫读书 <img style={{ width: "2rem", marginLeft: "0.5rem" }} src={vanpandaLogo} alt="vanpanda_logo" />
+                            大温熊猫
                         </Box>
                     </Typography>
                     <IconButton className={classes.menuButton} color="inherit">

@@ -9,7 +9,7 @@ import Chip from "@material-ui/core/Chip";
 import ErrorIcon from "@material-ui/icons/Error";
 import Box from "@material-ui/core/Box";
 import { Link } from "react-router-dom";
-import vanPandaLogo from "../../assets/svg/vanpanda_logo_filled.svg";
+import vanPandaLogo from "../../assets/svg/new_vanpanda_logo_draft.svg";
 
 const userLoginApi = "/api/v1/user/login";
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(1)
     },
     logo: {
-        width: "3rem",
+        width: "4rem",
         position: "absolute",
         bottom: 0,
         right: 0
