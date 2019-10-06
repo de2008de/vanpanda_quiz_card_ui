@@ -85,6 +85,8 @@ const SignUpPage = props => {
             })
             .then(response => {
                 setIsSigningUp(false);
+                const token = response.data.token;
+                window.localStorage.setItem("token", token);
                 props.history.push("/success");
             })
             .catch(response => {
