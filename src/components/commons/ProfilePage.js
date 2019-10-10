@@ -114,7 +114,12 @@ const ProfilePage = props => {
                                 <PaymentIcon />
                                 {"Credit:"}
                             </TableCell>
-                            <TableCell>{userProfile.credit}</TableCell>
+                            <TableCell>{userProfile.credit}
+                                <span onClick={() => { props.history.push("/payment") }}
+                                    style={{ marginLeft: "1rem", textDecoration: "underline" }}>
+                                    purchase
+                                </span>
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
