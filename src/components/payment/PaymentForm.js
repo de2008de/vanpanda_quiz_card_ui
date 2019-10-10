@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CardElement, injectStripe } from "react-stripe-elements";
+import { CardNumberElement, CardExpiryElement, CardCVCElement, injectStripe } from "react-stripe-elements";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -35,6 +35,9 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         margin: "1rem 1rem"
+    },
+    cardElement: {
+        margin: "1rem auto"
     }
 }));
 
@@ -148,7 +151,22 @@ const PaymentForm = props => {
                 </Button>
             </div>
             <Typography className={classes.hintText}>You are going to purchase <span className={classes.amount}>${amount}</span> CAD credit</Typography>
-            <CardElement />
+
+            <div className={classes.cardElement}>
+                <Typography variant="subtitle1">Card Number:</Typography>
+                <CardNumberElement />
+            </div>
+
+            <div className={classes.cardElement}>
+                <Typography variant="subtitle1">Expiry Date:</Typography>
+                <CardExpiryElement />
+            </div>
+
+            <div className={classes.cardElement}>
+                <Typography variant="subtitle1">CVC:</Typography>
+                <CardCVCElement />
+            </div>
+
             <div className={classes.buttonGroup}>
                 <Button className={classes.button} variant="contained" color="secondary" size="large" onClick={onCancelHandler}>Cancel</Button>
                 <Button className={classes.button} variant="contained" color="primary" size="large" onClick={onSubmitHandler}>Purchase</Button>
