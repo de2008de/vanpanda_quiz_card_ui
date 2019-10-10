@@ -9,7 +9,20 @@ import Button from "@material-ui/core/Button";
 import qs from "query-string";
 
 const useStyles = makeStyles(theme => ({
-
+    paymentCompletedPage: {
+        width: "90%",
+        margin: "auto"
+    },
+    title: {
+        margin: "1rem auto"
+    },
+    printButtonContainer: {
+        display: "flex",
+        justifyItems: "center"
+    },
+    printButton: {
+        margin: "1rem auto"
+    }
 }));
 
 const PaymentCompletedPage = props => {
@@ -22,12 +35,12 @@ const PaymentCompletedPage = props => {
     const invoiceId = qs.parse(props.location.search).invoiceId;
 
     return (
-        <div className="PaymentCompletedPage">
-            <Typography variant="h6">Purchase Success</Typography>
+        <div className={classes.paymentCompletedPage}>
+            <Typography className={classes.title} variant="h6">Purchase Success</Typography>
             <Typography variant="h6">Invoice ID: {invoiceId}</Typography>
             <Table>
                 <TableBody>
-                <TableRow>
+                    <TableRow>
                         <TableCell className={classes.field}>
                             Company
                         </TableCell>
@@ -56,7 +69,9 @@ const PaymentCompletedPage = props => {
                     </TableRow>
                 </TableBody>
             </Table>
-            <Button variant="contained" color="primary">Print</Button>
+            <div className={classes.printButtonContainer}>
+                <Button className={classes.printButton} variant="contained" color="primary" size="large">Print</Button>
+            </div>
         </div>
     );
 }
