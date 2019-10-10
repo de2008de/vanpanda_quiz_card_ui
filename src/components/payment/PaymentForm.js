@@ -7,6 +7,7 @@ import "../../assets/css/payment/paymentForm.css";
 import theme from "../../theme/WCTheme";
 import Typography from '@material-ui/core/Typography';
 import { addParametersToUrl } from "../../helpers/urlHelper";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import ServerConfig from "../../configs/ServerConfig";
 
@@ -38,6 +39,9 @@ const useStyles = makeStyles(theme => ({
     },
     cardElement: {
         margin: "1rem auto"
+    },
+    loader: {
+
     }
 }));
 
@@ -67,8 +71,10 @@ const PaymentForm = props => {
     }
 
     const onSubmitHandler = async () => {
+        setIsLoading(true);
         const { token } = await props.stripe.createToken({ name: "payment" });
         if (!token) {
+            setIsLoading(false);
             return false;
         }
         const headers = {
@@ -86,6 +92,7 @@ const PaymentForm = props => {
                 }
             )
             .then(response => {
+                setIsLoading(false);
                 const data = response.data.data;
                 const oParams = {};
                 oParams.invoiceId = data.invoiceId;
@@ -98,6 +105,20 @@ const PaymentForm = props => {
                 props.history.push(urlWithParameter);
             });
     };
+
+    const [isLoading, setIsLoading] = useState(false);
+    const showLoader = () => {
+        if (isLoading) {
+            return (
+                <div className={classes.loader}>
+                    <LinearProgress color="primary" />
+                    <Typography>We are processing your purchase</Typography>
+                </div>
+            );
+        } else {
+            return false;
+        }
+    }
 
     return (
         <div className="PaymentForm">
@@ -168,9 +189,10 @@ const PaymentForm = props => {
             </div>
 
             <div className={classes.buttonGroup}>
-                <Button className={classes.button} variant="contained" color="secondary" size="large" onClick={onCancelHandler}>Cancel</Button>
-                <Button className={classes.button} variant="contained" color="primary" size="large" onClick={onSubmitHandler}>Purchase</Button>
+                <Button className={classes.button} variant="contained" color="secondary" size="large" onClick={onCancelHandler} disabled={isLoading}>Cancel</Button>
+                <Button className={classes.button} variant="contained" color="primary" size="large" onClick={onSubmitHandler} disabled={isLoading}>Purchase</Button>
             </div>
+            {showLoader()}
         </div>
     );
 };
