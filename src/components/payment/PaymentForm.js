@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import "../../assets/css/payment/paymentForm.css";
 import theme from "../../theme/WCTheme";
 import Typography from '@material-ui/core/Typography';
-import { addParametersToUrl } from "../../helpers/urlHelper"; 
+import { addParametersToUrl } from "../../helpers/urlHelper";
 
 import ServerConfig from "../../configs/ServerConfig";
 
@@ -27,8 +27,14 @@ const useStyles = makeStyles(theme => ({
     hintText: {
         margin: "1rem auto"
     },
-    purchaseButton: {
+    buttonGroup: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
         margin: "1rem auto"
+    },
+    button: {
+        margin: "1rem 1rem"
     }
 }));
 
@@ -52,6 +58,10 @@ const PaymentForm = props => {
             setAmount(nAmount);
         };
     };
+
+    const onCancelHandler = () => {
+        props.history.goBack();
+    }
 
     const onSubmitHandler = async () => {
         const { token } = await props.stripe.createToken({ name: "payment" });
@@ -139,7 +149,10 @@ const PaymentForm = props => {
             </div>
             <Typography className={classes.hintText}>You are going to purchase <span className={classes.amount}>${amount}</span> CAD credit</Typography>
             <CardElement />
-            <Button className={classes.purchaseButton} variant="contained" color="primary" onClick={onSubmitHandler}>Purchase</Button>
+            <div className={classes.buttonGroup}>
+                <Button className={classes.button} variant="contained" color="secondary" size="large" onClick={onCancelHandler}>Cancel</Button>
+                <Button className={classes.button} variant="contained" color="primary" size="large" onClick={onSubmitHandler}>Purchase</Button>
+            </div>
         </div>
     );
 };
