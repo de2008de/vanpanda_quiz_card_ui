@@ -3,10 +3,13 @@ const determineEnvironment = () => {
     let ip;
     if (currentHost.indexOf("localhost") !== -1) {
         // develop
-        ip = "http://localhost:8080"
-    } else {
+        ip = "http://localhost:8080";
+    } else if (currentHost.indexOf("app.vanpanda.com") !== -1) {
         // production
-        ip = "https://gentle-peak-28389.herokuapp.com"
+        ip = "https://gentle-peak-28389.herokuapp.com";
+    } else if (currentHost.indexOf("test.vanpanda.com") !== -1) {
+        // testing
+        ip = "https://vanpanda-test.herokuapp.com";
     }
     return {
         api: {
