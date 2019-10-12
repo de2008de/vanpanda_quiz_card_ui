@@ -2,7 +2,6 @@ import React from "react";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
-import vanpandaLogo from "../../assets/svg/new_vanpanda_logo_draft.svg";
 
 const useStyles = makeStyles(theme => ({
     iconContainer: {
@@ -27,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const SuccessPage = () => {
+const SuccessPage = props => {
     const classes = useStyles();
     return (
         <div className="SuccessPage">
@@ -36,9 +35,6 @@ const SuccessPage = () => {
             </Box>
             <Box component="p" className={classes.successMessage}>
                 Thank you! Success!
-            </Box>
-            <Box className={classes.logoContainer}>
-                <img src={vanpandaLogo} className={classes.logo} alt="vanpanda_logo" />
             </Box>
         </div>
     );
