@@ -9,13 +9,14 @@ import qs from "query-string";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 import { isAuthenticated } from "../../utils/auth";
+import Chip from '@material-ui/core/Chip';
+import FaceIcon from '@material-ui/icons/Face';
 
 const sStudyCardApi = "/api/v1/card/studycard";
 const bookmarkApi = "/api/v1/bookmark";
 
 const useStyles = makeStyles(theme => ({
     header: {
-        height: "10rem",
         backgroundColor: "#fff"
     },
     headerTitleContainer: {
@@ -31,6 +32,9 @@ const useStyles = makeStyles(theme => ({
         margin: "0.5rem 0",
         display: "flex",
         alignItems: "center"
+    },
+    author: {
+        margin: "0.5rem auto"
     }
 }));
 
@@ -47,7 +51,7 @@ const DetailPage = props => {
                 const studyCard = response.data.data;
                 setStudyCard(studyCard);
             })
-            .catch(() => {});
+            .catch(() => { });
     };
 
     const getBookmarks = () => {
@@ -104,6 +108,11 @@ const DetailPage = props => {
         return aDetailCards;
     };
 
+    const onClickAuthorHandler = () => {
+        const authorProfileUrl = "/user/" + studyCard.userId;
+        props.history.push(authorProfileUrl);
+    };
+
     return (
         <div className="DetailPage">
             <div className={classes.header}>
@@ -134,6 +143,17 @@ const DetailPage = props => {
                             className={classes.svg}
                             src={schoolLogos[studyCard.school]}
                             alt="school_logo"
+                        />
+                    </Box>
+                    <Box>
+                        <Chip
+                            className={classes.author}
+                            icon={<FaceIcon />}
+                            label={"created by " + studyCard.username}
+                            clickable
+                            color="primary"
+                            variant="outlined"
+                            onClick={onClickAuthorHandler}
                         />
                     </Box>
                 </div>
