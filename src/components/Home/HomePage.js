@@ -53,6 +53,7 @@ class HomePage extends Component {
                                 subtitle={oStudyCard.subtitle}
                                 school={oStudyCard.school}
                                 conceptCards={oStudyCard.conceptCards}
+                                username={oStudyCard.username}
                             />
                         </Link>
                     );

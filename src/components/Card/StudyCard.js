@@ -9,6 +9,8 @@ import WCBadge from "../Badge/WCBadge";
 import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
 import UBCLogoSVG from "../../assets/svg/ubc_logo.svg";
 import ConceptCard from "./ConceptCard";
+import Chip from '@material-ui/core/Chip';
+import FaceIcon from '@material-ui/icons/Face';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -31,6 +33,9 @@ const useStyles = makeStyles(theme => ({
     conceptCardContainer: {
         backgroundColor: theme.palette.primary.light,
         padding: "0.3rem 0.6rem"
+    },
+    author: {
+        marginTop: "0.5rem"
     }
 }));
 
@@ -69,7 +74,17 @@ const StudyCard = props => {
                         <WCBadge content={props.conceptCards.length} color="primary" />{" "}
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img className={classes.svg} src={oSchoolList[props.school]}  alt="school_logo" />
+                        <img className={classes.svg} src={oSchoolList[props.school]} alt="school_logo" />
+                    </Box>
+                    <Box>
+                        <Chip
+                            className={classes.author}
+                            icon={<FaceIcon />}
+                            label={"created by " + props.username}
+                            clickable
+                            color="primary"
+                            variant="outlined"
+                        />
                     </Box>
                 </CardContent>
                 <div className={classes.conceptCardContainer}>
