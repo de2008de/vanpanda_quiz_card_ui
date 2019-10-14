@@ -9,7 +9,6 @@ import Chip from "@material-ui/core/Chip";
 import ErrorIcon from "@material-ui/icons/Error";
 import Box from "@material-ui/core/Box";
 import { Link } from "react-router-dom";
-import vanPandaLogo from "../../assets/svg/new_vanpanda_logo_draft.svg";
 
 const userLoginApi = "/api/v1/user/login";
 
@@ -146,7 +145,6 @@ const LoginPage = props => {
                     </Fab>
                 </Box>
                 {loadErrorMessages()}
-                <img src={vanPandaLogo} className={classes.logo} alt="vanpanda_logo" />
             </form>
         </div>
     );

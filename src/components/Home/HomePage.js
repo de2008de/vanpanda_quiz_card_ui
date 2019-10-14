@@ -5,7 +5,7 @@ import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
 import ServerConfig from "../../configs/ServerConfig";
 import axios from "axios";
-import vanpandaLogo from "../../assets/svg/new_vanpanda_logo_draft.svg";
+import vanpandaLogo from "../../assets/svg/vanpanda_logo.svg";
 
 import "../../assets/css/Home/HomePage.css";
 
@@ -53,6 +53,7 @@ class HomePage extends Component {
                                 subtitle={oStudyCard.subtitle}
                                 school={oStudyCard.school}
                                 conceptCards={oStudyCard.conceptCards}
+                                username={oStudyCard.username}
                             />
                         </Link>
                     );

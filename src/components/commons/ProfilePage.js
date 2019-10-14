@@ -50,7 +50,8 @@ const ProfilePage = props => {
     const classes = useStyles();
     const [userProfile, setUserProfile] = useState({
         username: "",
-        email: ""
+        email: "",
+        credit: ""
     });
 
     useEffect(() => {
@@ -70,7 +71,8 @@ const ProfilePage = props => {
                     return {
                         ...prevState,
                         email: oUser.email,
-                        username: oUser.username
+                        username: oUser.username,
+                        credit: oUser.credit
                     };
                 });
             });
@@ -110,9 +112,14 @@ const ProfilePage = props => {
                         <TableRow>
                             <TableCell className={classes.field}>
                                 <PaymentIcon />
-                                {"Membership:"}
+                                {"Credit:"}
                             </TableCell>
-                            <TableCell>{"Gold Member"}</TableCell>
+                            <TableCell>{userProfile.credit}
+                                <span onClick={() => { props.history.push("/payment") }}
+                                    style={{ marginLeft: "1rem", textDecoration: "underline" }}>
+                                    purchase
+                                </span>
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

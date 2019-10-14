@@ -193,18 +193,23 @@ const AddStudyCardPage = props => {
 
     const onSubmitHandler = () => {
         setIsSubmitting(true);
+        const headers = {
+            token: window.localStorage.getItem("token")
+        };
         axios
             .post(ServerConfig.api.ip + postStudyCardApi, {
                 title: input.title,
                 subtitle: input.subtitle,
                 school: input.school,
                 conceptCards: input.conceptCards
+            }, {
+                headers: headers
             })
             .then(() => {
                 setIsSubmitting(false);
                 props.history.push("/success");
             })
-            .catch(() => {});
+            .catch(() => { });
     };
 
     return (

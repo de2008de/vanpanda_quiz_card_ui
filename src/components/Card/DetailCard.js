@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     card: {
         backgroundColor: "#fff",
         padding: "0.5rem",
-        margin: "1.5rem 0.5rem",
+        margin: "0.5rem 0.5rem 1.5rem 0.5rem",
         borderRadius: "1rem 0.1rem 1rem 0.3rem",
         borderWidth: "0.1rem",
         borderStyle: "solid",
