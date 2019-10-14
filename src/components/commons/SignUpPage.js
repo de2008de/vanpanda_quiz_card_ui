@@ -9,7 +9,6 @@ import ServerConfig from "../../configs/ServerConfig";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Chip from "@material-ui/core/Chip";
 import ErrorIcon from "@material-ui/icons/Error";
-import vanPandaLogo from "../../assets/svg/new_vanpanda_logo_draft.svg";
 
 const userSignUpApi = "/api/v1/user/signup";
 
@@ -178,7 +177,6 @@ const SignUpPage = props => {
                     </Fab>
                 </Box>
                 {loadErrorMessages()}
-                <img src={vanPandaLogo} className={classes.logo} alt="vanpanda_logo" />
             </form>
         </div>
     );
