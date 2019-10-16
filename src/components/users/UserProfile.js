@@ -50,7 +50,7 @@ const UserProfile = props => {
         const getRequestHeader = {
             token: window.localStorage.getItem("token")
         };
-        if (!isAuthenticated()) {
+        if (!props.isPublic && !isAuthenticated()) {
             return;
         }
         axios
@@ -66,7 +66,7 @@ const UserProfile = props => {
                     };
                 });
             });
-    }, [sProfileRequestUrl]);
+    }, [sProfileRequestUrl, props.isPublic]);
 
     const generateTableRows = () => {
         const fieldDisplayNameMap = {

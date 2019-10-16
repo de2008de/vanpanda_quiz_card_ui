@@ -10,6 +10,7 @@ const PublicProfilePage = props => {
             <UserProfile
                 id={userId}
                 history={props.history}
+                isPublic={true}
             />
         </div>
     );
