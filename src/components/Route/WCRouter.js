@@ -10,6 +10,7 @@ import SignUpPage from "../commons/SignUpPage";
 import ProfilePage from "../commons/ProfilePage";
 import PaymentPage from "../commons/PaymentPage";
 import PaymentCompletedPage from "../payment/PaymentCompletedPage";
+import PublicProfilePage from "../commons/PublicProfilePage";
 
 const WCRouter = () => {
     return (
@@ -23,6 +24,7 @@ const WCRouter = () => {
                 <Route path="/login" component={LoginPage} />
                 <Route path="/signup" component={SignUpPage} />
                 <Route path="/profile" component={ProfilePage} />
+                <Route path="/user/publicProfile" component={PublicProfilePage} />
                 <Route path="/paymentCompleted" component={PaymentCompletedPage} />
                 <Route path="/payment" component={PaymentPage} />
                 <Redirect to="/" />
