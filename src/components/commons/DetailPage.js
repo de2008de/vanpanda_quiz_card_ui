@@ -109,7 +109,7 @@ const DetailPage = props => {
     };
 
     const onClickAuthorHandler = () => {
-        const authorProfileUrl = "/user/" + studyCard.userId;
+        const authorProfileUrl = "/user/publicProfile?id=" + studyCard.userId;
         props.history.push(authorProfileUrl);
     };
 
