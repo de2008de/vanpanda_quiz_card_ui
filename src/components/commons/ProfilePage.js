@@ -1,43 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { doAuthentication, isAuthenticated } from "../../utils/auth";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { doAuthentication } from "../../utils/auth";
 import { makeStyles } from "@material-ui/core/styles";
-import ServerConfig from "../../configs/ServerConfig";
-import axios from "axios";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
 import Fab from "@material-ui/core/Fab";
-import FaceIcon from "@material-ui/icons/Face";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import PaymentIcon from "@material-ui/icons/Payment";
-
-const userProfileApi = "/api/v1/user/profile";
+import UserProfile from "../users/UserProfile";
 
 const useStyles = makeStyles(theme => ({
-    accountCircleIcon: {
-        fontSize: "8rem"
-    },
-    accountCircleIconContainer: {
-        display: "flex",
-        justifyContent: "center",
-        margin: "2rem"
-    },
-    profileInfo: {
-        width: "90%",
-        margin: "auto"
-    },
-    field: {
-        color: theme.palette.text.secondary,
-        display: "flex",
-        alignItems: "center"
-    },
-    logout: {},
     logoutContainer: {
         display: "flex",
         justifyContent: "center",
-        margin: "3rem auto"
+        margin: "1rem auto"
     }
 }));
 
@@ -46,91 +17,22 @@ const ProfilePage = props => {
     useEffect(() => {
         doAuthentication(props.history);
     }, [isLogout, props.history]);
-
     const classes = useStyles();
-    const [userProfile, setUserProfile] = useState({
-        username: "",
-        email: "",
-        credit: ""
-    });
-
-    useEffect(() => {
-        const getRequestHeader = {
-            token: window.localStorage.getItem("token")
-        };
-        if (!isAuthenticated()) {
-            return;
-        }
-        axios
-            .get(ServerConfig.api.ip + userProfileApi, {
-                headers: getRequestHeader
-            })
-            .then(response => {
-                const oUser = response.data.data;
-                setUserProfile(prevState => {
-                    return {
-                        ...prevState,
-                        email: oUser.email,
-                        username: oUser.username,
-                        credit: oUser.credit
-                    };
-                });
-            });
-    }, []);
-
     const onLogoutHandler = () => {
         window.localStorage.removeItem("token");
         setIsLogout(true);
     };
     return (
         <div className="ProfilePage">
-            <div className={classes.accountCircleIconContainer}>
-                <AccountCircleIcon
-                    className={classes.accountCircleIcon}
-                    color="primary"
-                />
-            </div>
-            <div className={classes.profileInfo}>
-                <Table>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell className={classes.field}>
-                                <FaceIcon />
-                                {"Username:"}
-                            </TableCell>
-                            <TableCell>{userProfile.username}</TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                            <TableCell className={classes.field}>
-                                <MailOutlineIcon />
-                                {"Email:"}
-                            </TableCell>
-                            <TableCell>{userProfile.email}</TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                            <TableCell className={classes.field}>
-                                <PaymentIcon />
-                                {"Credit:"}
-                            </TableCell>
-                            <TableCell>{userProfile.credit}
-                                <span onClick={() => { props.history.push("/payment") }}
-                                    style={{ marginLeft: "1rem", textDecoration: "underline" }}>
-                                    purchase
-                                </span>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
+            <UserProfile
+                history={props.history}
+            />
             <div className={classes.logoutContainer}>
                 <Fab
                     variant="extended"
                     size="large"
                     color="secondary"
                     aria-label="logout"
-                    className={classes.logout}
                     onClick={onLogoutHandler}
                 >
                     Logout
