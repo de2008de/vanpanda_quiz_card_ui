@@ -1,39 +1,35 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
 import ServerConfig from "../../configs/ServerConfig";
 import axios from "axios";
+import { makeStyles } from "@material-ui/core";
 import vanpandaLogo from "../../assets/svg/vanpanda_logo.svg";
 
 import "../../assets/css/Home/HomePage.css";
 
 const getStudyCardApi = "/api/v1/card/studycard";
 
-class HomePage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            studyCards: [],
-            numCourses: 0,
-            numKeyConcepts: 0
-        };
-        this.classes = {
-            logoContainer: {
-                display: "flex",
-                justifyContent: "center",
-                position: "absolute",
-                top: "-1rem",
-                right: 0
-            },
-            logo: {
-                width: "6rem",
-                marginTop: "1rem"
-            }
-        };
+const useStyles = makeStyles(theme => ({
+    headerContainer: {
+        display: "flex",
+        flexWrap: "wrap",
+        margin: "1rem 1rem 0.5rem 1rem"
+    },
+    logo: {
+        width: "6rem",
     }
-    getStudyCards = iPageNumber => {
+}));
+
+const HomePage = props => {
+    const classes = useStyles();
+    const [studyCards, setStudyCards] = useState([]);
+    const [numCourses, setNumCourses] = useState(0);
+    const [numKeyConcepts, setNumKeyConcepts] = useState(0);
+
+    const getStudyCards = iPageNumber => {
         const aStudyCardComponents = [];
         let numKeyConcepts = 0;
         axios
@@ -60,46 +56,44 @@ class HomePage extends Component {
                     numKeyConcepts += oStudyCard.conceptCards.length;
                     aStudyCardComponents.push(oStudyCardComponent);
                 });
-                this.setState({
-                    studyCards: aStudyCardComponents,
-                    numCourses: aStudyCards.length,
-                    numKeyConcepts: numKeyConcepts
-                });
+                setStudyCards(aStudyCardComponents);
+                setNumCourses(aStudyCards.length);
+                setNumKeyConcepts(numKeyConcepts);
             });
     };
 
-    componentDidMount() {
-        this.getStudyCards(0);
-    }
+    useEffect(() => {
+        getStudyCards(0);
+    }, []);
 
-    render() {
-        return (
-            <div className="HomePage">
-                <div className="headerContainer">
-                    <div style={{position: "relative", width: "100%"}}>
-                        <Typography variant="h5">
-                            <Box fontWeight="bold">Today's</Box>
-                        </Typography>
-                        <Typography variant="h5">
-                            <Box>Learning</Box>
-                        </Typography>
-                        <Typography color="textSecondary">
-                            <Box component="span">
-                                {this.state.numCourses +
-                                    " courses: " +
-                                    this.state.numKeyConcepts +
-                                    " key concepts"}
-                            </Box>
-                        </Typography>
-                        <Box style={this.classes.logoContainer}>
-                            <img src={vanpandaLogo} style={this.classes.logo} alt="vanpanda_logo" />
+    return (
+        <div className="HomePage">
+            <div className={classes.headerContainer}>
+                <div>
+                    <Typography variant="h5">
+                        <Box fontWeight="bold">Today's</Box>
+                    </Typography>
+                    <Typography variant="h5">
+                        <Box>Learning</Box>
+                    </Typography>
+                    <Typography color="textSecondary">
+                        <Box component="span">
+                            {numCourses +
+                                " courses: " +
+                                numKeyConcepts +
+                                " key concepts"}
                         </Box>
-                    </div>
+                    </Typography>
                 </div>
-                <div className="content">{this.state.studyCards}</div>
+                <div style={{ flexGrow: 1 }}></div>
+                <div>
+                    <img src={vanpandaLogo} className={classes.logo} alt="vanpanda_logo" />
+                </div>
             </div>
-        );
-    }
+            <div className="content">{studyCards}</div>
+        </div>
+    );
+
 }
 
 export default HomePage;
