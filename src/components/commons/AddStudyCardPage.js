@@ -18,7 +18,8 @@ const useStyles = makeStyles(theme => ({
     textField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
-        width: "60%"
+        display: "flex",
+        width: "auto"
     },
     fabButton: {
         margin: "1rem 0.5rem 1rem 0.5rem"
@@ -48,6 +49,11 @@ const useStyles = makeStyles(theme => ({
     form: {
         width: "95%",
         margin: "auto"
+    },
+    showDescriptionOrSchool: {
+        color: theme.palette.primary.main,
+        fontWeight: theme.typography.fontWeightMedium,
+        margin: "0.5rem"
     }
 }));
 
@@ -61,6 +67,8 @@ const AddStudyCardPage = props => {
         conceptCards: []
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isDescriptionHidden, setIsDescriptionHidden] = useState(true);
+    const [isSchoolHidden, setIsSchoolHidden] = useState(true);
 
     const onChangeHandler = sFieldName => {
         return e => {
@@ -191,6 +199,14 @@ const AddStudyCardPage = props => {
         return aConceptCardInputComponents;
     };
 
+    const showDescriptionField = () => {
+        setIsDescriptionHidden(false);
+    };
+
+    const showSchoolField = () => {
+        setIsSchoolHidden(false);
+    };
+
     const onSubmitHandler = () => {
         setIsSubmitting(true);
         const headers = {
@@ -224,12 +240,13 @@ const AddStudyCardPage = props => {
                     margin="dense"
                 />
                 <TextField
-                    id="subtitle"
-                    label="Subtitle"
+                    id="description"
+                    label="Description"
                     className={classes.textField}
-                    value={input.subtitle}
-                    onChange={onChangeHandler("subtitle")}
+                    value={input.description}
+                    onChange={onChangeHandler("description")}
                     margin="dense"
+                    style={isDescriptionHidden ? { display: "none" } : {}}
                 />
                 <TextField
                     id="school"
@@ -239,10 +256,24 @@ const AddStudyCardPage = props => {
                     value={input.school}
                     onChange={onChangeHandler("school")}
                     margin="dense"
+                    style={isSchoolHidden ? { display: "none" } : {}}
                 >
                     {getSchoolOptions()}
                 </TextField>
-
+                <div 
+                    className={classes.showDescriptionOrSchool} 
+                    onClick={showDescriptionField}
+                    style={!isDescriptionHidden ? { display: "none" } : {}}
+                >
+                    + Description
+                </div>
+                <div 
+                    className={classes.showDescriptionOrSchool} 
+                    onClick={showSchoolField}
+                    style={!isSchoolHidden ? { display: "none" } : {}}
+                >
+                    + School
+                </div>
                 {getConceptCardInputFields()}
                 <Fab
                     variant="extended"
