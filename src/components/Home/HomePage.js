@@ -13,16 +13,13 @@ import "../../assets/css/Home/HomePage.css";
 const getStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
-    logoContainer: {
+    headerContainer: {
         display: "flex",
-        justifyContent: "center",
-        position: "absolute",
-        top: "-1rem",
-        right: 0
+        flexWrap: "wrap",
+        margin: "1rem 1rem 0.5rem 1rem"
     },
     logo: {
         width: "6rem",
-        marginTop: "1rem"
     }
 }));
 
@@ -71,8 +68,8 @@ const HomePage = props => {
 
     return (
         <div className="HomePage">
-            <div className="headerContainer">
-                <div style={{ position: "relative", width: "100%" }}>
+            <div className={classes.headerContainer}>
+                <div>
                     <Typography variant="h5">
                         <Box fontWeight="bold">Today's</Box>
                     </Typography>
@@ -87,9 +84,10 @@ const HomePage = props => {
                                 " key concepts"}
                         </Box>
                     </Typography>
-                    <Box className={classes.logoContainer}>
-                        <img src={vanpandaLogo} className={classes.logo} alt="vanpanda_logo" />
-                    </Box>
+                </div>
+                <div style={{ flexGrow: 1 }}></div>
+                <div>
+                    <img src={vanpandaLogo} className={classes.logo} alt="vanpanda_logo" />
                 </div>
             </div>
             <div className="content">{studyCards}</div>
