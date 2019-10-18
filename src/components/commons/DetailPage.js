@@ -126,7 +126,7 @@ const DetailPage = props => {
                     {/* This should be retrieved from data source */}
                     <Typography variant="h5">{studyCard.title}</Typography>
                     <Typography variant="subtitle1" color="textSecondary">
-                        {studyCard.subtitle}
+                        {studyCard.description}
                     </Typography>
                     <Box className={classes.infoBar}>
                         <WCBadge
@@ -139,11 +139,7 @@ const DetailPage = props => {
                         />
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img
-                            className={classes.svg}
-                            src={schoolLogos[studyCard.school]}
-                            alt="school_logo"
-                        />
+                        {schoolLogos[studyCard.school] ? <img className={classes.svg} src={schoolLogos[studyCard.school]} alt="school_logo" /> : ""}
                     </Box>
                     <Box>
                         <Chip

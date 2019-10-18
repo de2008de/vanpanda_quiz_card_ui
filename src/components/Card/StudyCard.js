@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
         minHeight: "12rem",
         margin: "1rem auto",
         backgroundColor: "#fff",
-        borderColor: theme.palette.primary.main,
+        borderColor: theme.palette.primary.light,
         borderWidth: "0.1rem",
         borderStyle: "solid"
     },
@@ -67,14 +67,14 @@ const StudyCard = props => {
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
                         <Box fontFamily={readingFontFamily} component="span">
-                            {props.subtitle}
+                            {props.description}
                         </Box>
                     </Typography>
                     <Box className={classes.infoBar}>
                         <WCBadge content={props.conceptCards.length} color="primary" />{" "}
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img className={classes.svg} src={oSchoolList[props.school]} alt="school_logo" />
+                        {oSchoolList[props.school] ? <img className={classes.svg} src={oSchoolList[props.school]} alt="school_logo" /> : ""}
                     </Box>
                     <Box>
                         <Chip
