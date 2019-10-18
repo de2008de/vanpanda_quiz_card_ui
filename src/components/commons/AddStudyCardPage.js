@@ -3,15 +3,13 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
 import PublishIcon from "@material-ui/icons/Publish";
-import Card from "@material-ui/core/Card";
-import Box from "@material-ui/core/Box";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import ServerConfig from "../../configs/ServerConfig";
 import { doAuthentication } from "../../utils/auth";
 import { Typography } from "@material-ui/core";
+import ConceptCardInputField from "../Card/ConceptCardInputField";
 import TRANSLATED_ERROR_TEXT from "../../resources/translatedText/ErrorMessagesEn";
 
 const postStudyCardApi = "/api/v1/card/studycard";
@@ -28,25 +26,6 @@ const useStyles = makeStyles(theme => ({
     },
     extendedIcon: {
         marginRight: theme.spacing(1)
-    },
-    conceptCardInput: {
-        margin: "1rem 1rem",
-        padding: "1rem",
-        borderRadius: "1rem 0.1rem 1rem 0.3rem",
-        position: "relative"
-    },
-    conceptCardInnerInput: {
-        backgroundColor: theme.palette.primary.light,
-        borderRadius: "inherit",
-        padding: "1rem 1.5rem 1rem 1rem"
-    },
-    conceptCardTextField: {
-        width: "100%"
-    },
-    deleteIcon: {
-        position: "absolute",
-        top: 0,
-        right: 0
     },
     form: {
         width: "95%",
@@ -156,53 +135,13 @@ const AddStudyCardPage = props => {
         const aConceptCardInputComponents = [];
         input.conceptCards.forEach((oConceptCardInput, index) => {
             const conceptCardComponent = (
-                <Card className={classes.conceptCardInput} key={index}>
-                    <Fab
-                        color="secondary"
-                        className={classes.deleteIcon}
-                        onClick={onDeleteHandler(index)}
-                    >
-                        <DeleteIcon />
-                    </Fab>
-                    <Box
-                        component="div"
-                        className={classes.conceptCardInnerInput}
-                    >
-                        <TextField
-                            id="conceptCardTitle"
-                            label="Title"
-                            className={
-                                classes.textField +
-                                " " +
-                                classes.conceptCardTextField
-                            }
-                            value={input.conceptCards[index].title}
-                            onChange={onConceptCardChangeHandler(
-                                index,
-                                "title"
-                            )}
-                            margin="dense"
-                        />
-                        <TextField
-                            id="conceptCardContent"
-                            multiline
-                            variant="filled"
-                            rows={10}
-                            label="Content"
-                            className={
-                                classes.textField +
-                                " " +
-                                classes.conceptCardTextField
-                            }
-                            value={input.conceptCards[index].content}
-                            onChange={onConceptCardChangeHandler(
-                                index,
-                                "content"
-                            )}
-                            margin="dense"
-                        />
-                    </Box>
-                </Card>
+                <ConceptCardInputField
+                    key={index}
+                    index={index}
+                    input={input}
+                    onDeleteHandler={onDeleteHandler}
+                    onConceptCardChangeHandler={onConceptCardChangeHandler}
+                />
             );
             aConceptCardInputComponents.push(conceptCardComponent);
         });
