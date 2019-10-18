@@ -139,11 +139,7 @@ const DetailPage = props => {
                         />
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img
-                            className={classes.svg}
-                            src={schoolLogos[studyCard.school]}
-                            alt="school_logo"
-                        />
+                        {schoolLogos[studyCard.school] ? <img className={classes.svg} src={schoolLogos[studyCard.school]} alt="school_logo" /> : ""}
                     </Box>
                     <Box>
                         <Chip
