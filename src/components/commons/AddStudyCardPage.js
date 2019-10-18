@@ -11,6 +11,8 @@ import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import ServerConfig from "../../configs/ServerConfig";
 import { doAuthentication } from "../../utils/auth";
+import { Typography } from "@material-ui/core";
+import TRANSLATED_ERROR_TEXT from "../../resources/translatedText/ErrorMessagesEn";
 
 const postStudyCardApi = "/api/v1/card/studycard";
 
@@ -54,6 +56,10 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.main,
         fontWeight: theme.typography.fontWeightMedium,
         margin: "0.5rem"
+    },
+    errorMessageContainer: {
+        margin: "0.5rem",
+        color: theme.palette.secondary.main
     }
 }));
 
@@ -64,8 +70,12 @@ const AddStudyCardPage = props => {
         title: "",
         subtitle: "",
         school: "",
-        conceptCards: []
+        conceptCards: [{
+            title: "",
+            content: ""
+        }]
     });
+    const [errorMessages, setErrorMessages] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDescriptionHidden, setIsDescriptionHidden] = useState(true);
     const [isSchoolHidden, setIsSchoolHidden] = useState(true);
@@ -207,7 +217,72 @@ const AddStudyCardPage = props => {
         setIsSchoolHidden(false);
     };
 
+    const showErrorMessage = () => {
+        const aErrorComponents = [];
+        errorMessages.forEach((message, index) => {
+            const errorComponent = (
+                <Typography
+                    key={index}
+                >
+                    {message}
+                </Typography>
+            );
+            aErrorComponents.push(errorComponent);
+        });
+        return aErrorComponents;
+    };
+
+    const addErrorMessage = message => {
+        setErrorMessages(prevState => {
+            const aErrorMessages = [...prevState];
+            aErrorMessages.push(message);
+            return aErrorMessages;
+        });
+    };
+
+    const clearErrorMessages = () => {
+        setErrorMessages([]);
+    };
+
+    const isConceptCardValid = oCard => {
+        let bIsValid = true;
+        if (oCard.title === null || oCard.title === undefined || oCard.title.trim() === "") {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_TITLE_REQUIRED);
+            bIsValid = false;
+        }
+        if (oCard.content === null || oCard.content === undefined || oCard.content.trim() === "") {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_CONTENT_REQUIRED);
+            bIsValid = false;
+        }
+        return bIsValid;
+    };
+
+    const isInputValid = () => {
+        let bIsValid = true;
+        if (!input.conceptCards || input.conceptCards.length === 0) {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.AT_LEAST_ONE_CONCEPT_CARD);
+            bIsValid = false;
+        }
+        if (input.title === null || input.title === undefined || input.title.trim() === "") {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.STUDY_CARD_TITLE_REQUIRED);
+            bIsValid = false;
+        }
+        if (input.conceptCards && input.conceptCards.length >= 0) {
+            for (let i = 0; i < input.conceptCards.length; i++) {
+                const oConceptCard = input.conceptCards[i];
+                if (!isConceptCardValid(oConceptCard)) {
+                    bIsValid = false;
+                }
+            }
+        }
+        return bIsValid;
+    };
+
     const onSubmitHandler = () => {
+        clearErrorMessages();
+        if (!isInputValid()) {
+            return false;
+        }
         setIsSubmitting(true);
         const headers = {
             token: window.localStorage.getItem("token")
@@ -260,21 +335,24 @@ const AddStudyCardPage = props => {
                 >
                     {getSchoolOptions()}
                 </TextField>
-                <div 
-                    className={classes.showDescriptionOrSchool} 
+                <div
+                    className={classes.showDescriptionOrSchool}
                     onClick={showDescriptionField}
                     style={!isDescriptionHidden ? { display: "none" } : {}}
                 >
                     + Description
                 </div>
-                <div 
-                    className={classes.showDescriptionOrSchool} 
+                <div
+                    className={classes.showDescriptionOrSchool}
                     onClick={showSchoolField}
                     style={!isSchoolHidden ? { display: "none" } : {}}
                 >
                     + School
                 </div>
                 {getConceptCardInputFields()}
+                <div className={classes.errorMessageContainer}>
+                    {showErrorMessage()}
+                </div>
                 <Fab
                     variant="extended"
                     size="small"
