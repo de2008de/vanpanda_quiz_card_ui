@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
         minHeight: "12rem",
         margin: "1rem auto",
         backgroundColor: "#fff",
-        borderColor: theme.palette.primary.main,
+        borderColor: theme.palette.primary.light,
         borderWidth: "0.1rem",
         borderStyle: "solid"
     },
