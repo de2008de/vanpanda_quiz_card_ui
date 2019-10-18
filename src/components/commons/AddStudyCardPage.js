@@ -87,6 +87,7 @@ const AddStudyCardPage = props => {
 
     const getSchoolOptions = () => {
         const oOptions = {
+            null: "Not Applicable",
             sfu: "Simon Fraser University",
             ubc: "University of British Columbia"
         };
