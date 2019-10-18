@@ -74,7 +74,7 @@ const StudyCard = props => {
                         <WCBadge content={props.conceptCards.length} color="primary" />{" "}
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img className={classes.svg} src={oSchoolList[props.school]} alt="school_logo" />
+                        {oSchoolList[props.school] ? <img className={classes.svg} src={oSchoolList[props.school]} alt="school_logo" /> : ""}
                     </Box>
                     <Box>
                         <Chip
