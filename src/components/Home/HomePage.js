@@ -46,7 +46,7 @@ const HomePage = props => {
                             <StudyCard
                                 key={oStudyCard.id}
                                 title={oStudyCard.title}
-                                subtitle={oStudyCard.subtitle}
+                                description={oStudyCard.description}
                                 school={oStudyCard.school}
                                 conceptCards={oStudyCard.conceptCards}
                                 username={oStudyCard.username}

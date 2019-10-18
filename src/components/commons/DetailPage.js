@@ -126,7 +126,7 @@ const DetailPage = props => {
                     {/* This should be retrieved from data source */}
                     <Typography variant="h5">{studyCard.title}</Typography>
                     <Typography variant="subtitle1" color="textSecondary">
-                        {studyCard.subtitle}
+                        {studyCard.description}
                     </Typography>
                     <Box className={classes.infoBar}>
                         <WCBadge

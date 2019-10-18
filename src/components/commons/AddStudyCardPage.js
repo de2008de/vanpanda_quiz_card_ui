@@ -68,7 +68,7 @@ const AddStudyCardPage = props => {
     const classes = useStyles();
     const [input, setInput] = useState({
         title: "",
-        subtitle: "",
+        description: "",
         school: "",
         conceptCards: [{
             title: "",
@@ -290,7 +290,7 @@ const AddStudyCardPage = props => {
         axios
             .post(ServerConfig.api.ip + postStudyCardApi, {
                 title: input.title,
-                subtitle: input.subtitle,
+                description: input.description,
                 school: input.school,
                 conceptCards: input.conceptCards
             }, {

@@ -67,7 +67,7 @@ const StudyCard = props => {
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
                         <Box fontFamily={readingFontFamily} component="span">
-                            {props.subtitle}
+                            {props.description}
                         </Box>
                     </Typography>
                     <Box className={classes.infoBar}>
