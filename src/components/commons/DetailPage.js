@@ -39,6 +39,11 @@ const useStyles = makeStyles(theme => ({
     },
     author: {
         margin: "0.5rem auto"
+    },
+    buttonGroup: {
+        display: "flex",
+        flexWrap: "wrap",
+        margin: "0.5rem"
     }
 }));
 
@@ -158,7 +163,7 @@ const DetailPage = props => {
                     </Box>
                 </div>
             </div>
-            <div>
+            <div className={classes.buttonGroup}>
                 <ButtonCard
                     svg={bookSVG}
                     text="STUDY"
