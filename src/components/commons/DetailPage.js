@@ -99,8 +99,8 @@ const DetailPage = props => {
                     id={oConceptCard.id}
                     key={oConceptCard.id}
                     bookmarked={bookmarks[oConceptCard.id] ? true : false}
-                    title={oConceptCard.title}
-                    content={oConceptCard.content}
+                    term={oConceptCard.term}
+                    definition={oConceptCard.definition}
                 />
             );
             aDetailCards.push(oDetailCard);

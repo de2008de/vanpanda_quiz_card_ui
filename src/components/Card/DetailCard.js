@@ -25,10 +25,10 @@ const useStyles = makeStyles(theme => ({
         borderRadius: "inherit",
         padding: "1rem"
     },
-    contentTitle: {
+    term: {
         fontFamily: theme.typography.fontFamily
     },
-    contentParagraph: {
+    definition: {
         padding: "0 1rem 0 0"
     },
     footer: {
@@ -124,11 +124,11 @@ const DetailCard = props => {
     return (
         <div className={classes.card + " DetailCard"}>
             <div className={classes.content}>
-                <div className={classes.contentTitle}>
-                    <Typography variant="h6">{props.title}</Typography>
+                <div className={classes.term}>
+                    <Typography variant="h6">{props.term}</Typography>
                 </div>
-                <div className={classes.contentParagraph}>
-                    <Typography variant="body1">{props.content}</Typography>
+                <div className={classes.definition}>
+                    <Typography variant="body1">{props.definition}</Typography>
                 </div>
             </div>
             <div className={classes.footer}>
