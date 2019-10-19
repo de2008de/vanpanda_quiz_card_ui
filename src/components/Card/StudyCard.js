@@ -52,7 +52,7 @@ const StudyCard = props => {
     const loadConceptCards = () => {
         const aConceptCards = [];
         props.conceptCards.forEach(conceptCard => {
-            const oConceptCard = <ConceptCard key={conceptCard.id} content={conceptCard.title} />;
+            const oConceptCard = <ConceptCard key={conceptCard.id} term={conceptCard.term} />;
             aConceptCards.push(oConceptCard);
         });
         return <div>{aConceptCards}</div>;
