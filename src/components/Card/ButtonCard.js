@@ -8,7 +8,10 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles(theme => ({
     card: {
         display: "inline-block",
-        margin: "0.5rem"
+        margin: "0.5rem",
+        borderBottomColor: theme.palette.primary.main,
+        borderBottomWidth: "0.3rem",
+        borderBottomStyle: "solid"
     },
     svgContainer: {
         display: "flex",
