@@ -53,25 +53,23 @@ const ConceptCardInputField = props => {
                 component="div"
             >
                 <TextField
-                    id="conceptCardTitle"
-                    label="Title"
+                    label="Term"
                     className={classes.textField}
-                    value={props.input.conceptCards[props.index].title}
+                    value={props.input.conceptCards[props.index].term}
                     onChange={props.onConceptCardChangeHandler(
                         props.index,
-                        "title"
+                        "term"
                     )}
                     margin="dense"
                 />
                 <TextField
-                    id="conceptCardContent"
                     multiline
-                    label="Content"
+                    label="Definition"
                     className={classes.textField}
-                    value={props.input.conceptCards[props.index].content}
+                    value={props.input.conceptCards[props.index].definition}
                     onChange={props.onConceptCardChangeHandler(
                         props.index,
-                        "content"
+                        "definition"
                     )}
                     margin="dense"
                 />

@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
         width: "5rem",
         height: "3rem",
         textAlign: "left",
-        fontSize: "0.6rem",
+        fontSize: "1rem",
         fontWeight: "bold",
         color: theme.palette.text.secondary,
         backgroundColor: "inherit",
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 const ConceptCard = props => {
     const classes = useStyles();
-    return <Card className={classes.card}>{props.content}</Card>;
+    return <Card className={classes.card}>{props.term}</Card>;
 };
 
 export default ConceptCard;

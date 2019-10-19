@@ -11,6 +11,7 @@ import { doAuthentication } from "../../utils/auth";
 import { Typography } from "@material-ui/core";
 import ConceptCardInputField from "../Card/ConceptCardInputField";
 import TRANSLATED_ERROR_TEXT from "../../resources/translatedText/ErrorMessagesEn";
+import HTTP_RESPONSE_STATUS from "../../resources/http/HttpResponseStatus";
 
 const postStudyCardApi = "/api/v1/card/studycard";
 
@@ -50,8 +51,8 @@ const AddStudyCardPage = props => {
         description: "",
         school: "",
         conceptCards: [{
-            title: "",
-            content: ""
+            term: "",
+            definition: ""
         }]
     });
     const [errorMessages, setErrorMessages] = useState([]);
@@ -106,8 +107,8 @@ const AddStudyCardPage = props => {
 
     const addConceptCardOnClickHandler = () => {
         const oConceptCardInput = {
-            title: "",
-            content: ""
+            term: "",
+            definition: ""
         };
         const aConceptCards = [...input.conceptCards];
         aConceptCards.push(oConceptCardInput);
@@ -186,12 +187,12 @@ const AddStudyCardPage = props => {
 
     const isConceptCardValid = oCard => {
         let bIsValid = true;
-        if (oCard.title === null || oCard.title === undefined || oCard.title.trim() === "") {
-            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_TITLE_REQUIRED);
+        if (oCard.term === null || oCard.term === undefined || oCard.term.trim() === "") {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_TERM_REQUIRED);
             bIsValid = false;
         }
-        if (oCard.content === null || oCard.content === undefined || oCard.content.trim() === "") {
-            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_CONTENT_REQUIRED);
+        if (oCard.definition === null || oCard.definition === undefined || oCard.definition.trim() === "") {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_DEFINITION_REQUIRED);
             bIsValid = false;
         }
         return bIsValid;
@@ -240,7 +241,17 @@ const AddStudyCardPage = props => {
                 setIsSubmitting(false);
                 props.history.push("/success");
             })
-            .catch(() => { });
+            .catch((error) => {
+                setIsSubmitting(false);
+                if (!error.response) {
+                    addErrorMessage(TRANSLATED_ERROR_TEXT.SERVER_NO_RESPONSE);
+                }
+                else if (error.response.status === HTTP_RESPONSE_STATUS.INVALID_REQUEST) {
+                    addErrorMessage(TRANSLATED_ERROR_TEXT.SERVER_INVALIDA_INPUT_ERROR);
+                } else {
+                    addErrorMessage(TRANSLATED_ERROR_TEXT.SERVER_INTERNAL_ERROR);
+                }
+            });
     };
 
     return (
