@@ -5,12 +5,16 @@ import WCBadge from "../Badge/WCBadge";
 import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
 import UBCLogoSVG from "../../assets/svg/ubc_logo.svg";
 import DetailCard from "../Card/DetailCard";
+import ButtonCard from "../Card/ButtonCard";
 import qs from "query-string";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 import { isAuthenticated } from "../../utils/auth";
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
+import bookSVG from "../../assets/svg/book.svg";
+import cardSVG from "../../assets/svg/card.svg";
+import quizSVG from "../../assets/svg/quiz.svg";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 const bookmarkApi = "/api/v1/bookmark";
@@ -154,7 +158,23 @@ const DetailPage = props => {
                     </Box>
                 </div>
             </div>
-            <div className="content">{loadConceptCards()}</div>
+            <div>
+                <ButtonCard
+                    svg={bookSVG}
+                    text="STUDY"
+                />
+                <ButtonCard
+                    svg={cardSVG}
+                    text="FLASHCARDS"
+                />
+                <ButtonCard
+                    svg={quizSVG}
+                    text="QUIZ"
+                />
+            </div>
+            <div className="content">
+                {loadConceptCards()}
+            </div>
         </div>
     );
 };
