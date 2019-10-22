@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "inherit",
         padding: "0.3rem",
         margin: "0.2rem",
-        display: "inline-block",
+        display: "inline-flex",
         textOverflow: "ellipsis"
     },
 }));

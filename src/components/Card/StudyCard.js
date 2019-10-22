@@ -32,6 +32,8 @@ const useStyles = makeStyles(theme => ({
     },
     conceptCardContainer: {
         backgroundColor: theme.palette.primary.light,
+        display: "flex",
+        flexWrap: "wrap",
         padding: "0.3rem 0.6rem"
     },
     author: {
