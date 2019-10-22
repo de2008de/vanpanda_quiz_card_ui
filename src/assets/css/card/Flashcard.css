@@ -1,0 +1,80 @@
+/* Animation for card first time appears */
+.card-scene {
+    perspective: 600px;
+    animation: cardAppear 1.4s forwards;
+}
+.card-scene2 {
+    perspective: 600px;
+    animation: cardAppear2 1.4s forwards;
+}
+@keyframes cardAppear {
+    0% {
+        transform: rotate3d(0,0,1,15deg) translate3d(0,-100vh,0);
+    }
+    30% {
+        transform: rotate3d(0,0,0,0deg) translate3d(0,0,0);
+    }
+    65% {
+        transform: rotate3d(0,0,0,0deg) translate3d(0,0,0) scale3d(1,1,1);
+    }
+    80% {
+        transform: rotate3d(0,0,1,-5deg) scale3d(1.05,1.05,1);
+    }
+}
+
+@keyframes cardAppear2 {
+    0% {
+        transform: rotate3d(0,0,1,15deg) translate3d(0,-100vh,0);
+    }
+    30% {
+        transform: rotate3d(0,0,0,0deg) translate3d(0,0,0);
+    }
+    65% {
+        transform: rotate3d(0,0,0,0deg) translate3d(0,0,0) scale3d(1,1,1);
+    }
+    80% {
+        transform: rotate3d(0,0,1,-5deg) scale3d(1.05,1.05,1);
+    }
+}
+
+.FlashcardContainer {
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateY(180deg);
+    margin: 2rem auto;
+    height: 50vh;
+    width: 80vw;
+}
+
+.FlashcardContainer.card-flipped {
+    animation: cardFlip .275s forwards linear;
+}
+.FlashcardContainer.card-unflipped {
+    animation: cardUnFlip .275s forwards linear;
+}
+@keyframes cardFlip {
+    0% {
+      transform: rotateZ(0deg) rotateY(180deg);
+    } 
+    50% {
+      transform: rotateZ(-10deg) rotateY(90deg);
+    }
+    100% {
+      transform: rotateZ(0deg) rotateY(0deg);
+    }
+}
+@keyframes cardUnFlip {
+    0% {
+        transform: rotateZ(0deg) rotateY(0deg);
+    } 
+    50% {
+        transform: rotateZ(-10deg) rotateY(90deg);
+    }
+    100% {
+        transform: rotateZ(0deg) rotateY(180deg);
+    }
+}
+
+.card-face {
+    backface-visibility: hidden;
+}

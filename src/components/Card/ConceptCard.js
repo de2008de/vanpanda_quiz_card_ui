@@ -10,14 +10,15 @@ const useStyles = makeStyles(theme => ({
         width: "5rem",
         height: "3rem",
         textAlign: "left",
-        fontSize: "1rem",
+        fontSize: "0.8rem",
         fontWeight: "bold",
         color: theme.palette.text.secondary,
         backgroundColor: "inherit",
         padding: "0.3rem",
         margin: "0.2rem",
-        display: "inline-block"
-    }
+        display: "inline-block",
+        textOverflow: "ellipsis"
+    },
 }));
 
 const ConceptCard = props => {

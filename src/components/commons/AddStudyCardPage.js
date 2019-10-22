@@ -12,6 +12,7 @@ import { Typography } from "@material-ui/core";
 import ConceptCardInputField from "../Card/ConceptCardInputField";
 import TRANSLATED_ERROR_TEXT from "../../resources/translatedText/ErrorMessagesEn";
 import HTTP_RESPONSE_STATUS from "../../resources/http/HttpResponseStatus";
+import { CARD_LENGTH_LIMIT } from "../../resources/lengthLimit/CardLengthLimit";
 
 const postStudyCardApi = "/api/v1/card/studycard";
 
@@ -195,6 +196,14 @@ const AddStudyCardPage = props => {
             addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_DEFINITION_REQUIRED);
             bIsValid = false;
         }
+        if (oCard.term.length > CARD_LENGTH_LIMIT.CONCEPT_CARD_TERM_LENGTH_LIMIT) {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_TERM_LENGTH_LIMIT_EXCEEDED);
+            bIsValid = false;
+        }
+        if (oCard.definition.length > CARD_LENGTH_LIMIT.CONCEPT_CARD_DEFINITION_LENGTH_LIMIT) {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_DEFINITION_LENGTH_LIMIT_EXCEEDED);
+            bIsValid = false;
+        }
         return bIsValid;
     };
 
@@ -264,6 +273,7 @@ const AddStudyCardPage = props => {
                     value={input.title}
                     onChange={onChangeHandler("title")}
                     margin="dense"
+                    inputProps={{maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT}}
                 />
                 <TextField
                     id="description"
@@ -273,6 +283,7 @@ const AddStudyCardPage = props => {
                     onChange={onChangeHandler("description")}
                     margin="dense"
                     style={isDescriptionHidden ? { display: "none" } : {}}
+                    inputProps={{maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT}}
                 />
                 <TextField
                     id="school"
@@ -283,6 +294,7 @@ const AddStudyCardPage = props => {
                     onChange={onChangeHandler("school")}
                     margin="dense"
                     style={isSchoolHidden ? { display: "none" } : {}}
+                    inputProps={{maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_SCHOOL_LIMIT}}
                 >
                     {getSchoolOptions()}
                 </TextField>

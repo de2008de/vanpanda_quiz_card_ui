@@ -51,8 +51,8 @@ const BookmarkPage = props => {
                 <DetailCard
                     id={oConceptCard.id}
                     key={oConceptCard.id}
-                    title={oConceptCard.title}
-                    content={oConceptCard.content}
+                    term={oConceptCard.term}
+                    definition={oConceptCard.definition}
                     bookmarked
                 />
             );

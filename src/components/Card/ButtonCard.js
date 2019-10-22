@@ -28,20 +28,25 @@ const useStyles = makeStyles(theme => ({
 const ButtonCard = props => {
     const classes = useStyles();
     return (
-        <Card className={classes.card}>
-            <CardActionArea>
-                <CardContent>
-                    <div className={classes.svgContainer}>
-                        <img className={classes.svg} src={props.svg} alt="" />
-                    </div>
-                    <Typography
-                        className={classes.text}
-                    >
-                        {props.text}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Card>
+        <div
+            className="ButtonCard"
+            onClick={props.onClickHandler}
+        >
+            <Card className={classes.card}>
+                <CardActionArea>
+                    <CardContent>
+                        <div className={classes.svgContainer}>
+                            <img className={classes.svg} src={props.svg} alt="" />
+                        </div>
+                        <Typography
+                            className={classes.text}
+                        >
+                            {props.text}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        </div>
     );
 };
 
