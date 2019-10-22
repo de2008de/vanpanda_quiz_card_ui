@@ -51,10 +51,15 @@ const StudyCard = props => {
 
     const loadConceptCards = () => {
         const aConceptCards = [];
-        props.conceptCards.forEach(conceptCard => {
-            const oConceptCard = <ConceptCard key={conceptCard.id} term={conceptCard.term} />;
+        const maxConceptCardDisplayed = 6;
+        const conceptCards = props.conceptCards;
+        for (let i = 0; i < conceptCards.length; i++) {
+            const oConceptCard = <ConceptCard key={conceptCards[i].id} term={conceptCards[i].term} />;
             aConceptCards.push(oConceptCard);
-        });
+            if (aConceptCards.length === maxConceptCardDisplayed) {
+                break;
+            }
+        }
         return <div>{aConceptCards}</div>;
     };
 
