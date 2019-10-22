@@ -7,7 +7,7 @@ const determineEnvironment = () => {
     } else if (currentHost.indexOf("app.vanpanda.com") !== -1) {
         // production
         ip = "https://gentle-peak-28389.herokuapp.com";
-    } else if (currentHost.indexOf("test.vanpanda.com") !== -1) {
+    } else {
         // testing
         ip = "https://vanpanda-test.herokuapp.com";
     }
