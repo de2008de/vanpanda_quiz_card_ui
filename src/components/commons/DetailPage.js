@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { makeStyles, Typography, Box } from "@material-ui/core";
 import WCBadge from "../Badge/WCBadge";
@@ -15,6 +15,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import bookSVG from "../../assets/svg/book.svg";
 import cardSVG from "../../assets/svg/card.svg";
 import quizSVG from "../../assets/svg/quiz.svg";
+import { AppContext } from "../context/AppContext";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 const bookmarkApi = "/api/v1/bookmark";
@@ -52,6 +53,7 @@ const DetailPage = props => {
     const studyCardId = qs.parse(props.location.search).id;
     const [studyCard, setStudyCard] = useState({});
     const [bookmarks, setBookmarks] = useState({});
+    const { setAppContext } = useContext(AppContext);
 
     const getStudyCardById = id => {
         axios
@@ -122,6 +124,16 @@ const DetailPage = props => {
         props.history.push(authorProfileUrl);
     };
 
+    const onClickStudyHandler = () => {
+        setAppContext(prevState => {
+            return {
+                ...prevState,
+                studyCard
+            };
+        });
+        props.history.push("/studyCard/study?id=" + studyCardId);
+    };
+
     return (
         <div className="DetailPage">
             <div className={classes.header}>
@@ -167,6 +179,7 @@ const DetailPage = props => {
                 <ButtonCard
                     svg={bookSVG}
                     text="STUDY"
+                    onClickHandler={onClickStudyHandler}
                 />
                 <ButtonCard
                     svg={cardSVG}
