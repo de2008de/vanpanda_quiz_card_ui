@@ -53,7 +53,7 @@ const StudyCard = props => {
 
     const loadConceptCards = () => {
         const aConceptCards = [];
-        const maxConceptCardDisplayed = 6;
+        const maxConceptCardDisplayed = 2;
         const conceptCards = props.conceptCards;
         for (let i = 0; i < conceptCards.length; i++) {
             const oConceptCard = <ConceptCard key={conceptCards[i].id} term={conceptCards[i].term} />;
