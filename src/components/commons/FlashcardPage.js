@@ -4,15 +4,19 @@ import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 import qs from "query-string";
 import Flashcard from "../Card/Flashcard";
-import { makeStyles, Button } from "@material-ui/core";
+import { makeStyles, Button, Typography } from "@material-ui/core";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
     buttonGroup: {
-        margin: "1rem 2rem 3rem 2rem",
+        margin: "1rem 2rem 2rem 2rem",
         display: "flex",
         flexWrap: "wrap"
+    },
+    cardNumberIndicator: {
+        textAlign: "center",
+        margin: "1rem auto"
     }
 }));
 
@@ -52,20 +56,23 @@ const FlashcardPage = props => {
     const onClickNext = () => {
         const maxNumberOfCards = studyCard.conceptCards.length;
         if (indexOfCard === maxNumberOfCards - 1) {
-            return false;
+            setIndexOfCard(0);
+        } else {
+            setIndexOfCard(indexOfCard + 1);
         }
         runNewCardAppearAnimation();
         setIsFlipped(false);
-        setIndexOfCard(indexOfCard + 1);
     }
 
     const onClickPrevious = () => {
+        const maxNumberOfCards = studyCard.conceptCards.length;
         if (indexOfCard === 0) {
-            return false;
+            setIndexOfCard(maxNumberOfCards - 1);
+        } else {
+            setIndexOfCard(indexOfCard - 1);
         }
         runNewCardAppearAnimation();
         setIsFlipped(false);
-        setIndexOfCard(indexOfCard - 1);
     }
 
     const onClickCardHandler = () => {
@@ -85,6 +92,9 @@ const FlashcardPage = props => {
                 isFlipped={isFlipped}
                 onClickHandler={onClickCardHandler}
             />
+            <div className={classes.cardNumberIndicator}>
+                <Typography variant="subtitle1">{(indexOfCard + 1) + " of " + (studyCard.conceptCards && studyCard.conceptCards.length)}</Typography>
+            </div>
             <div className={classes.buttonGroup}>
                 <Button className={classes.button} variant="contained" color="primary" size="large" onClick={onClickPrevious}>Previous</Button>
                 <div style={{ flexGrow: 1 }}></div>
