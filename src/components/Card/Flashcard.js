@@ -30,8 +30,7 @@ const useStyles = makeStyles(theme => ({
         width: "100%",
     },
     cardBackContent: {
-        position: "absolute",
-        bottom: 0,
+        position: "relative",
         overflow: "hidden",
         boxSizing: "border-box",
         height: "40%"
