@@ -15,11 +15,12 @@ const useStyles = makeStyles(theme => ({
     cardBackHeader: {
         display: "flex",
         justifyContent: "center",
-        padding: "1rem",
-        height: "60%"
+        alignItems: "center",
+        height: "10%"
     },
     cardBackPicture: {
-        width: "10rem"
+        width: "100%",
+        height: "100%"
     },
     cardBack: {
         transform: "rotateY(180deg)"
@@ -30,11 +31,10 @@ const useStyles = makeStyles(theme => ({
         width: "100%",
     },
     cardBackContent: {
-        position: "absolute",
-        bottom: 0,
+        position: "relative",
         overflow: "hidden",
         boxSizing: "border-box",
-        height: "40%"
+        height: "80%"
     },
     cardFront: {
         position: "absolute",
