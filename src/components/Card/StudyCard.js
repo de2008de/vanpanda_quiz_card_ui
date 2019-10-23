@@ -32,6 +32,8 @@ const useStyles = makeStyles(theme => ({
     },
     conceptCardContainer: {
         backgroundColor: theme.palette.primary.light,
+        display: "flex",
+        flexWrap: "wrap",
         padding: "0.3rem 0.6rem"
     },
     author: {
@@ -51,10 +53,15 @@ const StudyCard = props => {
 
     const loadConceptCards = () => {
         const aConceptCards = [];
-        props.conceptCards.forEach(conceptCard => {
-            const oConceptCard = <ConceptCard key={conceptCard.id} term={conceptCard.term} />;
+        const maxConceptCardDisplayed = 2;
+        const conceptCards = props.conceptCards;
+        for (let i = 0; i < conceptCards.length; i++) {
+            const oConceptCard = <ConceptCard key={conceptCards[i].id} term={conceptCards[i].term} />;
             aConceptCards.push(oConceptCard);
-        });
+            if (aConceptCards.length === maxConceptCardDisplayed) {
+                break;
+            }
+        }
         return <div>{aConceptCards}</div>;
     };
 

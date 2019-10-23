@@ -10,13 +10,13 @@ const sStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
     buttonGroup: {
-        margin: "1rem 2rem 2rem 2rem",
+        margin: "0.5rem 2rem 2rem 2rem",
         display: "flex",
         flexWrap: "wrap"
     },
     cardNumberIndicator: {
         textAlign: "center",
-        margin: "1rem auto"
+        margin: "0.5rem auto"
     }
 }));
 

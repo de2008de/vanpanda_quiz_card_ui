@@ -6,8 +6,8 @@ import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
-    card: {
-        display: "inline-block",
+    buttonCard: {
+        display: "inline-flex",
         margin: "0.5rem",
         borderBottomColor: theme.palette.primary.main,
         borderBottomWidth: "0.3rem",
@@ -15,10 +15,12 @@ const useStyles = makeStyles(theme => ({
     },
     svgContainer: {
         display: "flex",
-        justifyContent: "center"
+        justifyContent: "center",
+        alignContent: "center"
     },
     svg: {
-        width: "2rem"
+        width: "2rem",
+        height: "2rem"
     },
     text: {
         color: theme.palette.primary.main
@@ -28,25 +30,23 @@ const useStyles = makeStyles(theme => ({
 const ButtonCard = props => {
     const classes = useStyles();
     return (
-        <div
-            className="ButtonCard"
+        <Card
+            className={classes.buttonCard}
             onClick={props.onClickHandler}
         >
-            <Card className={classes.card}>
-                <CardActionArea>
-                    <CardContent>
-                        <div className={classes.svgContainer}>
-                            <img className={classes.svg} src={props.svg} alt="" />
-                        </div>
-                        <Typography
-                            className={classes.text}
-                        >
-                            {props.text}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-            </Card>
-        </div>
+            <CardActionArea>
+                <CardContent>
+                    <div className={classes.svgContainer}>
+                        <img className={classes.svg} src={props.svg} alt="" />
+                    </div>
+                    <Typography
+                        className={classes.text}
+                    >
+                        {props.text}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+        </Card>
     );
 };
 
