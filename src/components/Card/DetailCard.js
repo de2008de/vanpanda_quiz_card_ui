@@ -4,11 +4,8 @@ import Typography from "@material-ui/core/Typography";
 import BookmarkIcon from "@material-ui/icons/Bookmark";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import Chip from "@material-ui/core/Chip";
-import axios from "axios";
-import ServerConfig from "../../configs/ServerConfig";
 import { isAuthenticated } from "../../utils/auth";
-
-const bookmarkApi = "/api/v1/bookmark";
+import { addBookmark, deleteBookmark } from "../api/BookmarkApiHelper";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -66,38 +63,21 @@ const DetailCard = props => {
             setIsChipVisible(true);
             return;
         }
-
-        const headers = {
-            token: window.localStorage.getItem("token")
-        };
-
+        const conceptCardId = props.id;
         if (!bookmarked) {
             setBookmarked(true);
             setChipText(ADDED_TO_BOOKMARK_TEXT);
             setIsChipVisible(true);
-            axios
-                .post(
-                    ServerConfig.api.ip + bookmarkApi,
-                    {
-                        concept_card_id: props.id
-                    },
-                    { headers: headers }
-                )
-                .then(() => {})
-                .catch(() => {});
+            addBookmark(conceptCardId)
+                .then(() => { })
+                .catch(() => { });
         } else {
             setBookmarked(false);
             setChipText(REMOVED_TO_BOOKMARK_TEXT);
             setIsChipVisible(true);
-            axios
-                .delete(ServerConfig.api.ip + bookmarkApi, {
-                    headers: headers,
-                    data: {
-                        concept_card_id: props.id
-                    }
-                })
-                .then(() => {})
-                .catch(() => {});
+            deleteBookmark(conceptCardId)
+                .then(() => { })
+                .catch(() => { });
         }
     };
 
