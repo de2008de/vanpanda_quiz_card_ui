@@ -79,6 +79,9 @@ const DetailCard = props => {
                 .then(() => { })
                 .catch(() => { });
         }
+        if (props.boomarkOnClickCallback) {
+            props.boomarkOnClickCallback();
+        }
     };
 
     const getBookmarkedIcon = () => {

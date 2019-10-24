@@ -16,7 +16,7 @@ import bookSVG from "../../assets/svg/book.svg";
 import cardSVG from "../../assets/svg/card.svg";
 import quizSVG from "../../assets/svg/quiz.svg";
 import { AppContext } from "../context/AppContext";
-import { getBookmarks } from "../api/BookmarkApiHelper";
+import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -68,13 +68,10 @@ const DetailPage = props => {
     const callGetBookmarksApi = () => {
         getBookmarks()
             .then(response => {
-            const bookmarks = response.data.data.bookmarks;
-            const bookmarkMap = {};
-            bookmarks.forEach(oBookmark => {
-                bookmarkMap[oBookmark.conceptCardId] = oBookmark;
+                const bookmarks = response.data.data.bookmarks;
+                const bookmarkMap = convertBookmarkArrayToMap(bookmarks);
+                setBookmarks(bookmarkMap);
             });
-            setBookmarks(bookmarkMap);
-        });
     };
 
     useEffect(() => {
@@ -93,6 +90,21 @@ const DetailPage = props => {
         ubc: UBCLogoSVG
     };
 
+    const boomarkOnClickCallback = conceptCardId => {
+        return () => {
+            setBookmarks(bookmarks => {
+                if (bookmarks[conceptCardId]) {
+                    delete bookmarks[conceptCardId];
+                } else {
+                    bookmarks[conceptCardId] = {
+                        conceptCardId: conceptCardId
+                    }
+                }
+                return bookmarks;
+            });
+        }
+    };
+
     const loadConceptCards = () => {
         const aDetailCards = [];
         if (!studyCard.conceptCards) {
@@ -106,6 +118,7 @@ const DetailPage = props => {
                     bookmarked={bookmarks[oConceptCard.id] ? true : false}
                     term={oConceptCard.term}
                     definition={oConceptCard.definition}
+                    boomarkOnClickCallback={boomarkOnClickCallback(oConceptCard.id)}
                 />
             );
             aDetailCards.push(oDetailCard);
@@ -122,7 +135,8 @@ const DetailPage = props => {
         setAppContext(prevState => {
             return {
                 ...prevState,
-                studyCard
+                studyCard,
+                bookmarks
             };
         });
         props.history.push("/studyCard/study?id=" + studyCardId);
@@ -132,7 +146,8 @@ const DetailPage = props => {
         setAppContext(prevState => {
             return {
                 ...prevState,
-                studyCard
+                studyCard,
+                bookmarks
             };
         });
         props.history.push("/studyCard/flashcard?id=" + studyCardId);
