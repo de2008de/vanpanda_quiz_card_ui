@@ -62,7 +62,10 @@ const ConceptCardInputField = props => {
                         "term"
                     )}
                     margin="dense"
-                    inputProps={{maxLength: CARD_LENGTH_LIMIT.CONCEPT_CARD_TERM_LENGTH_LIMIT}}
+                    inputProps={{
+                        maxLength: CARD_LENGTH_LIMIT.CONCEPT_CARD_TERM_LENGTH_LIMIT,
+                        autoComplete: "off"
+                    }}
                 />
                 <TextField
                     multiline
@@ -74,7 +77,10 @@ const ConceptCardInputField = props => {
                         "definition"
                     )}
                     margin="dense"
-                    inputProps={{maxLength: CARD_LENGTH_LIMIT.CONCEPT_CARD_DEFINITION_LENGTH_LIMIT}}
+                    inputProps={{
+                        maxLength: CARD_LENGTH_LIMIT.CONCEPT_CARD_DEFINITION_LENGTH_LIMIT,
+                        autoComplete: "off"
+                    }}
                 />
             </Box>
         </Card>
