@@ -40,3 +40,11 @@ export const deleteBookmark = id => {
             }
         });
 };
+
+export const convertBookmarkArrayToMap = bookmarks => {
+    const bookmarkMap = {};
+    bookmarks.forEach(oBookmark => {
+        bookmarkMap[oBookmark.conceptCardId] = oBookmark;
+    });
+    return bookmarkMap;
+};
