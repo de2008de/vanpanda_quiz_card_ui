@@ -16,9 +16,9 @@ import bookSVG from "../../assets/svg/book.svg";
 import cardSVG from "../../assets/svg/card.svg";
 import quizSVG from "../../assets/svg/quiz.svg";
 import { AppContext } from "../context/AppContext";
+import { getBookmarks } from "../api/BookmarkApiHelper";
 
 const sStudyCardApi = "/api/v1/card/studycard";
-const bookmarkApi = "/api/v1/bookmark";
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -65,28 +65,22 @@ const DetailPage = props => {
             .catch(() => { });
     };
 
-    const getBookmarks = () => {
-        const headers = {
-            token: window.localStorage.getItem("token")
-        };
-        axios
-            .get(ServerConfig.api.ip + bookmarkApi, {
-                headers: headers
-            })
+    const callGetBookmarksApi = () => {
+        getBookmarks()
             .then(response => {
-                const bookmarks = response.data.data.bookmarks;
-                const bookmarkMap = {};
-                bookmarks.forEach(oBookmark => {
-                    bookmarkMap[oBookmark.conceptCardId] = oBookmark;
-                });
-                setBookmarks(bookmarkMap);
+            const bookmarks = response.data.data.bookmarks;
+            const bookmarkMap = {};
+            bookmarks.forEach(oBookmark => {
+                bookmarkMap[oBookmark.conceptCardId] = oBookmark;
             });
+            setBookmarks(bookmarkMap);
+        });
     };
 
     useEffect(() => {
         getStudyCardById(studyCardId);
         if (isAuthenticated()) {
-            getBookmarks();
+            callGetBookmarksApi();
         }
     }, [studyCardId]);
 

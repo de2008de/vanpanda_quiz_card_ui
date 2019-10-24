@@ -4,6 +4,16 @@ import ServerConfig from "../../configs/ServerConfig";
 const bookmarkApi = "/api/v1/bookmark";
 const token = window.localStorage.getItem("token");
 
+export const getBookmarks = () => {
+    const headers = {
+        token: token
+    };
+    return axios
+        .get(ServerConfig.api.ip + bookmarkApi, {
+            headers: headers
+        });
+};
+
 export const addBookmark = id => {
     const headers = {
         token: token
