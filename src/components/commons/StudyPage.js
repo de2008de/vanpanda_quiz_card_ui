@@ -45,6 +45,7 @@ const StudyPage = props => {
     const [indexOfQuestion, setIndexOfQuestion] = useState(0);
     const [userInputAnswer, setUserInputAsnwer] = useState("");
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
+    const [showResult, setShowResult] = useState(false);
     const [showAnswer, setShowAnswer] = useState(false);
     const studyCardId = qs.parse(props.location.search).id;
 
@@ -84,6 +85,10 @@ const StudyPage = props => {
             setUserInputAsnwer(pendingAnswer);
             if (pendingAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
                 setIsAnswerCorrect(true);
+                const totalNumQuestions = studyCard.conceptCards.length;
+                if (indexOfQuestion === totalNumQuestions - 1) {
+                    setShowResult(true);
+                }
             }
         }
     }
@@ -99,11 +104,19 @@ const StudyPage = props => {
     };
 
     const onClickNextQuestion = () => {
+        const totalNumQuestions = studyCard.conceptCards.length;
+        if (indexOfQuestion === totalNumQuestions - 1) {
+            return false;
+        }
         setIndexOfQuestion(index => {
             return index + 1;
         });
         resetQuestion();
-    }
+    };
+
+    const onClickShowResult = () => {
+        
+    };
 
     const showStudyQuestion = () => {
         if (!studyCard.conceptCards) {
@@ -162,13 +175,25 @@ const StudyPage = props => {
                                 CORRECT!
                             </Typography>
                             <div style={{ flexGrow: 1 }}></div>
-                            <Button
-                                color="primary"
-                                variant="outlined"
-                                onClick={onClickNextQuestion}
-                            >
-                                Next
-                            </Button>
+                            {
+                                !showResult ?
+                                <Button
+                                    color="primary"
+                                    variant="outlined"
+                                    onClick={onClickNextQuestion}
+                                >
+                                    Next
+                                </Button>
+                                :
+                                <Button
+                                    color="secondary"
+                                    variant="contained"
+                                    onClick={onClickShowResult}
+                                >
+                                    Show Result
+                                </Button>
+                            }
+
                         </div>
                         :
                         ""
