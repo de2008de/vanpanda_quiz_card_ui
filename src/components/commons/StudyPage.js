@@ -47,6 +47,10 @@ const StudyPage = props => {
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const [showAnswer, setShowAnswer] = useState(false);
+    const [resultMap, setResultMap] = useState({
+        masteredConceptCard: [],
+        needImprovementConceptCard: []
+    });
     const studyCardId = qs.parse(props.location.search).id;
 
     useEffect(() => {
@@ -85,6 +89,7 @@ const StudyPage = props => {
             setUserInputAsnwer(pendingAnswer);
             if (pendingAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
                 setIsAnswerCorrect(true);
+                recordResult();
                 const totalNumQuestions = studyCard.conceptCards.length;
                 if (indexOfQuestion === totalNumQuestions - 1) {
                     setShowResult(true);
@@ -103,6 +108,19 @@ const StudyPage = props => {
         setShowAnswer(true);
     };
 
+    const recordResult = () => {
+        const conceptCardId = studyCard.conceptCards[indexOfQuestion].id;
+        const didUserShowAnswer = showAnswer;
+        setResultMap(result => {
+            if (didUserShowAnswer) {
+                result.needImprovementConceptCard.push(conceptCardId);
+            } else {
+                result.masteredConceptCard.push(conceptCardId);
+            }
+            return result;
+        });
+    }
+
     const onClickNextQuestion = () => {
         const totalNumQuestions = studyCard.conceptCards.length;
         if (indexOfQuestion === totalNumQuestions - 1) {
@@ -114,8 +132,15 @@ const StudyPage = props => {
         resetQuestion();
     };
 
+    const getResultParamsString = () => {
+        const params = encodeURIComponent(JSON.stringify(resultMap));
+        const paramString = "result=" + params;
+        return paramString;
+    };
+
     const onClickShowResult = () => {
-        
+        const params = getResultParamsString();
+        props.history.push("/studyCard/study/result?" + params);
     };
 
     const showStudyQuestion = () => {
