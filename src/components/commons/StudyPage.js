@@ -131,6 +131,7 @@ const StudyPage = props => {
             <div>
                 <DetailCard
                     id={conceptCardId}
+                    key={conceptCardId}
                     bookmarked={isBookmared}
                     definition={conceptCard.definition}
                 />
