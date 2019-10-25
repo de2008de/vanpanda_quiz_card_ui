@@ -6,22 +6,34 @@ import qs from "query-string";
 import DetailCard from "../Card/DetailCard";
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from "@material-ui/core/styles";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
+import "../../assets/css/commons/StudyPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
+    studyPage: {
+        margin: "0 1rem"
+    },
     textField: {
         display: "flex",
         width: "auto",
-        margin: "0 1rem"
     },
     doNotKnow: {
         textAlign: "right",
-        margin: "1rem",
         textDecoration: "underline",
-        color: theme.palette.secondary.main
+        color: theme.palette.secondary.main,
+        margin: "0.5rem 0"
+    },
+    helperTextContainer: {
+        display: "flex",
+        alignItems: "center",
+        margin: "0.5rem 0"
+    },
+    indexIndicator: {
+        textAlign: "center"
     }
 }));
 
@@ -33,6 +45,7 @@ const StudyPage = props => {
     const [indexOfQuestion, setIndexOfQuestion] = useState(0);
     const [userInputAnswer, setUserInputAsnwer] = useState("");
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
+    const [showAnswer, setShowAnswer] = useState(false);
     const studyCardId = qs.parse(props.location.search).id;
 
     useEffect(() => {
@@ -78,13 +91,26 @@ const StudyPage = props => {
     const resetQuestion = () => {
         setIsAnswerCorrect(false);
         setUserInputAsnwer("");
+        setShowAnswer(false);
     };
+
+    const onClickIDontKnow = () => {
+        setShowAnswer(true);
+    };
+
+    const onClickNextQuestion = () => {
+        setIndexOfQuestion(index => {
+            return index + 1;
+        });
+        resetQuestion();
+    }
 
     const showStudyQuestion = () => {
         if (!studyCard.conceptCards) {
             return false;
         }
         const conceptCard = studyCard.conceptCards[indexOfQuestion];
+        const totalNumQuestions = studyCard.conceptCards.length;
         const conceptCardId = conceptCard.id;
         const isBookmared = bookmarks[conceptCardId];
         const correctAnswer = conceptCard.term;
@@ -95,18 +121,38 @@ const StudyPage = props => {
                     bookmarked={isBookmared}
                     definition={conceptCard.definition}
                 />
+                <Typography className={classes.indexIndicator}>
+                    {indexOfQuestion + " of " + totalNumQuestions}
+                </Typography>
+                {
+                    showAnswer ?
+                        <div
+                            className={classes.answer}
+                        >
+                            <Typography
+                                color="primary"
+                            >
+                                Answer is: {correctAnswer}.
+                            </Typography>
+                        </div>
+                        :
+                        ""
+                }
                 <TextField
-                    label="Answer"
+                    label={showAnswer ? '"' + correctAnswer + '" type it here' : "Type your answer"}
+                    error={showAnswer && !isAnswerCorrect}
                     value={userInputAnswer}
                     onChange={userInputAnswerOnChange(correctAnswer)}
                     margin="normal"
-                    className={classes.textField}
+                    className={classes.textField + " answer-text-field"}
                     inputProps={{
                         autoComplete: "off"
                     }}
                     disabled={isAnswerCorrect}
-                    helperText={
-                        isAnswerCorrect ?
+                />
+                {
+                    isAnswerCorrect ?
+                        <div className={classes.helperTextContainer}>
                             <Typography
                                 component="span"
                                 className={classes.helperText}
@@ -115,23 +161,37 @@ const StudyPage = props => {
                             >
                                 CORRECT!
                             </Typography>
+                            <div style={{ flexGrow: 1 }}></div>
+                            <Button
+                                color="primary"
+                                variant="outlined"
+                                onClick={onClickNextQuestion}
+                            >
+                                Next
+                            </Button>
+                        </div>
+                        :
+                        ""
+                }
+                <div>
+                    {
+                        !isAnswerCorrect ?
+                            <Typography
+                                className={classes.doNotKnow}
+                                onClick={onClickIDontKnow}
+                            >
+                                I don't know
+                            </Typography>
                             :
                             ""
                     }
-                />
-                <div>
-                    <Typography
-                        className={classes.doNotKnow}
-                    >
-                        I don't know
-                    </Typography>
                 </div>
             </div>
         );
     }
 
     return (
-        <div>
+        <div className={classes.studyPage + " StudyPage"}>
             {showStudyQuestion()}
         </div>
     );
