@@ -136,7 +136,7 @@ const StudyPage = props => {
                     definition={conceptCard.definition}
                 />
                 <Typography className={classes.indexIndicator}>
-                    {indexOfQuestion + " of " + totalNumQuestions}
+                    {(indexOfQuestion + 1) + " of " + totalNumQuestions}
                 </Typography>
                 {
                     showAnswer ?
