@@ -143,6 +143,21 @@ const StudyPage = props => {
         props.history.push("/studyCard/study/result?" + params);
     };
 
+    const boomarkOnClickCallback = conceptCardId => {
+        return () => {
+            setBookmarks(bookmarks => {
+                if (bookmarks[conceptCardId]) {
+                    delete bookmarks[conceptCardId];
+                } else {
+                    bookmarks[conceptCardId] = {
+                        conceptCardId: conceptCardId
+                    }
+                }
+                return bookmarks;
+            });
+        }
+    };
+
     const showStudyQuestion = () => {
         if (!studyCard.conceptCards) {
             return false;
@@ -159,6 +174,7 @@ const StudyPage = props => {
                     key={conceptCardId}
                     bookmarked={isBookmared}
                     definition={conceptCard.definition}
+                    boomarkOnClickCallback={boomarkOnClickCallback(conceptCardId)}
                 />
                 <Typography className={classes.indexIndicator}>
                     {(indexOfQuestion + 1) + " of " + totalNumQuestions}
