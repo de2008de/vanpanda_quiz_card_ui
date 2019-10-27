@@ -9,6 +9,11 @@ import Tab from '@material-ui/core/Tab';
 import { AppContext } from "../context/AppContext";
 import { convertConceptCardsArrayToMap } from "../api/StudyCardsApiHelper";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
+import Button from '@material-ui/core/Button';
+import axios from "axios";
+import ServerConfig from "../../configs/ServerConfig";
+
+const sStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
     waterWaveContainer: {
@@ -21,6 +26,11 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center"
+    },
+    buttonGroup: {
+        display: "flex",
+        flexWrap: "wrap",
+        margin: "0.5rem 1rem"
     }
 }));
 
@@ -29,7 +39,9 @@ const StudyPageResult = props => {
     const { appContext } = useContext(AppContext);
     const [tabIndex, setTabIndex] = useState(0);
     const [bookmarks, setBookmarks] = useState({});
+    const [studyCard, setStudyCard] = useState({});
     const result = JSON.parse(qs.parse(props.location.search).result);
+    const studyCardId = qs.parse(props.location.search).id;
 
     useEffect(() => {
         // If we have cache, then use cache
@@ -46,6 +58,21 @@ const StudyPageResult = props => {
             .catch(() => { });
     }, [appContext]);
 
+    useEffect(() => {
+        // If we have cache, then use cache
+        if (appContext && appContext.studyCard) {
+            setStudyCard(appContext.studyCard);
+            return;
+        }
+        axios
+            .get(ServerConfig.api.ip + sStudyCardApi + "/" + studyCardId)
+            .then(response => {
+                const studyCard = response.data.data;
+                setStudyCard(studyCard);
+            })
+            .catch(() => { });
+    }, [appContext, studyCardId]);
+
     const getTotalScore = result => {
         const totalConceptCards = result.masteredConceptCard.length + result.needImprovementConceptCard.length;
         const numMasteredConceptCard = result.masteredConceptCard.length;
@@ -57,6 +84,14 @@ const StudyPageResult = props => {
 
     const onTabChange = (event, index) => {
         setTabIndex(index);
+    };
+
+    const onClickBackToStudyCard = () => {
+        props.history.push("/detail?id=" + studyCardId);
+    };
+
+    const onClickStudyAgain = () => {
+        props.history.push("/studyCard/study?id=" + studyCardId);
     };
 
     const showDetailCards = () => {
@@ -73,10 +108,10 @@ const StudyPageResult = props => {
         } else if (currentTab === NEED_IMPROVEMENT) {
             detailCardIds = result.needImprovementConceptCard;
         }
-        if (!appContext || !appContext.studyCard || !appContext.studyCard.conceptCards) {
+        if (!studyCard || !studyCard.conceptCards) {
             return false;
         }
-        const conceptCards = appContext.studyCard.conceptCards;
+        const conceptCards = studyCard.conceptCards;
         const conceptCardsMap = convertConceptCardsArrayToMap(conceptCards);
         const detailCards = [];
         detailCardIds.forEach(id => {
@@ -108,6 +143,23 @@ const StudyPageResult = props => {
                 <Typography variant="h6">
                     Your score is {score}%
                 </Typography>
+            </div>
+            <div className={classes.buttonGroup}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={onClickBackToStudyCard}
+                >
+                    Back to Study Card
+                </Button>
+                <div style={{flexGrow: 1}}></div>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={onClickStudyAgain}
+                >
+                    Study Again
+                </Button>
             </div>
             <div>
                 <div>

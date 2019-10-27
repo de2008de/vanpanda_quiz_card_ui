@@ -134,7 +134,7 @@ const StudyPage = props => {
 
     const getResultParamsString = () => {
         const params = encodeURIComponent(JSON.stringify(resultMap));
-        const paramString = "result=" + params;
+        const paramString = "result=" + params + "&id=" + studyCardId;
         return paramString;
     };
 
