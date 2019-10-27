@@ -273,7 +273,10 @@ const AddStudyCardPage = props => {
                     value={input.title}
                     onChange={onChangeHandler("title")}
                     margin="dense"
-                    inputProps={{maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT}}
+                    inputProps={{
+                        maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT,
+                        autoComplete: "off"
+                    }}
                 />
                 <TextField
                     id="description"
@@ -283,7 +286,10 @@ const AddStudyCardPage = props => {
                     onChange={onChangeHandler("description")}
                     margin="dense"
                     style={isDescriptionHidden ? { display: "none" } : {}}
-                    inputProps={{maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT}}
+                    inputProps={{
+                        maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT,
+                        autoComplete: "off"
+                    }}
                 />
                 <TextField
                     id="school"
@@ -294,7 +300,10 @@ const AddStudyCardPage = props => {
                     onChange={onChangeHandler("school")}
                     margin="dense"
                     style={isSchoolHidden ? { display: "none" } : {}}
-                    inputProps={{maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_SCHOOL_LIMIT}}
+                    inputProps={{
+                        maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_SCHOOL_LIMIT,
+                        autoComplete: "off"
+                    }}
                 >
                     {getSchoolOptions()}
                 </TextField>

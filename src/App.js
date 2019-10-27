@@ -7,7 +7,7 @@ import { AppContext } from "./components/context/AppContext";
 
 function App() {
     const [appContext, setAppContext] = useState(null);
-    const studyCardContextValue = useMemo(() => {
+    const appContextValue = useMemo(() => {
         return {
             appContext,
             setAppContext
@@ -16,7 +16,7 @@ function App() {
 
     return (
         <div className="App">
-            <AppContext.Provider value={studyCardContextValue}>
+            <AppContext.Provider value={appContextValue}>
                 <MuiThemeProvider theme={WCTheme}>
                     <BrowserRouter>
                         <AppShell />
