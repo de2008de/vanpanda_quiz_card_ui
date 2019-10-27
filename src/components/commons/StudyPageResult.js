@@ -94,6 +94,21 @@ const StudyPageResult = props => {
         props.history.push("/studyCard/study?id=" + studyCardId);
     };
 
+    const boomarkOnClickCallback = conceptCardId => {
+        return () => {
+            setBookmarks(bookmarks => {
+                if (bookmarks[conceptCardId]) {
+                    delete bookmarks[conceptCardId];
+                } else {
+                    bookmarks[conceptCardId] = {
+                        conceptCardId: conceptCardId
+                    }
+                }
+                return bookmarks;
+            });
+        }
+    };
+
     const showDetailCards = () => {
         const MASTERED = "mastered"
         const NEED_IMPROVEMENT = "need_improvement";
@@ -124,13 +139,14 @@ const StudyPageResult = props => {
                     term={conceptCard.term}
                     bookmarked={isBookmared}
                     definition={conceptCard.definition}
+                    boomarkOnClickCallback={boomarkOnClickCallback(id)}
                 >
                 </DetailCard>
             );
             detailCards.push(detailCardComponent);
         });
         return detailCards;
-    }
+    };
 
     return (
         <div className="StudyPageResult">
