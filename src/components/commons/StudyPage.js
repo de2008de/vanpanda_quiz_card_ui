@@ -21,8 +21,10 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         width: "auto",
     },
+    doNotKnowContainer: {
+        textAlign: "right"
+    },
     doNotKnow: {
-        textAlign: "right",
         textDecoration: "underline",
         color: theme.palette.secondary.main,
         margin: "0.5rem 0"
@@ -240,10 +242,11 @@ const StudyPage = props => {
                         :
                         ""
                 }
-                <div>
+                <div className={classes.doNotKnowContainer}>
                     {
                         !isAnswerCorrect ?
                             <Typography
+                                component="span"
                                 className={classes.doNotKnow}
                                 onClick={onClickIDontKnow}
                             >
