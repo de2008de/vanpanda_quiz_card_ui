@@ -13,6 +13,7 @@ import PaymentCompletedPage from "../payment/PaymentCompletedPage";
 import PublicProfilePage from "../commons/PublicProfilePage";
 import StudyPage from "../commons/StudyPage";
 import FlashcardPage from "../commons/FlashcardPage";
+import StudyPageResult from "../commons/StudyPageResult";
 
 const WCRouter = () => {
     return (
@@ -29,7 +30,8 @@ const WCRouter = () => {
                 <Route path="/user/publicProfile" component={PublicProfilePage} />
                 <Route path="/paymentCompleted" component={PaymentCompletedPage} />
                 <Route path="/payment" component={PaymentPage} />
-                <Route path="/studyCard/study" component={StudyPage} />
+                <Route path="/studyCard/study" exact component={StudyPage} />
+                <Route path="/studyCard/study/result" component={StudyPageResult} />
                 <Route path="/studyCard/flashcard" component={FlashcardPage} />
                 <Redirect to="/" />
             </Switch>

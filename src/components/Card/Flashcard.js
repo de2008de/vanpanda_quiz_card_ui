@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import vanpandaLogoSvg from "../../assets/svg/vanpanda_logo_no_bg.svg";
 import { makeStyles, Typography } from "@material-ui/core";
 import "../../assets/css/card/Flashcard.css";
