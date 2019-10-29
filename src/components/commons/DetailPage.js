@@ -153,6 +153,17 @@ const DetailPage = props => {
         props.history.push("/studyCard/flashcard?id=" + studyCardId);
     }
 
+    const onClickQuizHandler = () => {
+        setAppContext(prevState => {
+            return {
+                ...prevState,
+                studyCard,
+                bookmarks
+            }
+        });
+        props.history.push("/studyCard/quiz?id=" + studyCardId);
+    };
+
     return (
         <div className="DetailPage">
             <div className={classes.header}>
@@ -208,6 +219,7 @@ const DetailPage = props => {
                 <ButtonCard
                     svg={quizSVG}
                     text="QUIZ"
+                    onClickHandler={onClickQuizHandler}
                 />
             </div>
             <div className="content">
