@@ -2,9 +2,14 @@ import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 
 const bookmarkApi = "/api/v1/bookmark";
-const token = window.localStorage.getItem("token");
+
+const getToken = () => {
+    const token = window.localStorage.getItem("token");
+    return token;
+};
 
 export const getBookmarks = () => {
+    const token = getToken();
     const headers = {
         token: token
     };
@@ -15,6 +20,7 @@ export const getBookmarks = () => {
 };
 
 export const addBookmark = id => {
+    const token = getToken();
     const headers = {
         token: token
     };
@@ -29,6 +35,7 @@ export const addBookmark = id => {
 };
 
 export const deleteBookmark = id => {
+    const token = getToken();
     const headers = {
         token: token
     };
