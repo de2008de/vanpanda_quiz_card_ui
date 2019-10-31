@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
 import { getRandomNumber } from "../../helpers/mathHelper";
 import { shuffleArray } from "../../helpers/arrayHelper";
+import GoBackArrow from "./GoBackArrow";
 import "../../assets/css/commons/StudyPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
@@ -397,6 +398,9 @@ const StudyPage = props => {
 
     return (
         <div className={classes.studyPage + " StudyPage"}>
+            <GoBackArrow
+                history={props.history}
+            />
             {
                 showQuestion()
             }

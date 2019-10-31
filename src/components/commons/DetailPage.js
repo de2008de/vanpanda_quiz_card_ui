@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import GoBackArrow from "./GoBackArrow";
 import { makeStyles, Typography, Box } from "@material-ui/core";
 import WCBadge from "../Badge/WCBadge";
 import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
@@ -81,10 +81,6 @@ const DetailPage = props => {
             callGetBookmarksApi();
         }
     }, [studyCardId]);
-
-    const backArrowOnClickHandler = () => {
-        props.history.goBack();
-    };
 
     const schoolLogos = {
         sfu: SFULogoSVG,
@@ -168,12 +164,9 @@ const DetailPage = props => {
     return (
         <div className="DetailPage">
             <div className={classes.header}>
-                <div onClick={backArrowOnClickHandler}>
-                    <ArrowBackIcon
-                        className={classes.arrowBack}
-                        color="primary"
-                    />
-                </div>
+                <GoBackArrow
+                    history={props.history}
+                />
                 <div className={classes.headerTitleContainer}>
                     {/* This should be retrieved from data source */}
                     <Typography variant="h5">{studyCard.title}</Typography>
