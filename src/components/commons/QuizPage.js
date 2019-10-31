@@ -8,10 +8,26 @@ import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelpe
 import Button from '@material-ui/core/Button';
 import { getRandomNumber } from "../../helpers/mathHelper";
 import { shuffleArray } from "../../helpers/arrayHelper";
+import { makeStyles } from "@material-ui/core";
+import Typography from '@material-ui/core/Typography';
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
+const useStyles = makeStyles(theme => ({
+    multipleChoiceButtonWrapper: {
+        margin: "1rem 0.5rem"
+    },
+    multipleChoiceButton: {
+        display: "block",
+        width: "100%"
+    },
+    hintText: {
+        margin: "0.5rem 0.5rem"
+    }
+}));
+
 const QuizPage = props => {
+    const classes = useStyles();
     const appContext = useContext(AppContext);
     const [studyCard, setStudyCard] = useState({});
     const [bookmarks, setBookmarks] = useState({});
@@ -101,12 +117,16 @@ const QuizPage = props => {
         const choiceButtons = [];
         shuffledChoices.forEach(choice => {
             const button = (
-                <Button
-                    variant="outlined"
-                    color="primary"
-                >
-                    {choice}
-                </Button>
+                <div className={classes.multipleChoiceButtonWrapper}>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        size="large"
+                        className={classes.multipleChoiceButton}
+                    >
+                        {choice}
+                    </Button>
+                </div>
             );
             choiceButtons.push(button);
         });
@@ -134,6 +154,11 @@ const QuizPage = props => {
                     </DetailCard>
                 </div>
                 <div>
+                    <Typography
+                        className={classes.hintText}
+                    >
+                        Please select an answer.
+                    </Typography>
                     {showMultipleChoices(studyCard)}
                 </div>
             </div>
