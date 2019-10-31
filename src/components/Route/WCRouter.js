@@ -14,7 +14,6 @@ import PublicProfilePage from "../commons/PublicProfilePage";
 import StudyPage from "../commons/StudyPage";
 import FlashcardPage from "../commons/FlashcardPage";
 import StudyPageResult from "../commons/StudyPageResult";
-import QuizPage from "../commons/QuizPage";
 
 const WCRouter = () => {
     return (
@@ -34,7 +33,6 @@ const WCRouter = () => {
                 <Route path="/studyCard/study" exact component={StudyPage} />
                 <Route path="/studyCard/study/result" component={StudyPageResult} />
                 <Route path="/studyCard/flashcard" component={FlashcardPage} />
-                <Route path="/studyCard/quiz" exact component={QuizPage} />
                 <Redirect to="/" />
             </Switch>
         </div>

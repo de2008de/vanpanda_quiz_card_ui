@@ -17,6 +17,7 @@ import cardSVG from "../../assets/svg/card.svg";
 import quizSVG from "../../assets/svg/quiz.svg";
 import { AppContext } from "../context/AppContext";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
+import "../../assets/css/commons/DetailPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -139,7 +140,7 @@ const DetailPage = props => {
                 bookmarks
             };
         });
-        props.history.push("/studyCard/study?id=" + studyCardId);
+        props.history.push("/studyCard/study?id=" + studyCardId + "&type=written");
     };
 
     const onClickFlashcardHandler = () => {
@@ -161,7 +162,7 @@ const DetailPage = props => {
                 bookmarks
             }
         });
-        props.history.push("/studyCard/quiz?id=" + studyCardId);
+        props.history.push("/studyCard/study?id=" + studyCardId + "&type=multiple_choice");
     };
 
     return (
@@ -207,19 +208,19 @@ const DetailPage = props => {
             </div>
             <div className={classes.buttonGroup}>
                 <ButtonCard
+                    svg={quizSVG}
+                    text="MULTIPLE CHOICES"
+                    onClickHandler={onClickQuizHandler}
+                />
+                <ButtonCard
                     svg={bookSVG}
-                    text="STUDY"
+                    text="WRITTEN TEST"
                     onClickHandler={onClickStudyHandler}
                 />
                 <ButtonCard
                     svg={cardSVG}
                     text="FLASHCARDS"
                     onClickHandler={onClickFlashcardHandler}
-                />
-                <ButtonCard
-                    svg={quizSVG}
-                    text="QUIZ"
-                    onClickHandler={onClickQuizHandler}
                 />
             </div>
             <div className="content">
