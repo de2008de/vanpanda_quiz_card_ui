@@ -91,7 +91,8 @@ const StudyPageResult = props => {
     };
 
     const onClickStudyAgain = () => {
-        props.history.push("/studyCard/study?id=" + studyCardId);
+        const type = qs.parse(props.location.search).type;
+        props.history.push("/studyCard/study?id=" + studyCardId + "&type=" + type);
     };
 
     const boomarkOnClickCallback = conceptCardId => {

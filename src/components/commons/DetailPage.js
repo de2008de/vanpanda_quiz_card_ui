@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import GoBackArrow from "./GoBackArrow";
 import { makeStyles, Typography, Box } from "@material-ui/core";
 import WCBadge from "../Badge/WCBadge";
 import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
@@ -17,6 +17,7 @@ import cardSVG from "../../assets/svg/card.svg";
 import quizSVG from "../../assets/svg/quiz.svg";
 import { AppContext } from "../context/AppContext";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
+import "../../assets/css/commons/DetailPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -81,10 +82,6 @@ const DetailPage = props => {
         }
     }, [studyCardId]);
 
-    const backArrowOnClickHandler = () => {
-        props.history.goBack();
-    };
-
     const schoolLogos = {
         sfu: SFULogoSVG,
         ubc: UBCLogoSVG
@@ -139,7 +136,7 @@ const DetailPage = props => {
                 bookmarks
             };
         });
-        props.history.push("/studyCard/study?id=" + studyCardId);
+        props.history.push("/studyCard/study?id=" + studyCardId + "&type=written");
     };
 
     const onClickFlashcardHandler = () => {
@@ -153,15 +150,23 @@ const DetailPage = props => {
         props.history.push("/studyCard/flashcard?id=" + studyCardId);
     }
 
+    const onClickQuizHandler = () => {
+        setAppContext(prevState => {
+            return {
+                ...prevState,
+                studyCard,
+                bookmarks
+            }
+        });
+        props.history.push("/studyCard/study?id=" + studyCardId + "&type=multiple_choice");
+    };
+
     return (
         <div className="DetailPage">
             <div className={classes.header}>
-                <div onClick={backArrowOnClickHandler}>
-                    <ArrowBackIcon
-                        className={classes.arrowBack}
-                        color="primary"
-                    />
-                </div>
+                <GoBackArrow
+                    history={props.history}
+                />
                 <div className={classes.headerTitleContainer}>
                     {/* This should be retrieved from data source */}
                     <Typography variant="h5">{studyCard.title}</Typography>
@@ -196,18 +201,19 @@ const DetailPage = props => {
             </div>
             <div className={classes.buttonGroup}>
                 <ButtonCard
+                    svg={quizSVG}
+                    text="MULTIPLE CHOICES"
+                    onClickHandler={onClickQuizHandler}
+                />
+                <ButtonCard
                     svg={bookSVG}
-                    text="STUDY"
+                    text="WRITTEN TEST"
                     onClickHandler={onClickStudyHandler}
                 />
                 <ButtonCard
                     svg={cardSVG}
                     text="FLASHCARDS"
                     onClickHandler={onClickFlashcardHandler}
-                />
-                <ButtonCard
-                    svg={quizSVG}
-                    text="QUIZ"
                 />
             </div>
             <div className="content">

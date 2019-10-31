@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
         height: "2rem"
     },
     text: {
-        color: theme.palette.primary.main
+        color: theme.palette.primary.main,
+        textAlign: "center"
     }
 }));
 
@@ -31,7 +32,7 @@ const ButtonCard = props => {
     const classes = useStyles();
     return (
         <Card
-            className={classes.buttonCard}
+            className={classes.buttonCard + " ButtonCard"}
             onClick={props.onClickHandler}
         >
             <CardActionArea>

@@ -9,6 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from "@material-ui/core/styles";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
+import { getRandomNumber } from "../../helpers/mathHelper";
+import { shuffleArray } from "../../helpers/arrayHelper";
+import GoBackArrow from "./GoBackArrow";
 import "../../assets/css/commons/StudyPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
@@ -36,6 +39,16 @@ const useStyles = makeStyles(theme => ({
     },
     indexIndicator: {
         textAlign: "center"
+    },
+    multipleChoiceButtonWrapper: {
+        margin: "1rem 0.5rem"
+    },
+    multipleChoiceButton: {
+        display: "block",
+        width: "100%"
+    },
+    hintText: {
+        margin: "0.5rem 0.5rem"
     }
 }));
 
@@ -110,11 +123,11 @@ const StudyPage = props => {
         setShowAnswer(true);
     };
 
-    const recordResult = () => {
+    const recordResult = (isAnswerCorrect = true) => {
         const conceptCardId = studyCard.conceptCards[indexOfQuestion].id;
         const didUserShowAnswer = showAnswer;
         setResultMap(result => {
-            if (didUserShowAnswer) {
+            if (didUserShowAnswer || !isAnswerCorrect) {
                 result.needImprovementConceptCard.push(conceptCardId);
             } else {
                 result.masteredConceptCard.push(conceptCardId);
@@ -124,6 +137,10 @@ const StudyPage = props => {
     }
 
     const onClickNextQuestion = () => {
+        goToNextQuestion();
+    };
+
+    const goToNextQuestion = () => {
         const totalNumQuestions = studyCard.conceptCards.length;
         if (indexOfQuestion === totalNumQuestions - 1) {
             return false;
@@ -141,8 +158,13 @@ const StudyPage = props => {
     };
 
     const onClickShowResult = () => {
+        goToShowResultPage();
+    };
+
+    const goToShowResultPage = () => {
+        const type = qs.parse(props.location.search).type;
         const params = getResultParamsString();
-        props.history.push("/studyCard/study/result?" + params);
+        props.history.push("/studyCard/study/result?" + params + "&type=" + type);
     };
 
     const boomarkOnClickCallback = conceptCardId => {
@@ -160,15 +182,88 @@ const StudyPage = props => {
         }
     };
 
-    const showStudyQuestion = () => {
-        if (!studyCard.conceptCards) {
+    const getMultipleChoices = studyCard => {
+        const conceptCard = studyCard.conceptCards[indexOfQuestion];
+        const conceptCardId = conceptCard.id;
+        const correctAnswer = conceptCard.term;
+        const numConceptCard = studyCard.conceptCards.length;
+        if (numConceptCard < 2) {
             return false;
         }
+        const numChoices = numConceptCard > 4 ? 4 : numConceptCard;
+        const multipleChoices = {
+            choices: {},
+            correctAnswer: null
+        };
+        const low = 0;
+        const high = numConceptCard - 1;
+        multipleChoices.choices[conceptCardId] = correctAnswer;
+        multipleChoices.correctAnswer = correctAnswer;
+        while (Object.keys(multipleChoices.choices).length < numChoices) {
+            const randomAnswerIndex = getRandomNumber(low, high);
+            const randomAnswer = studyCard.conceptCards[randomAnswerIndex];
+            if (multipleChoices.choices[randomAnswer.id]) {
+                continue;
+            }
+            multipleChoices.choices[randomAnswer.id] = randomAnswer.term;
+        }
+        return multipleChoices;
+    };
+
+    const onClickMultipleChoiceButton = (pendingAnswer, correctAnswer) => {
+        return event => {
+            let isCorrect = true;
+            if (pendingAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+                isCorrect = true;
+            } else {
+                isCorrect = false;
+            }
+            recordResult(isCorrect);
+            const totalNumQuestions = studyCard.conceptCards.length;
+            if (indexOfQuestion === totalNumQuestions - 1) {
+                goToShowResultPage();
+            } else {
+                goToNextQuestion();
+            }
+        };
+    };
+
+    const showMultipleChoices = studyCard => {
+        const multipleChoices = getMultipleChoices(studyCard);
+        const choices = [];
+        let key;
+        for (key in multipleChoices.choices) {
+            choices.push(multipleChoices.choices[key]);
+        }
+        const shuffledChoices = shuffleArray(choices);
+        const choiceButtons = [];
+        shuffledChoices.forEach(choice => {
+            const button = (
+                <div
+                    key={choice}
+                    className={classes.multipleChoiceButtonWrapper}
+                >
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        size="large"
+                        className={classes.multipleChoiceButton}
+                        onClick={onClickMultipleChoiceButton(choice, multipleChoices.correctAnswer)}
+                    >
+                        {choice}
+                    </Button>
+                </div>
+            );
+            choiceButtons.push(button);
+        });
+        return choiceButtons;
+    };
+
+    const showDetailCard = () => {
         const conceptCard = studyCard.conceptCards[indexOfQuestion];
         const totalNumQuestions = studyCard.conceptCards.length;
         const conceptCardId = conceptCard.id;
         const isBookmared = bookmarks[conceptCardId];
-        const correctAnswer = conceptCard.term;
         return (
             <div>
                 <DetailCard
@@ -181,6 +276,38 @@ const StudyPage = props => {
                 <Typography className={classes.indexIndicator}>
                     {(indexOfQuestion + 1) + " of " + totalNumQuestions}
                 </Typography>
+            </div>
+        );
+    };
+
+    const showMultipleChoiceQuestion = () => {
+        if (!studyCard.conceptCards) {
+            return false;
+        }
+        return (
+            <div>
+                {showDetailCard()}
+                <div>
+                    <Typography
+                        className={classes.hintText}
+                    >
+                        Please select an answer.
+                    </Typography>
+                    {showMultipleChoices(studyCard)}
+                </div>
+            </div>
+        );
+    };
+
+    const showWrittenQuestion = () => {
+        if (!studyCard.conceptCards) {
+            return false;
+        }
+        const conceptCard = studyCard.conceptCards[indexOfQuestion];
+        const correctAnswer = conceptCard.term;
+        return (
+            <div>
+                {showDetailCard()}
                 {
                     showAnswer ?
                         <div
@@ -221,20 +348,20 @@ const StudyPage = props => {
                             <div style={{ flexGrow: 1 }}></div>
                             {
                                 !showResult ?
-                                <Button
-                                    color="primary"
-                                    variant="outlined"
-                                    onClick={onClickNextQuestion}
-                                >
-                                    Next
+                                    <Button
+                                        color="primary"
+                                        variant="outlined"
+                                        onClick={onClickNextQuestion}
+                                    >
+                                        Next
                                 </Button>
-                                :
-                                <Button
-                                    color="secondary"
-                                    variant="contained"
-                                    onClick={onClickShowResult}
-                                >
-                                    Show Result
+                                    :
+                                    <Button
+                                        color="secondary"
+                                        variant="contained"
+                                        onClick={onClickShowResult}
+                                    >
+                                        Show Result
                                 </Button>
                             }
 
@@ -258,11 +385,25 @@ const StudyPage = props => {
                 </div>
             </div>
         );
-    }
+    };
+
+    const showQuestion = () => {
+        const type = qs.parse(props.location.search).type;
+        if (type === "written") {
+            return showWrittenQuestion();
+        } else if (type === "multiple_choice") {
+            return showMultipleChoiceQuestion();
+        }
+    };
 
     return (
         <div className={classes.studyPage + " StudyPage"}>
-            {showStudyQuestion()}
+            <GoBackArrow
+                history={props.history}
+            />
+            {
+                showQuestion()
+            }
         </div>
     );
 }
