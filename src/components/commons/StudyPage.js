@@ -15,6 +15,7 @@ import {
 import { getRandomNumber } from "../../helpers/mathHelper";
 import { shuffleArray } from "../../helpers/arrayHelper";
 import GoBackArrow from "./GoBackArrow";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "../../assets/css/commons/StudyPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
@@ -298,7 +299,7 @@ const StudyPage = props => {
 
     const showMultipleChoiceQuestion = () => {
         if (!studyCard.conceptCards) {
-            return false;
+            return <div></div>;
         }
         return (
             <div>
@@ -315,7 +316,7 @@ const StudyPage = props => {
 
     const showWrittenQuestion = () => {
         if (!studyCard.conceptCards) {
-            return false;
+            return <div></div>;
         }
         const conceptCard = studyCard.conceptCards[indexOfQuestion];
         const correctAnswer = conceptCard.term;
@@ -404,13 +405,23 @@ const StudyPage = props => {
             return showWrittenQuestion();
         } else if (type === "multiple_choice") {
             return showMultipleChoiceQuestion();
+        } else {
+            return showWrittenQuestion();
         }
     };
 
     return (
         <div className={classes.studyPage + " StudyPage"}>
             <GoBackArrow history={props.history} />
-            {showQuestion()}
+            <TransitionGroup>
+                <CSSTransition
+                    key={indexOfQuestion}
+                    timeout={1000}
+                    classNames="question"
+                >
+                    {showQuestion()}
+                </CSSTransition>
+            </TransitionGroup>
         </div>
     );
 };
