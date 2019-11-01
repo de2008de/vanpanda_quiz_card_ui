@@ -111,7 +111,7 @@ const StudyPage = props => {
                 }
             }
         }
-    }
+    };
 
     const resetQuestion = () => {
         setIsAnswerCorrect(false);
@@ -134,7 +134,7 @@ const StudyPage = props => {
             }
             return result;
         });
-    }
+    };
 
     const onClickNextQuestion = () => {
         goToNextQuestion();

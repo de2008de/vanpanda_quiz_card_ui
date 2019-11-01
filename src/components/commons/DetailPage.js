@@ -17,7 +17,6 @@ import cardSVG from "../../assets/svg/card.svg";
 import quizSVG from "../../assets/svg/quiz.svg";
 import { AppContext } from "../context/AppContext";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
-import "../../assets/css/commons/DetailPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -128,7 +127,7 @@ const DetailPage = props => {
         props.history.push(authorProfileUrl);
     };
 
-    const onClickStudyHandler = () => {
+    const onClickTestHandler = () => {
         setAppContext(prevState => {
             return {
                 ...prevState,
@@ -202,13 +201,13 @@ const DetailPage = props => {
             <div className={classes.buttonGroup}>
                 <ButtonCard
                     svg={quizSVG}
-                    text="MULTIPLE CHOICES"
+                    text="QUIZ"
                     onClickHandler={onClickQuizHandler}
                 />
                 <ButtonCard
                     svg={bookSVG}
-                    text="WRITTEN TEST"
-                    onClickHandler={onClickStudyHandler}
+                    text="TEST"
+                    onClickHandler={onClickTestHandler}
                 />
                 <ButtonCard
                     svg={cardSVG}
