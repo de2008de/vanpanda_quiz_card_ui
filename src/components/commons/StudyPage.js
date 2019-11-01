@@ -4,25 +4,29 @@ import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 import qs from "query-string";
 import DetailCard from "../Card/DetailCard";
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
+import {
+    getBookmarks,
+    convertBookmarkArrayToMap
+} from "../api/BookmarkApiHelper";
 import { getRandomNumber } from "../../helpers/mathHelper";
 import { shuffleArray } from "../../helpers/arrayHelper";
 import GoBackArrow from "./GoBackArrow";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "../../assets/css/commons/StudyPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
-    studyPage: {
-        margin: "0 1rem"
+    answerFieldWrapper: {
+        margin: "0.5rem"
     },
     textField: {
         display: "flex",
-        width: "auto",
+        width: "100%"
     },
     doNotKnowContainer: {
         textAlign: "right"
@@ -80,7 +84,7 @@ const StudyPage = props => {
                 const studyCard = response.data.data;
                 setStudyCard(studyCard);
             })
-            .catch(() => { });
+            .catch(() => {});
     }, [appContext, studyCardId]);
 
     useEffect(() => {
@@ -95,14 +99,17 @@ const StudyPage = props => {
                 const bookmarkMap = convertBookmarkArrayToMap(bookmarks);
                 setBookmarks(bookmarkMap);
             })
-            .catch(() => { });
+            .catch(() => {});
     }, [appContext]);
 
     const userInputAnswerOnChange = correctAnswer => {
         return event => {
             const pendingAnswer = event.target.value;
             setUserInputAsnwer(pendingAnswer);
-            if (pendingAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+            if (
+                pendingAnswer.trim().toLowerCase() ===
+                correctAnswer.trim().toLowerCase()
+            ) {
                 setIsAnswerCorrect(true);
                 recordResult();
                 const totalNumQuestions = studyCard.conceptCards.length;
@@ -110,8 +117,8 @@ const StudyPage = props => {
                     setShowResult(true);
                 }
             }
-        }
-    }
+        };
+    };
 
     const resetQuestion = () => {
         setIsAnswerCorrect(false);
@@ -134,7 +141,7 @@ const StudyPage = props => {
             }
             return result;
         });
-    }
+    };
 
     const onClickNextQuestion = () => {
         goToNextQuestion();
@@ -164,7 +171,9 @@ const StudyPage = props => {
     const goToShowResultPage = () => {
         const type = qs.parse(props.location.search).type;
         const params = getResultParamsString();
-        props.history.push("/studyCard/study/result?" + params + "&type=" + type);
+        props.history.push(
+            "/studyCard/study/result?" + params + "&type=" + type
+        );
     };
 
     const boomarkOnClickCallback = conceptCardId => {
@@ -175,11 +184,11 @@ const StudyPage = props => {
                 } else {
                     bookmarks[conceptCardId] = {
                         conceptCardId: conceptCardId
-                    }
+                    };
                 }
                 return bookmarks;
             });
-        }
+        };
     };
 
     const getMultipleChoices = studyCard => {
@@ -213,7 +222,10 @@ const StudyPage = props => {
     const onClickMultipleChoiceButton = (pendingAnswer, correctAnswer) => {
         return event => {
             let isCorrect = true;
-            if (pendingAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+            if (
+                pendingAnswer.trim().toLowerCase() ===
+                correctAnswer.trim().toLowerCase()
+            ) {
                 isCorrect = true;
             } else {
                 isCorrect = false;
@@ -248,7 +260,10 @@ const StudyPage = props => {
                         color="primary"
                         size="large"
                         className={classes.multipleChoiceButton}
-                        onClick={onClickMultipleChoiceButton(choice, multipleChoices.correctAnswer)}
+                        onClick={onClickMultipleChoiceButton(
+                            choice,
+                            multipleChoices.correctAnswer
+                        )}
                     >
                         {choice}
                     </Button>
@@ -271,10 +286,12 @@ const StudyPage = props => {
                     key={conceptCardId}
                     bookmarked={isBookmared}
                     definition={conceptCard.definition}
-                    boomarkOnClickCallback={boomarkOnClickCallback(conceptCardId)}
+                    boomarkOnClickCallback={boomarkOnClickCallback(
+                        conceptCardId
+                    )}
                 />
                 <Typography className={classes.indexIndicator}>
-                    {(indexOfQuestion + 1) + " of " + totalNumQuestions}
+                    {indexOfQuestion + 1 + " of " + totalNumQuestions}
                 </Typography>
             </div>
         );
@@ -282,15 +299,13 @@ const StudyPage = props => {
 
     const showMultipleChoiceQuestion = () => {
         if (!studyCard.conceptCards) {
-            return false;
+            return <div></div>;
         }
         return (
             <div>
                 {showDetailCard()}
                 <div>
-                    <Typography
-                        className={classes.hintText}
-                    >
+                    <Typography className={classes.hintText}>
                         Please select an answer.
                     </Typography>
                     {showMultipleChoices(studyCard)}
@@ -301,41 +316,40 @@ const StudyPage = props => {
 
     const showWrittenQuestion = () => {
         if (!studyCard.conceptCards) {
-            return false;
+            return <div></div>;
         }
         const conceptCard = studyCard.conceptCards[indexOfQuestion];
         const correctAnswer = conceptCard.term;
         return (
             <div>
                 {showDetailCard()}
-                {
-                    showAnswer ?
-                        <div
-                            className={classes.answer}
-                        >
-                            <Typography
-                                color="primary"
-                            >
+                <div className={classes.answerFieldWrapper}>
+                    {showAnswer ? (
+                        <div className={classes.answer}>
+                            <Typography color="primary">
                                 Answer is: {correctAnswer}.
                             </Typography>
                         </div>
-                        :
+                    ) : (
                         ""
-                }
-                <TextField
-                    label={showAnswer ? '"' + correctAnswer + '" type it here' : "Type your answer"}
-                    error={showAnswer && !isAnswerCorrect}
-                    value={userInputAnswer}
-                    onChange={userInputAnswerOnChange(correctAnswer)}
-                    margin="normal"
-                    className={classes.textField + " answer-text-field"}
-                    inputProps={{
-                        autoComplete: "off"
-                    }}
-                    disabled={isAnswerCorrect}
-                />
-                {
-                    isAnswerCorrect ?
+                    )}
+                    <TextField
+                        label={
+                            showAnswer
+                                ? '"' + correctAnswer + '" type it here'
+                                : "Type your answer"
+                        }
+                        error={showAnswer && !isAnswerCorrect}
+                        value={userInputAnswer}
+                        onChange={userInputAnswerOnChange(correctAnswer)}
+                        margin="normal"
+                        className={classes.textField + " answer-text-field"}
+                        inputProps={{
+                            autoComplete: "off"
+                        }}
+                        disabled={isAnswerCorrect}
+                    />
+                    {isAnswerCorrect ? (
                         <div className={classes.helperTextContainer}>
                             <Typography
                                 component="span"
@@ -346,32 +360,29 @@ const StudyPage = props => {
                                 CORRECT!
                             </Typography>
                             <div style={{ flexGrow: 1 }}></div>
-                            {
-                                !showResult ?
-                                    <Button
-                                        color="primary"
-                                        variant="outlined"
-                                        onClick={onClickNextQuestion}
-                                    >
-                                        Next
+                            {!showResult ? (
+                                <Button
+                                    color="primary"
+                                    variant="outlined"
+                                    onClick={onClickNextQuestion}
+                                >
+                                    Next
                                 </Button>
-                                    :
-                                    <Button
-                                        color="secondary"
-                                        variant="contained"
-                                        onClick={onClickShowResult}
-                                    >
-                                        Show Result
+                            ) : (
+                                <Button
+                                    color="secondary"
+                                    variant="contained"
+                                    onClick={onClickShowResult}
+                                >
+                                    Show Result
                                 </Button>
-                            }
-
+                            )}
                         </div>
-                        :
+                    ) : (
                         ""
-                }
-                <div className={classes.doNotKnowContainer}>
-                    {
-                        !isAnswerCorrect ?
+                    )}
+                    <div className={classes.doNotKnowContainer}>
+                        {!isAnswerCorrect ? (
                             <Typography
                                 component="span"
                                 className={classes.doNotKnow}
@@ -379,9 +390,10 @@ const StudyPage = props => {
                             >
                                 I don't know
                             </Typography>
-                            :
+                        ) : (
                             ""
-                    }
+                        )}
+                    </div>
                 </div>
             </div>
         );
@@ -393,19 +405,25 @@ const StudyPage = props => {
             return showWrittenQuestion();
         } else if (type === "multiple_choice") {
             return showMultipleChoiceQuestion();
+        } else {
+            return showWrittenQuestion();
         }
     };
 
     return (
         <div className={classes.studyPage + " StudyPage"}>
-            <GoBackArrow
-                history={props.history}
-            />
-            {
-                showQuestion()
-            }
+            <GoBackArrow history={props.history} />
+            <TransitionGroup>
+                <CSSTransition
+                    key={indexOfQuestion}
+                    timeout={1000}
+                    classNames="question"
+                >
+                    {showQuestion()}
+                </CSSTransition>
+            </TransitionGroup>
         </div>
     );
-}
+};
 
 export default StudyPage;
