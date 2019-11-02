@@ -14,12 +14,14 @@ import PublicProfilePage from "../commons/PublicProfilePage";
 import StudyPage from "../commons/StudyPage";
 import FlashcardPage from "../commons/FlashcardPage";
 import StudyPageResult from "../commons/StudyPageResult";
+import ExplorePage from "../explore/ExplorePage";
 
 const WCRouter = () => {
     return (
         <div className="WCRouter">
             <Switch>
-                <Route path="/" exact component={HomePage} />
+                <Route path="/" exact component={ExplorePage} />
+                <Route path="/my_home" exact component={HomePage} />
                 <Route path="/detail" component={DetailPage} />
                 <Route path="/bookmarks" component={BookmarkPage} />
                 <Route path="/addStudyCard" component={AddStudyCardPage} />

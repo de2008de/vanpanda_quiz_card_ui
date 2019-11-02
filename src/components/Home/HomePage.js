@@ -7,6 +7,7 @@ import ServerConfig from "../../configs/ServerConfig";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core";
 import vanpandaLogo from "../../assets/svg/vanpanda_logo.svg";
+import { doAuthentication } from "../../utils/auth";
 
 import "../../assets/css/Home/HomePage.css";
 
@@ -24,6 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const HomePage = props => {
+    doAuthentication(props.history);
     const classes = useStyles();
     const [studyCards, setStudyCards] = useState([]);
     const [numCourses, setNumCourses] = useState(0);
