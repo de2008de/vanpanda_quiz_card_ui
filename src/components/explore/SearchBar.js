@@ -34,6 +34,7 @@ const SearchBar = props => {
             <div className={classes.searchInputWrapper}>
                 <input
                     type="text"
+                    placeholder={props.placeholder}
                     className={classes.searchInput + " searchInput"}
                 />
             </div>
