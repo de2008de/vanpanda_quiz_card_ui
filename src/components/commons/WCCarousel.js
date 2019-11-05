@@ -30,7 +30,12 @@ const WCCarousel = props => {
 
     return (
         <div className={classes.wrapper + " WCCarousel"}>
-            <Carousel showThumbs={false} showStatus={false}>
+            <Carousel
+                showThumbs={false}
+                showStatus={false}
+                autoPlay={true}
+                infiniteLoop={true}
+            >
                 {getCarouselImg()}
             </Carousel>
         </div>
