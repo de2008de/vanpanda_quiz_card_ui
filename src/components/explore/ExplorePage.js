@@ -4,6 +4,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import WCCarousel from "../commons/WCCarousel";
 import ServerConfig from "../../configs/ServerConfig";
+import FeatureIcon from "./FeatureIcon";
+import CarIcon from "../../assets/svg/car.svg";
+import ChatIcon from "../../assets/svg/chat.svg";
+import GraduateIcon from "../../assets/svg/graduate.svg";
+import WritingIcon from "../../assets/svg/writing.svg";
 
 const useStyles = makeStyles(theme => ({
     searchBarWrapper: {
@@ -15,6 +20,11 @@ const useStyles = makeStyles(theme => ({
     },
     mailIcon: {
         marginLeft: "0.5rem"
+    },
+    featureIconsContainer: {
+        display: "flex",
+        justifyContent: "space-around",
+        flexWrap: "wrap"
     }
 }));
 
@@ -47,6 +57,16 @@ const ExplorePage = props => {
             </div>
             <div>
                 <WCCarousel imgSrcArray={getCarouselImgArray()} />
+            </div>
+            <div className={classes.featureIconsContainer}>
+                <FeatureIcon src={GraduateIcon} text1="IELTS" text2="Test" />
+                <FeatureIcon src={CarIcon} text1="Driver" text2="License" />
+                <FeatureIcon src={ChatIcon} text1="Languages" />
+                <FeatureIcon
+                    src={WritingIcon}
+                    text1="Immigration"
+                    text2="Test"
+                />
             </div>
         </div>
     );
