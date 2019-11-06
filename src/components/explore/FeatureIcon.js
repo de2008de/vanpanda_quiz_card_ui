@@ -10,12 +10,12 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "center"
     },
     img: {
-        width: "12vw",
-        height: "12vw"
+        width: "3rem",
+        height: "3rem"
     },
     textWrapper: {
         textAlign: "center",
-        fontSize: "3vw",
+        fontSize: "0.8rem",
         color: theme.palette.text.secondary
     }
 }));
