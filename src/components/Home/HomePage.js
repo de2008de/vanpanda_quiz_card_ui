@@ -73,10 +73,10 @@ const HomePage = props => {
             <div className={classes.headerContainer}>
                 <div>
                     <Typography variant="h5">
-                        <Box fontWeight="bold">Today's</Box>
+                        <Box fontWeight="bold">My</Box>
                     </Typography>
                     <Typography variant="h5">
-                        <Box>Learning</Box>
+                        <Box>Study Cards</Box>
                     </Typography>
                     <Typography color="textSecondary">
                         <Box component="span">
