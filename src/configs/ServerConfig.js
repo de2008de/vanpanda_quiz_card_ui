@@ -6,7 +6,8 @@ const determineEnvironment = () => {
         ip = "http://localhost:8080";
     } else if (currentHost.indexOf("app.vanpanda.com") !== -1) {
         // production
-        ip = "https://gentle-peak-28389.herokuapp.com";
+        // TODO: switch to https
+        ip = "http://server.vanpanda.com";
     } else {
         // testing
         ip = "https://vanpanda-test.herokuapp.com";
