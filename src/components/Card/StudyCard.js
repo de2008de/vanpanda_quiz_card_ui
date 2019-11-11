@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
         minHeight: "12rem",
         margin: "1rem auto",
         backgroundColor: "#fff",
-        borderColor: theme.palette.primary.main,
+        borderColor: theme.palette.primary.light,
         borderWidth: "0.1rem",
         borderStyle: "solid"
     },
@@ -32,6 +32,8 @@ const useStyles = makeStyles(theme => ({
     },
     conceptCardContainer: {
         backgroundColor: theme.palette.primary.light,
+        display: "flex",
+        flexWrap: "wrap",
         padding: "0.3rem 0.6rem"
     },
     author: {
@@ -51,10 +53,15 @@ const StudyCard = props => {
 
     const loadConceptCards = () => {
         const aConceptCards = [];
-        props.conceptCards.forEach(conceptCard => {
-            const oConceptCard = <ConceptCard key={conceptCard.id} content={conceptCard.title} />;
+        const maxConceptCardDisplayed = 2;
+        const conceptCards = props.conceptCards;
+        for (let i = 0; i < conceptCards.length; i++) {
+            const oConceptCard = <ConceptCard key={conceptCards[i].id} term={conceptCards[i].term} />;
             aConceptCards.push(oConceptCard);
-        });
+            if (aConceptCards.length === maxConceptCardDisplayed) {
+                break;
+            }
+        }
         return <div>{aConceptCards}</div>;
     };
 
@@ -67,14 +74,14 @@ const StudyCard = props => {
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
                         <Box fontFamily={readingFontFamily} component="span">
-                            {props.subtitle}
+                            {props.description}
                         </Box>
                     </Typography>
                     <Box className={classes.infoBar}>
                         <WCBadge content={props.conceptCards.length} color="primary" />{" "}
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img className={classes.svg} src={oSchoolList[props.school]} alt="school_logo" />
+                        {oSchoolList[props.school] ? <img className={classes.svg} src={oSchoolList[props.school]} alt="school_logo" /> : ""}
                     </Box>
                     <Box>
                         <Chip

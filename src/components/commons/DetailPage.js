@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from "react";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import React, { useState, useEffect, useContext } from "react";
+import GoBackArrow from "./GoBackArrow";
 import { makeStyles, Typography, Box } from "@material-ui/core";
 import WCBadge from "../Badge/WCBadge";
 import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
 import UBCLogoSVG from "../../assets/svg/ubc_logo.svg";
 import DetailCard from "../Card/DetailCard";
+import ButtonCard from "../Card/ButtonCard";
 import qs from "query-string";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 import { isAuthenticated } from "../../utils/auth";
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
+import bookSVG from "../../assets/svg/book.svg";
+import cardSVG from "../../assets/svg/card.svg";
+import quizSVG from "../../assets/svg/quiz.svg";
+import { AppContext } from "../context/AppContext";
+import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
 
 const sStudyCardApi = "/api/v1/card/studycard";
-const bookmarkApi = "/api/v1/bookmark";
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -35,6 +40,11 @@ const useStyles = makeStyles(theme => ({
     },
     author: {
         margin: "0.5rem auto"
+    },
+    buttonGroup: {
+        display: "flex",
+        flexWrap: "wrap",
+        margin: "0.5rem"
     }
 }));
 
@@ -43,6 +53,7 @@ const DetailPage = props => {
     const studyCardId = qs.parse(props.location.search).id;
     const [studyCard, setStudyCard] = useState({});
     const [bookmarks, setBookmarks] = useState({});
+    const { setAppContext } = useContext(AppContext);
 
     const getStudyCardById = id => {
         axios
@@ -54,20 +65,11 @@ const DetailPage = props => {
             .catch(() => { });
     };
 
-    const getBookmarks = () => {
-        const headers = {
-            token: window.localStorage.getItem("token")
-        };
-        axios
-            .get(ServerConfig.api.ip + bookmarkApi, {
-                headers: headers
-            })
+    const callGetBookmarksApi = () => {
+        getBookmarks()
             .then(response => {
                 const bookmarks = response.data.data.bookmarks;
-                const bookmarkMap = {};
-                bookmarks.forEach(oBookmark => {
-                    bookmarkMap[oBookmark.conceptCardId] = oBookmark;
-                });
+                const bookmarkMap = convertBookmarkArrayToMap(bookmarks);
                 setBookmarks(bookmarkMap);
             });
     };
@@ -75,17 +77,28 @@ const DetailPage = props => {
     useEffect(() => {
         getStudyCardById(studyCardId);
         if (isAuthenticated()) {
-            getBookmarks();
+            callGetBookmarksApi();
         }
     }, [studyCardId]);
-
-    const backArrowOnClickHandler = () => {
-        props.history.goBack();
-    };
 
     const schoolLogos = {
         sfu: SFULogoSVG,
         ubc: UBCLogoSVG
+    };
+
+    const boomarkOnClickCallback = conceptCardId => {
+        return () => {
+            setBookmarks(bookmarks => {
+                if (bookmarks[conceptCardId]) {
+                    delete bookmarks[conceptCardId];
+                } else {
+                    bookmarks[conceptCardId] = {
+                        conceptCardId: conceptCardId
+                    }
+                }
+                return bookmarks;
+            });
+        }
     };
 
     const loadConceptCards = () => {
@@ -99,8 +112,9 @@ const DetailPage = props => {
                     id={oConceptCard.id}
                     key={oConceptCard.id}
                     bookmarked={bookmarks[oConceptCard.id] ? true : false}
-                    title={oConceptCard.title}
-                    content={oConceptCard.content}
+                    term={oConceptCard.term}
+                    definition={oConceptCard.definition}
+                    boomarkOnClickCallback={boomarkOnClickCallback(oConceptCard.id)}
                 />
             );
             aDetailCards.push(oDetailCard);
@@ -109,24 +123,54 @@ const DetailPage = props => {
     };
 
     const onClickAuthorHandler = () => {
-        const authorProfileUrl = "/user/" + studyCard.userId;
+        const authorProfileUrl = "/user/publicProfile?id=" + studyCard.userId;
         props.history.push(authorProfileUrl);
+    };
+
+    const onClickTestHandler = () => {
+        setAppContext(prevState => {
+            return {
+                ...prevState,
+                studyCard,
+                bookmarks
+            };
+        });
+        props.history.push("/studyCard/study?id=" + studyCardId + "&type=written");
+    };
+
+    const onClickFlashcardHandler = () => {
+        setAppContext(prevState => {
+            return {
+                ...prevState,
+                studyCard,
+                bookmarks
+            };
+        });
+        props.history.push("/studyCard/flashcard?id=" + studyCardId);
+    }
+
+    const onClickQuizHandler = () => {
+        setAppContext(prevState => {
+            return {
+                ...prevState,
+                studyCard,
+                bookmarks
+            }
+        });
+        props.history.push("/studyCard/study?id=" + studyCardId + "&type=multiple_choice");
     };
 
     return (
         <div className="DetailPage">
             <div className={classes.header}>
-                <div onClick={backArrowOnClickHandler}>
-                    <ArrowBackIcon
-                        className={classes.arrowBack}
-                        color="primary"
-                    />
-                </div>
+                <GoBackArrow
+                    history={props.history}
+                />
                 <div className={classes.headerTitleContainer}>
                     {/* This should be retrieved from data source */}
                     <Typography variant="h5">{studyCard.title}</Typography>
                     <Typography variant="subtitle1" color="textSecondary">
-                        {studyCard.subtitle}
+                        {studyCard.description}
                     </Typography>
                     <Box className={classes.infoBar}>
                         <WCBadge
@@ -139,11 +183,7 @@ const DetailPage = props => {
                         />
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
-                        <img
-                            className={classes.svg}
-                            src={schoolLogos[studyCard.school]}
-                            alt="school_logo"
-                        />
+                        {schoolLogos[studyCard.school] ? <img className={classes.svg} src={schoolLogos[studyCard.school]} alt="school_logo" /> : ""}
                     </Box>
                     <Box>
                         <Chip
@@ -158,7 +198,26 @@ const DetailPage = props => {
                     </Box>
                 </div>
             </div>
-            <div className="content">{loadConceptCards()}</div>
+            <div className={classes.buttonGroup}>
+                <ButtonCard
+                    svg={quizSVG}
+                    text="QUIZ"
+                    onClickHandler={onClickQuizHandler}
+                />
+                <ButtonCard
+                    svg={bookSVG}
+                    text="TEST"
+                    onClickHandler={onClickTestHandler}
+                />
+                <ButtonCard
+                    svg={cardSVG}
+                    text="FLASHCARDS"
+                    onClickHandler={onClickFlashcardHandler}
+                />
+            </div>
+            <div className="content">
+                {loadConceptCards()}
+            </div>
         </div>
     );
 };

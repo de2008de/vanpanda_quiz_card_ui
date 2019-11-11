@@ -10,6 +10,8 @@ const AppShell = () => {
             <WCAppBar />
             <WCRouter />
             <WCAppFooter />
+            {/* Provide a space buffer for app footer so we can ensure that users can always scroll to the bottom */}
+            <div className="footer-space-buffer" style={{ height: "5rem" }}></div>
         </div>
     );
 }

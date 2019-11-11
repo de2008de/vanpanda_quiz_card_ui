@@ -7,22 +7,33 @@ const useStyles = makeStyles(theme => ({
         borderStyle: "dashed",
         borderColor: "#bab4b2",
         borderWidth: "2px",
-        width: "5rem",
-        height: "3rem",
+        width: "6rem",
+        height: "4rem",
         textAlign: "left",
-        fontSize: "0.6rem",
+        lineHeight: "0.8rem",
+        fontSize: "0.8rem",
         fontWeight: "bold",
         color: theme.palette.text.secondary,
         backgroundColor: "inherit",
-        padding: "0.3rem",
+        padding: "0.5rem",
         margin: "0.2rem",
-        display: "inline-block"
+        display: "inline-flex"
+    },
+    text: {
+        textOverflow: "ellipsis",
+        overflow: "hidden"
     }
 }));
 
 const ConceptCard = props => {
     const classes = useStyles();
-    return <Card className={classes.card}>{props.content}</Card>;
+    return (
+        <Card className={classes.card}>
+            <div className={classes.text}>
+                {props.term}
+            </div>
+        </Card>
+    );
 };
 
 export default ConceptCard;

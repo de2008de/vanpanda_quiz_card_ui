@@ -1,0 +1,24 @@
+.StudyPage .DetailCard {
+    margin: 0.5rem;
+}
+
+.StudyPage .answer-text-field {
+    margin-top: 0;
+}
+
+.question-enter {
+    opacity: 0;
+    transform: scale(0.9);
+    transform: translateX(-100%);
+}
+.question-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 800ms, transform 800ms;
+}
+.question-exit {
+    opacity: 0;
+}
+.question-exit-active {
+    opacity: 0;
+}

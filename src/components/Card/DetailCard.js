@@ -4,11 +4,8 @@ import Typography from "@material-ui/core/Typography";
 import BookmarkIcon from "@material-ui/icons/Bookmark";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import Chip from "@material-ui/core/Chip";
-import axios from "axios";
-import ServerConfig from "../../configs/ServerConfig";
 import { isAuthenticated } from "../../utils/auth";
-
-const bookmarkApi = "/api/v1/bookmark";
+import { addBookmark, deleteBookmark } from "../api/BookmarkApiHelper";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -18,17 +15,17 @@ const useStyles = makeStyles(theme => ({
         borderRadius: "1rem 0.1rem 1rem 0.3rem",
         borderWidth: "0.1rem",
         borderStyle: "solid",
-        borderColor: theme.palette.primary.main
+        borderColor: theme.palette.primary.light
     },
     content: {
         backgroundColor: theme.palette.primary.light,
         borderRadius: "inherit",
         padding: "1rem"
     },
-    contentTitle: {
+    term: {
         fontFamily: theme.typography.fontFamily
     },
-    contentParagraph: {
+    definition: {
         padding: "0 1rem 0 0"
     },
     footer: {
@@ -66,38 +63,24 @@ const DetailCard = props => {
             setIsChipVisible(true);
             return;
         }
-
-        const headers = {
-            token: window.localStorage.getItem("token")
-        };
-
+        const conceptCardId = props.id;
         if (!bookmarked) {
             setBookmarked(true);
             setChipText(ADDED_TO_BOOKMARK_TEXT);
             setIsChipVisible(true);
-            axios
-                .post(
-                    ServerConfig.api.ip + bookmarkApi,
-                    {
-                        concept_card_id: props.id
-                    },
-                    { headers: headers }
-                )
-                .then(() => {})
-                .catch(() => {});
+            addBookmark(conceptCardId)
+                .then(() => { })
+                .catch(() => { });
         } else {
             setBookmarked(false);
             setChipText(REMOVED_TO_BOOKMARK_TEXT);
             setIsChipVisible(true);
-            axios
-                .delete(ServerConfig.api.ip + bookmarkApi, {
-                    headers: headers,
-                    data: {
-                        concept_card_id: props.id
-                    }
-                })
-                .then(() => {})
-                .catch(() => {});
+            deleteBookmark(conceptCardId)
+                .then(() => { })
+                .catch(() => { });
+        }
+        if (props.boomarkOnClickCallback) {
+            props.boomarkOnClickCallback();
         }
     };
 
@@ -124,11 +107,11 @@ const DetailCard = props => {
     return (
         <div className={classes.card + " DetailCard"}>
             <div className={classes.content}>
-                <div className={classes.contentTitle}>
-                    <Typography variant="h6">{props.title}</Typography>
+                <div className={classes.term}>
+                    <Typography variant="h6">{props.term}</Typography>
                 </div>
-                <div className={classes.contentParagraph}>
-                    <Typography variant="body1">{props.content}</Typography>
+                <div className={classes.definition}>
+                    <Typography variant="body1">{props.definition}</Typography>
                 </div>
             </div>
             <div className={classes.footer}>
