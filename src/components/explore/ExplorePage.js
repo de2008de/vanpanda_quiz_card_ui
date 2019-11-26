@@ -12,6 +12,10 @@ import WritingIcon from "../../assets/svg/writing.svg";
 import axios from "axios";
 import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
+import CloseIcon from '@material-ui/icons/Close';
+import { debounce } from "../../helpers/general";
+import { searchStudyCard, renderStudyCards } from "../api/StudyCardsApiHelper";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const getStudyCardApi = "/api/v1/card/studycard";
 
@@ -23,7 +27,7 @@ const useStyles = makeStyles(theme => ({
         width: "auto",
         margin: "0.5rem 0.5rem 1rem 1rem"
     },
-    mailIcon: {
+    iconOnRightOfSearchBar: {
         marginLeft: "0.5rem"
     },
     featureIconsContainer: {
@@ -38,13 +42,21 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.primary.main,
         borderRadius: "12px",
         padding: "0.5rem"
+    },
+    loaderWrapper: {
+        display: "flex",
+        justifyContent: "center"
     }
 }));
 
 const ExplorePage = props => {
     const classes = useStyles();
     const [studyCards, setStudyCards] = useState([]);
+    const [isInSearchMode, setIsInSearchMode] = useState(false);
+    const [searchResult, setSearchResult] = useState([]);
+    const [isSearchingResult, setIsSearchingResult] = useState(false);
     const getSearchBarPlaceholder = () => {
+        // TODO: get hot keywords dynamically
         return "BC驾照笔试";
     };
 
@@ -95,31 +107,109 @@ const ExplorePage = props => {
         getStudyCards(0);
     }, []);
 
+    const onClickSearchBarHandler = () => {
+        setIsInSearchMode(true);
+    };
+
+    const renderExplorePageContent = () => {
+        if (!isInSearchMode) {
+            return (
+                <div className="ExplorePageContent">
+                    <div>
+                        <WCCarousel imgSrcArray={getCarouselImgArray()} />
+                    </div>
+                    <div className={classes.featureIconsContainer}>
+                        <FeatureIcon src={GraduateIcon} text1="IELTS" text2="Test" />
+                        <FeatureIcon src={CarIcon} text1="Driver" text2="License" />
+                        <FeatureIcon src={ChatIcon} text1="Languages" />
+                        <FeatureIcon
+                            src={WritingIcon}
+                            text1="Immigration"
+                            text2="Test"
+                        />
+                    </div>
+                    <div className={classes.recommendationContainer}>
+                        <div className={classes.recommendationTitle}>
+                            Recommendations
+                        </div>
+                        <div>{studyCards}</div>
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <div className="">
+                    {renderSearchResult()}
+                </div>
+            );
+        }
+    };
+
+    const renderSearchResult = () => {
+        if (isSearchingResult) {
+            return (
+                <div className={classes.loaderWrapper}>
+                    <CircularProgress />
+                </div>
+            );
+        } else if (!searchResult || searchResult.length === 0) {
+            return (
+                <div style={{textAlign: "center"}}>
+                    No Result
+                </div>
+            );
+        } else {
+            return renderStudyCards(searchResult);
+        }
+    };
+
+    const onClickSearchCloseIcon = () => {
+        setIsInSearchMode(false);
+    };
+
+    const processSearchStudyCard = keyword => {
+        setIsSearchingResult(true);
+        searchStudyCard(keyword)
+        .then(response => {
+            const studyCards = response.data.data;
+            setSearchResult(studyCards);
+            setIsSearchingResult(false);
+        });
+    };
+
+    const getOnChangeSearchTextHandler = () => {
+        const debounceInterval = 600;
+        const debouncedProcessSearchStudyCard = debounce(processSearchStudyCard, debounceInterval);
+        const debouncedWrapper = e => {
+            const keyword = e.target.value;
+            debouncedProcessSearchStudyCard(keyword);
+        };
+        return debouncedWrapper;
+    };
+
+    const renderObjectOnRightOfSearchBar = () => {
+        if (!isInSearchMode) {
+            return (
+                <MailOutlineIcon className={classes.iconOnRightOfSearchBar} />
+            );
+        } else {
+            return (
+                <CloseIcon className={classes.iconOnRightOfSearchBar} onClick={onClickSearchCloseIcon} />
+            );
+        }
+    };
+
     return (
         <div className="ExplorePage">
             <div className={classes.searchBarWrapper}>
-                <SearchBar placeholder={getSearchBarPlaceholder()} />
-                <MailOutlineIcon className={classes.mailIcon} />
-            </div>
-            <div>
-                <WCCarousel imgSrcArray={getCarouselImgArray()} />
-            </div>
-            <div className={classes.featureIconsContainer}>
-                <FeatureIcon src={GraduateIcon} text1="IELTS" text2="Test" />
-                <FeatureIcon src={CarIcon} text1="Driver" text2="License" />
-                <FeatureIcon src={ChatIcon} text1="Languages" />
-                <FeatureIcon
-                    src={WritingIcon}
-                    text1="Immigration"
-                    text2="Test"
+                <SearchBar
+                    placeholder={getSearchBarPlaceholder()}
+                    onClickHandler={onClickSearchBarHandler}
+                    onChangeHandler={getOnChangeSearchTextHandler()}
                 />
+                {renderObjectOnRightOfSearchBar()}
             </div>
-            <div className={classes.recommendationContainer}>
-                <div className={classes.recommendationTitle}>
-                    Recommendations
-                </div>
-                <div>{studyCards}</div>
-            </div>
+            {renderExplorePageContent()}
         </div>
     );
 };
