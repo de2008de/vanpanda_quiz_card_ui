@@ -7,6 +7,8 @@ import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import BookOutlined from "@material-ui/icons/BookOutlined";
+import { Link } from "react-router-dom";
+import "../../assets/css/AppShell/WCAppBar.css";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -34,13 +36,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const WCAppBar = () => {
+const WCAppBar = props => {
     const classes = useStyles();
     return (
-        <div className={classes.root}>
+        <div className={classes.root + " WCAppBar"}>
             <AppBar position="static">
                 <Toolbar>
-                <IconButton className={classes.menuButton} color="inherit">
+                    <IconButton className={classes.menuButton} color="inherit">
                         <BookOutlined />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
@@ -48,9 +50,11 @@ const WCAppBar = () => {
                             大温熊猫
                         </Box>
                     </Typography>
-                    <IconButton className={classes.menuButton} color="inherit">
-                        <SearchIcon />
-                    </IconButton>
+                    <Link to="/search">
+                        <IconButton className={classes.menuButton} color="inherit">
+                            <SearchIcon />
+                        </IconButton>
+                    </Link>
                 </Toolbar>
             </AppBar>
         </div>

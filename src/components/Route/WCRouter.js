@@ -15,6 +15,7 @@ import StudyPage from "../commons/StudyPage";
 import FlashcardPage from "../commons/FlashcardPage";
 import StudyPageResult from "../commons/StudyPageResult";
 import ExplorePage from "../explore/ExplorePage";
+import SearchResultPage from "../explore/SearchPage";
 
 const WCRouter = () => {
     return (
@@ -35,6 +36,7 @@ const WCRouter = () => {
                 <Route path="/studyCard/study" exact component={StudyPage} />
                 <Route path="/studyCard/study/result" component={StudyPageResult} />
                 <Route path="/studyCard/flashcard" component={FlashcardPage} />
+                <Route path="/search" exact component={SearchResultPage} />
                 <Redirect to="/" />
             </Switch>
         </div>

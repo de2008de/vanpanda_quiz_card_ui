@@ -16,11 +16,12 @@ export const convertConceptCardsArrayToMap = conceptCards => {
     return conceptCardMap;
 };
 
-export const searchStudyCard = keyword => {
+export const searchStudyCard = (keyword, pageNumber = 0) => {
     const contentParam = "content=" + keyword;
+    const pageParam = "page=" + pageNumber;
     return axios
         .get(
-            ServerConfig.api.ip + cardApi + searchCardUrl + "?" + contentParam
+            ServerConfig.api.ip + cardApi + searchCardUrl + "?" + contentParam + "&" + pageParam
         );
 };
 

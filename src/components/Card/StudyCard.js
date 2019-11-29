@@ -88,14 +88,24 @@ const StudyCard = props => {
                         {oSchoolList[props.school] ? <img className={classes.svg} src={oSchoolList[props.school]} alt="school_logo" /> : ""}
                     </Box>
                     <Box>
-                        <Chip
-                            className={classes.author}
-                            icon={<FaceIcon />}
-                            label={"created by " + props.username}
-                            clickable
-                            color="primary"
-                            variant="outlined"
-                        />
+                        {
+                            props.username ?
+                                <Chip
+                                    className={classes.author}
+                                    icon={<FaceIcon />}
+                                    label={"created by " + props.username}
+                                    clickable
+                                    color="primary"
+                                    variant="outlined"
+                                />
+                                :
+                                <Chip
+                                    className={classes.author}
+                                    icon={<FaceIcon />}
+                                    color="primary"
+                                    variant="outlined"
+                                />
+                        }
                     </Box>
                 </CardContent>
                 <div className={classes.conceptCardContainer}>
