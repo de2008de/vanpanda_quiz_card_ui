@@ -1,5 +1,6 @@
 const determineEnvironment = () => {
-    const currentHost = window.location.host;
+    const currentHost = window.location.hostname;
+    const protocol = window.location.protocol;
     let ip;
     if (currentHost.indexOf("localhost") !== -1) {
         // develop
@@ -7,9 +8,11 @@ const determineEnvironment = () => {
     } else if (currentHost.indexOf("app.vanpanda.com") !== -1) {
         // production
         ip = "https://server.vanpanda.com";
-    } else {
+    } else if (currentHost.indexOf("apptest.vanpanda.com") !== -1) {
         // testing
         ip = "https://vanpanda-test.herokuapp.com";
+    } else {
+        ip = protocol + "//" + currentHost + ":8080"
     }
     return {
         api: {
