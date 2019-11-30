@@ -140,6 +140,7 @@ const ExplorePage = props => {
         <div className="ExplorePage">
             <div className={classes.searchBarWrapper}>
                 <SearchBar
+                    isInputDisabled={true}
                     placeholder={getSearchBarPlaceholder()}
                     onClickHandler={onClickSearchBarHandler}
                 />

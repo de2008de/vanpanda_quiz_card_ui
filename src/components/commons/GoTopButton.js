@@ -13,11 +13,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ScrollableContainer = ".AppShell";
+const scrollOptions = {
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+};
 
 const GoTopButton = props => {
     const classes = useStyles();
     const onClickButtonHandler = () => {
-        document.querySelector(ScrollableContainer).scrollTo(0, 0);
+        document.querySelector(ScrollableContainer).scrollTo(scrollOptions);
     };
     return (
         <div className={classes.buttonWrapper} onClick={onClickButtonHandler}>
