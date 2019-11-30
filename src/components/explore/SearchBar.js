@@ -33,7 +33,6 @@ const SearchBar = props => {
             <span className={classes.searchIcon}><SearchTwoToneIcon /></span>
             <div className={classes.searchInputWrapper}>
                 <input
-                    autoFocus
                     disabled={props.isInputDisabled}
                     type="text"
                     placeholder={props.placeholder}

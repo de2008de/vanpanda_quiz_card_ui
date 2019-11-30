@@ -5,6 +5,14 @@ import { debounce } from "../../helpers/general";
 import CloseIcon from '@material-ui/icons/Close';
 import SearchBar from "./SearchBar";
 import GoTopIcon from "../commons/GoTopButton";
+import {
+    cacheSearchState,
+    getCachedSearchState,
+    clearCachedSearchState,
+    cacheVerticalScrollPosition,
+    getCachedVerticalScrollPosition,
+    clearCachedVerticalScrollPosition
+} from "../../helpers/cacheHelper";
 
 const styles = {
     searchBarWrapper: {
@@ -31,7 +39,8 @@ const styles = {
 class SearchResultPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.cachedSearchState = getCachedSearchState();
+        this.defaultState = {
             currentSearchResultPage: 0,
             searchResult: [],
             isSearchingResult: false,
@@ -39,6 +48,11 @@ class SearchResultPage extends Component {
             isLoadingMore: false,
             hasMoreResult: true,
             isLoadingFirstPage: true
+        };
+        this.searchState = this.cachedSearchState || this.defaultState;
+        this.searhBarAutoFocus = this.cachedSearchState ? false : true;
+        this.state = {
+            ...this.searchState
         }
     }
 
@@ -50,6 +64,26 @@ class SearchResultPage extends Component {
         const oIntersectionObserver = new IntersectionObserver(fnCallBack, oOberserverOptions);
         const oObservee = document.querySelector("#observee");
         oIntersectionObserver.observe(oObservee);
+        document.querySelector(".SearchBar input").value = this.state.searchKeyword;
+        const verticalScrollPosition = getCachedVerticalScrollPosition();
+        if (verticalScrollPosition) {
+            const ScrollableContainer = ".AppShell";
+            document.querySelector(ScrollableContainer).scrollTo(0, verticalScrollPosition);
+        }
+        if (this.searhBarAutoFocus) {
+            const searchBarInput = ".SearchBar input";
+            document.querySelector(searchBarInput).focus();
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.hasClearedSearchState) {
+            clearCachedSearchState();
+            clearCachedVerticalScrollPosition();
+        } else {
+            cacheSearchState(this.state);
+            cacheVerticalScrollPosition();
+        }
     }
 
     getFirstPageSearchResult = (keyword) => {
@@ -106,6 +140,7 @@ class SearchResultPage extends Component {
     }
 
     onClickSearchCloseIcon = () => {
+        this.hasClearedSearchState = true;
         this.props.history.goBack();
     };
 
