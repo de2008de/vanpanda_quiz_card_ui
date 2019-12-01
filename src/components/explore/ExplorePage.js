@@ -122,7 +122,7 @@ const ExplorePage = props => {
                 </div>
                 <div className={classes.recommendationContainer}>
                     <div className={classes.recommendationTitle}>
-                        Recommendations
+                        Latest Cards
                         </div>
                     <div>{studyCards}</div>
                 </div>
