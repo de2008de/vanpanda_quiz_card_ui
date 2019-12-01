@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
         width: "auto",
         margin: "0.5rem 0.5rem 1rem 1rem"
     },
-    mailIcon: {
+    iconOnRightOfSearchBar: {
         marginLeft: "0.5rem"
     },
     featureIconsContainer: {
@@ -38,6 +38,10 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.primary.main,
         borderRadius: "12px",
         padding: "0.5rem"
+    },
+    loaderWrapper: {
+        display: "flex",
+        justifyContent: "center"
     }
 }));
 
@@ -45,6 +49,7 @@ const ExplorePage = props => {
     const classes = useStyles();
     const [studyCards, setStudyCards] = useState([]);
     const getSearchBarPlaceholder = () => {
+        // TODO: get hot keywords dynamically
         return "BC驾照笔试";
     };
 
@@ -95,31 +100,53 @@ const ExplorePage = props => {
         getStudyCards(0);
     }, []);
 
+    const onClickSearchBarHandler = () => {
+        props.history.push("/search");
+    };
+
+    const renderExplorePageContent = () => {
+        return (
+            <div className="ExplorePageContent">
+                <div>
+                    <WCCarousel imgSrcArray={getCarouselImgArray()} />
+                </div>
+                <div className={classes.featureIconsContainer}>
+                    <FeatureIcon src={GraduateIcon} text1="IELTS" text2="Test" />
+                    <FeatureIcon src={CarIcon} text1="Driver" text2="License" />
+                    <FeatureIcon src={ChatIcon} text1="Languages" />
+                    <FeatureIcon
+                        src={WritingIcon}
+                        text1="Immigration"
+                        text2="Test"
+                    />
+                </div>
+                <div className={classes.recommendationContainer}>
+                    <div className={classes.recommendationTitle}>
+                        Latest Cards
+                        </div>
+                    <div>{studyCards}</div>
+                </div>
+            </div>
+        );
+    };
+
+    const renderObjectOnRightOfSearchBar = () => {
+        return (
+            <MailOutlineIcon className={classes.iconOnRightOfSearchBar} />
+        );
+    };
+
     return (
         <div className="ExplorePage">
             <div className={classes.searchBarWrapper}>
-                <SearchBar placeholder={getSearchBarPlaceholder()} />
-                <MailOutlineIcon className={classes.mailIcon} />
-            </div>
-            <div>
-                <WCCarousel imgSrcArray={getCarouselImgArray()} />
-            </div>
-            <div className={classes.featureIconsContainer}>
-                <FeatureIcon src={GraduateIcon} text1="IELTS" text2="Test" />
-                <FeatureIcon src={CarIcon} text1="Driver" text2="License" />
-                <FeatureIcon src={ChatIcon} text1="Languages" />
-                <FeatureIcon
-                    src={WritingIcon}
-                    text1="Immigration"
-                    text2="Test"
+                <SearchBar
+                    isInputDisabled={true}
+                    placeholder={getSearchBarPlaceholder()}
+                    onClickHandler={onClickSearchBarHandler}
                 />
+                {renderObjectOnRightOfSearchBar()}
             </div>
-            <div className={classes.recommendationContainer}>
-                <div className={classes.recommendationTitle}>
-                    Recommendations
-                </div>
-                <div>{studyCards}</div>
-            </div>
+            {renderExplorePageContent()}
         </div>
     );
 };

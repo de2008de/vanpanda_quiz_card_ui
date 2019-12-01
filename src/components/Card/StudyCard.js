@@ -55,11 +55,15 @@ const StudyCard = props => {
         const aConceptCards = [];
         const maxConceptCardDisplayed = 2;
         const conceptCards = props.conceptCards;
-        for (let i = 0; i < conceptCards.length; i++) {
-            const oConceptCard = <ConceptCard key={conceptCards[i].id} term={conceptCards[i].term} />;
-            aConceptCards.push(oConceptCard);
-            if (aConceptCards.length === maxConceptCardDisplayed) {
-                break;
+        if (!conceptCards) {
+            return <ConceptCard key={0} term={"Click to see more"} />;
+        } else {
+            for (let i = 0; i < conceptCards.length; i++) {
+                const oConceptCard = <ConceptCard key={conceptCards[i].id} term={conceptCards[i].term} />;
+                aConceptCards.push(oConceptCard);
+                if (aConceptCards.length === maxConceptCardDisplayed) {
+                    break;
+                }
             }
         }
         return <div>{aConceptCards}</div>;
@@ -78,20 +82,30 @@ const StudyCard = props => {
                         </Box>
                     </Typography>
                     <Box className={classes.infoBar}>
-                        <WCBadge content={props.conceptCards.length} color="primary" />{" "}
+                        <WCBadge content={props.conceptCards ? props.conceptCards.length : ""} color="primary" />{" "}
                         <span style={{ margin: "0.3rem" }}>Key Concepts</span>
                         <div style={{ flexGrow: "1" }}></div>
                         {oSchoolList[props.school] ? <img className={classes.svg} src={oSchoolList[props.school]} alt="school_logo" /> : ""}
                     </Box>
                     <Box>
-                        <Chip
-                            className={classes.author}
-                            icon={<FaceIcon />}
-                            label={"created by " + props.username}
-                            clickable
-                            color="primary"
-                            variant="outlined"
-                        />
+                        {
+                            props.username ?
+                                <Chip
+                                    className={classes.author}
+                                    icon={<FaceIcon />}
+                                    label={"created by " + props.username}
+                                    clickable
+                                    color="primary"
+                                    variant="outlined"
+                                />
+                                :
+                                <Chip
+                                    className={classes.author}
+                                    icon={<FaceIcon />}
+                                    color="primary"
+                                    variant="outlined"
+                                />
+                        }
                     </Box>
                 </CardContent>
                 <div className={classes.conceptCardContainer}>

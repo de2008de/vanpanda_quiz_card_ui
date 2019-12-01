@@ -17,13 +17,15 @@ const WCCarousel = props => {
     const getCarouselImg = () => {
         const imgSrcArray = props.imgSrcArray;
         const imgSrcComponents = [];
+        var counter = 0;
         imgSrcArray.forEach(src => {
             const srcComponent = (
-                <div>
+                <div key={counter}>
                     <img src={src} alt="" />
                 </div>
             );
             imgSrcComponents.push(srcComponent);
+            counter++;
         });
         return imgSrcComponents;
     };
