@@ -11,7 +11,7 @@ import { doAuthentication } from "../../utils/auth";
 
 import "../../assets/css/Home/HomePage.css";
 
-const getStudyCardApi = "/api/v1/card/studycard";
+const getMyStudyCardApi = "/api/v1/card/my_study_cards";
 
 const useStyles = makeStyles(theme => ({
     headerContainer: {
@@ -31,11 +31,16 @@ const HomePage = props => {
     const [numCourses, setNumCourses] = useState(0);
     const [numKeyConcepts, setNumKeyConcepts] = useState(0);
 
-    const getStudyCards = iPageNumber => {
+    const getMyStudyCards = iPageNumber => {
         const aStudyCardComponents = [];
         let numKeyConcepts = 0;
+        const getRequestHeader = {
+            token: window.localStorage.getItem("token")
+        };
         axios
-            .get(ServerConfig.api.ip + getStudyCardApi + "?page=" + iPageNumber)
+            .get(ServerConfig.api.ip + getMyStudyCardApi + "?page=" + iPageNumber, {
+                headers: getRequestHeader
+            })
             .then(response => {
                 const aStudyCards = response.data.data;
                 aStudyCards.forEach(oStudyCard => {
@@ -65,7 +70,7 @@ const HomePage = props => {
     };
 
     useEffect(() => {
-        getStudyCards(0);
+        getMyStudyCards(0);
     }, []);
 
     return (
