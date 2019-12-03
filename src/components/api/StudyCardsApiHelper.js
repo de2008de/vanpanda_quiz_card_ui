@@ -6,6 +6,17 @@ import { Link } from "react-router-dom";
 
 const cardApi = "/api/v1/card";
 const searchCardUrl = "/search/studycard";
+const getMyStudyCardApi = "/api/v1/card/my_study_cards";
+
+export const getMyStudyCard = iPageNumber => {
+    const requestHeader = {
+        token: window.localStorage.getItem("token")
+    };
+    return axios
+        .get(ServerConfig.api.ip + getMyStudyCardApi + "?page=" + iPageNumber, {
+            headers: requestHeader
+        });
+};
 
 export const convertConceptCardsArrayToMap = conceptCards => {
     const conceptCardMap = {};
