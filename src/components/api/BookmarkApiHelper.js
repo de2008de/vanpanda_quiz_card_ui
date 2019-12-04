@@ -8,14 +8,15 @@ const getToken = () => {
     return token;
 };
 
-export const getBookmarks = () => {
+export const getBookmarks = cancelToken => {
     const token = getToken();
     const headers = {
         token: token
     };
     return axios
         .get(ServerConfig.api.ip + bookmarkApi, {
-            headers: headers
+            headers: headers,
+            cancelToken: cancelToken
         });
 };
 

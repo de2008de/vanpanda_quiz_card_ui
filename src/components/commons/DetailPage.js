@@ -17,6 +17,7 @@ import cardSVG from "../../assets/svg/card.svg";
 import quizSVG from "../../assets/svg/quiz.svg";
 import { AppContext } from "../context/AppContext";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
+import { getAxioCancelTokenSource } from "../../helpers/general";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -55,29 +56,37 @@ const DetailPage = props => {
     const [bookmarks, setBookmarks] = useState({});
     const { setAppContext } = useContext(AppContext);
 
-    const getStudyCardById = id => {
+    const getStudyCardById = (id, cancelToken) => {
         axios
-            .get(ServerConfig.api.ip + sStudyCardApi + "/" + id)
+            .get(ServerConfig.api.ip + sStudyCardApi + "/" + id, {
+                cancelToken: cancelToken
+            })
             .then(response => {
                 const studyCard = response.data.data;
                 setStudyCard(studyCard);
             })
-            .catch(() => { });
+            .catch(thrown => { });
     };
 
-    const callGetBookmarksApi = () => {
-        getBookmarks()
+    const callGetBookmarksApi = cancelToken => {
+        getBookmarks(cancelToken)
             .then(response => {
                 const bookmarks = response.data.data.bookmarks;
                 const bookmarkMap = convertBookmarkArrayToMap(bookmarks);
                 setBookmarks(bookmarkMap);
-            });
+            })
+            .catch(thrown => { });
     };
 
     useEffect(() => {
-        getStudyCardById(studyCardId);
+        const cancelTokenSource = getAxioCancelTokenSource();
+        const cancelToken = cancelTokenSource.token;
+        getStudyCardById(studyCardId, cancelToken);
         if (isAuthenticated()) {
-            callGetBookmarksApi();
+            callGetBookmarksApi(cancelToken);
+        }
+        return () => {
+            cancelTokenSource.cancel();
         }
     }, [studyCardId]);
 

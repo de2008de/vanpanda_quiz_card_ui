@@ -39,6 +39,7 @@ const styles = {
 class SearchResultPage extends Component {
     constructor(props) {
         super(props);
+        this._isMounted = false;
         this.cachedSearchState = getCachedSearchState();
         this.defaultState = {
             currentSearchResultPage: 0,
@@ -57,6 +58,7 @@ class SearchResultPage extends Component {
     }
 
     componentDidMount() {
+        this._isMounted = true;
         const fnCallBack = (entries, observer) => {
             entries.forEach(this.onIntersectingBottom.bind(this));
         }
@@ -77,11 +79,22 @@ class SearchResultPage extends Component {
     }
 
     componentWillUnmount() {
+        this._isMounted = false;
+        clearTimeout(this._debounceTimeout);
         if (this.hasClearedSearchState) {
             clearCachedSearchState();
             clearCachedVerticalScrollPosition();
         } else {
-            cacheSearchState(this.state);
+            const currentState = Object.assign({}, this.state);
+            if (this.state.isSearchingResult || this.state.isLoadingMore) {
+                if (this.state.isLoadingFirstPage) {
+                    currentState.searchKeyword = "";
+                }
+                currentState.currentSearchResultPage = currentState.currentSearchResultPage - 1;
+                currentState.isSearchingResult = false;
+                currentState.isLoadingMore = false;
+            }
+            cacheSearchState(currentState);
             cacheVerticalScrollPosition();
         }
     }
@@ -97,6 +110,9 @@ class SearchResultPage extends Component {
         });
         searchStudyCard(keyword, firstPage)
             .then(response => {
+                if (!this._isMounted) {
+                    return;
+                }
                 const studyCards = response.data.data;
                 this.setState({
                     searchResult: studyCards,
@@ -116,6 +132,9 @@ class SearchResultPage extends Component {
         });
         searchStudyCard(this.state.searchKeyword, page)
             .then(response => {
+                if (!this._isMounted) {
+                    return;
+                }
                 const studyCards = response.data.data;
                 if (!studyCards || studyCards.length === 0) {
                     this.setState({
@@ -150,7 +169,8 @@ class SearchResultPage extends Component {
         const onChangeHandler = e => {
             const keyword = e.target.value;
             const firstPage = 0;
-            debouncedGetFirstPageSearchResult(keyword, firstPage);
+            const timeout = debouncedGetFirstPageSearchResult(keyword, firstPage);
+            this._debounceTimeout = timeout;
         };
         return onChangeHandler;
     };

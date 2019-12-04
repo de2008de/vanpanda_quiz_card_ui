@@ -8,13 +8,14 @@ const cardApi = "/api/v1/card";
 const searchCardUrl = "/search/studycard";
 const getMyStudyCardApi = "/api/v1/card/my_study_cards";
 
-export const getMyStudyCard = iPageNumber => {
+export const getMyStudyCard = (iPageNumber, cancelToken) => {
     const requestHeader = {
         token: window.localStorage.getItem("token")
     };
     return axios
         .get(ServerConfig.api.ip + getMyStudyCardApi + "?page=" + iPageNumber, {
-            headers: requestHeader
+            headers: requestHeader,
+            cancelToken: cancelToken
         });
 };
 

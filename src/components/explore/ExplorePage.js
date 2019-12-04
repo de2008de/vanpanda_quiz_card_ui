@@ -12,6 +12,7 @@ import WritingIcon from "../../assets/svg/writing.svg";
 import axios from "axios";
 import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
+import { getAxioCancelTokenSource } from "../../helpers/general";
 
 const getStudyCardApi = "/api/v1/card/studycard";
 
@@ -67,10 +68,12 @@ const ExplorePage = props => {
         return staticContentPaths;
     };
 
-    const getStudyCards = iPageNumber => {
+    const getStudyCards = (iPageNumber, cancelToken) => {
         const aStudyCardComponents = [];
         axios
-            .get(ServerConfig.api.ip + getStudyCardApi + "?page=" + iPageNumber)
+            .get(ServerConfig.api.ip + getStudyCardApi + "?page=" + iPageNumber, {
+                cancelToken: cancelToken
+            })
             .then(response => {
                 const aStudyCards = response.data.data;
                 aStudyCards.forEach(oStudyCard => {
@@ -93,11 +96,17 @@ const ExplorePage = props => {
                     aStudyCardComponents.push(oStudyCardComponent);
                 });
                 setStudyCards(aStudyCardComponents);
-            });
+            })
+            .catch(thrown => { });
     };
 
     useEffect(() => {
-        getStudyCards(0);
+        const cancelTokenSource = getAxioCancelTokenSource();
+        const cancelToken = cancelTokenSource.token;
+        getStudyCards(0, cancelToken);
+        return () => {
+            cancelTokenSource.cancel();
+        }
     }, []);
 
     const onClickSearchBarHandler = () => {

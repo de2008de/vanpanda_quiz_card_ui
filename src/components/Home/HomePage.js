@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getMyStudyCard, renderStudyCards } from "../api/StudyCardsApiHelper";
 import "../../assets/css/Home/HomePage.css";
+import { getAxioCancelTokenSource } from "../../helpers/general";
 
 const useStyles = makeStyles(theme => ({
     headerContainer: {
@@ -38,12 +39,10 @@ const HomePage = props => {
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
 
-    const getMyStudyCards = iPageNumber => {
-        setCurrentPage(prevPage => {
-            return prevPage + 1;
-        });
+
+    const getMyStudyCards = (iPageNumber, cancelToken) => {
         setIsLoading(true);
-        getMyStudyCard(iPageNumber)
+        getMyStudyCard(iPageNumber, cancelToken)
             .then(response => {
                 setIsLoading(false);
                 const aStudyCards = response.data.data;
@@ -54,11 +53,14 @@ const HomePage = props => {
                 setStudyCards(aPrevStudyCards => {
                     return aPrevStudyCards.concat(aStudyCards);
                 });
-            });
+            })
+            .catch(thrown => { });
     };
 
     const onClickLoadMoreHandler = () => {
-        getMyStudyCards(currentPage);
+        setCurrentPage(prevPage => {
+            return prevPage + 1;
+        });
     };
 
     const renderLoadMoreButton = () => {
@@ -88,8 +90,13 @@ const HomePage = props => {
     };
 
     useEffect(() => {
-        getMyStudyCards(0);
-    }, []);
+        const cancelTokenSource = getAxioCancelTokenSource();
+        const cancelToken = cancelTokenSource.token;
+        getMyStudyCards(currentPage, cancelToken);
+        return () => {
+            cancelTokenSource.cancel();
+        }
+    }, [currentPage]);
 
     return (
         <div className="HomePage">
