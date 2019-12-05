@@ -40,6 +40,7 @@ const HomePage = props => {
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [isViewingCreatedByMe, setIsViewingCreatedByMe] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
 
     const getMyStudyCards = (iPageNumber, cancelToken, createdByMe) => {
         setIsLoading(true);
@@ -97,7 +98,13 @@ const HomePage = props => {
         setStudyCards([]);
         setCurrentPage(0);
         setHasMoreResult(true);
-    }
+    };
+
+    const onChangeEditModeHandler = () => {
+        setIsEditMode(prevState => {
+            return !prevState;
+        });
+    };
 
     useEffect(() => {
         const cancelTokenSource = getAxioCancelTokenSource();
@@ -134,8 +141,18 @@ const HomePage = props => {
                     Created By Me
                 </span>
             </div>
+            <div>
+                <Switch
+                    checked={isEditMode}
+                    onChange={onChangeEditModeHandler}
+                    color="primary"
+                />
+                <span>
+                    Edit Mode
+                </span>
+            </div>
             <div className="content">
-                {renderStudyCards(studyCards)}
+                {renderStudyCards(studyCards, isEditMode)}
             </div>
             <div className={classes.loadMoreWrapper}>
                 {renderLoadMoreButton()}

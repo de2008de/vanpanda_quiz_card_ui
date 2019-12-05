@@ -7,14 +7,14 @@ import { Link } from "react-router-dom";
 const cardApi = "/api/v1/card";
 const searchCardUrl = "/search/studycard";
 const getStudyCardsCreatedByMeApi = "/study_cards_created_by_me";
-const getMyStudyCardsApi = "/my_study_cards";
+const myStudyCardsApi = "/my_study_cards";
 
 export const getMyStudyCard = (iPageNumber, cancelToken, isCreatedByMe = true) => {
     let requestApiUrl = "";
     if (isCreatedByMe) {
         requestApiUrl = getStudyCardsCreatedByMeApi;
     } else {
-        requestApiUrl = getMyStudyCardsApi;
+        requestApiUrl = myStudyCardsApi;
     }
     const requestHeader = {
         token: window.localStorage.getItem("token")
@@ -23,6 +23,19 @@ export const getMyStudyCard = (iPageNumber, cancelToken, isCreatedByMe = true) =
         .get(ServerConfig.api.ip + cardApi + requestApiUrl + "?page=" + iPageNumber, {
             headers: requestHeader,
             cancelToken: cancelToken
+        });
+};
+
+export const removeStudyCardFromCollection = studyCardId => {
+    const requestHeader = {
+        token: window.localStorage.getItem("token")
+    };
+    return axios
+        .delete(ServerConfig.api.ip + cardApi + myStudyCardsApi, {
+            headers: requestHeader,
+            data: {
+                studyCardId: studyCardId
+            }
         });
 };
 
@@ -44,7 +57,7 @@ export const searchStudyCard = (keyword, pageNumber = 0) => {
         );
 };
 
-export const renderStudyCards = aStudyCards => {
+export const renderStudyCards = (aStudyCards, isEditMode = false) => {
     const aStudyCardComponents = [];
     aStudyCards.forEach(oStudyCard => {
         const cardComponent = (
@@ -55,6 +68,8 @@ export const renderStudyCards = aStudyCards => {
             >
                 <StudyCard
                     key={oStudyCard.id}
+                    id={oStudyCard.id}
+                    editMode={isEditMode}
                     title={oStudyCard.title}
                     description={oStudyCard.description}
                     school={oStudyCard.school}
