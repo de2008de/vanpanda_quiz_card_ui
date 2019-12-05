@@ -6,14 +6,21 @@ import { Link } from "react-router-dom";
 
 const cardApi = "/api/v1/card";
 const searchCardUrl = "/search/studycard";
-const getMyStudyCardApi = "/api/v1/card/my_study_cards";
+const getStudyCardsCreatedByMeApi = "/study_cards_created_by_me";
+const getMyStudyCardsApi = "/my_study_cards";
 
-export const getMyStudyCard = (iPageNumber, cancelToken) => {
+export const getMyStudyCard = (iPageNumber, cancelToken, isCreatedByMe = true) => {
+    let requestApiUrl = "";
+    if (isCreatedByMe) {
+        requestApiUrl = getStudyCardsCreatedByMeApi;
+    } else {
+        requestApiUrl = getMyStudyCardsApi;
+    }
     const requestHeader = {
         token: window.localStorage.getItem("token")
     };
     return axios
-        .get(ServerConfig.api.ip + getMyStudyCardApi + "?page=" + iPageNumber, {
+        .get(ServerConfig.api.ip + cardApi + requestApiUrl + "?page=" + iPageNumber, {
             headers: requestHeader,
             cancelToken: cancelToken
         });

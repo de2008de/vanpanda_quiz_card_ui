@@ -9,6 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { getMyStudyCard, renderStudyCards } from "../api/StudyCardsApiHelper";
 import "../../assets/css/Home/HomePage.css";
 import { getAxioCancelTokenSource } from "../../helpers/general";
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles(theme => ({
     headerContainer: {
@@ -38,11 +39,11 @@ const HomePage = props => {
     const [hasMoreResult, setHasMoreResult] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
+    const [isViewingCreatedByMe, setIsViewingCreatedByMe] = useState(false);
 
-
-    const getMyStudyCards = (iPageNumber, cancelToken) => {
+    const getMyStudyCards = (iPageNumber, cancelToken, createdByMe) => {
         setIsLoading(true);
-        getMyStudyCard(iPageNumber, cancelToken)
+        getMyStudyCard(iPageNumber, cancelToken, createdByMe)
             .then(response => {
                 setIsLoading(false);
                 const aStudyCards = response.data.data;
@@ -89,14 +90,23 @@ const HomePage = props => {
         }
     };
 
+    const onChangeViewCreatedByMe = () => {
+        setIsViewingCreatedByMe(prevState => {
+            return !prevState;
+        });
+        setStudyCards([]);
+        setCurrentPage(0);
+        setHasMoreResult(true);
+    }
+
     useEffect(() => {
         const cancelTokenSource = getAxioCancelTokenSource();
         const cancelToken = cancelTokenSource.token;
-        getMyStudyCards(currentPage, cancelToken);
+        getMyStudyCards(currentPage, cancelToken, isViewingCreatedByMe);
         return () => {
             cancelTokenSource.cancel();
         }
-    }, [currentPage]);
+    }, [currentPage, isViewingCreatedByMe]);
 
     return (
         <div className="HomePage">
@@ -113,6 +123,16 @@ const HomePage = props => {
                 <div>
                     <img src={vanpandaLogo} className={classes.logo} alt="vanpanda_logo" />
                 </div>
+            </div>
+            <div>
+                <Switch
+                    checked={isViewingCreatedByMe}
+                    onChange={onChangeViewCreatedByMe}
+                    color="primary"
+                />
+                <span>
+                    Created By Me
+                </span>
             </div>
             <div className="content">
                 {renderStudyCards(studyCards)}
