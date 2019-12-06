@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import StudyCard from "../Card/StudyCard";
-import { Link } from "react-router-dom";
-import ServerConfig from "../../configs/ServerConfig";
-import axios from "axios";
 import { makeStyles } from "@material-ui/core";
 import vanpandaLogo from "../../assets/svg/vanpanda_logo.svg";
 import { doAuthentication } from "../../utils/auth";
-
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { getMyStudyCard, renderStudyCards } from "../api/StudyCardsApiHelper";
 import "../../assets/css/Home/HomePage.css";
-
-const getStudyCardApi = "/api/v1/card/studycard";
+import { getAxioCancelTokenSource } from "../../helpers/general";
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles(theme => ({
     headerContainer: {
@@ -21,6 +19,16 @@ const useStyles = makeStyles(theme => ({
     },
     logo: {
         width: "6rem"
+    },
+    loadMoreWrapper: {
+        display: "flex",
+        justifyContent: "center",
+        margin: "1rem auto"
+    },
+    circularProgressWrapper: {
+        display: "flex",
+        justifyContent: "center",
+        margin: "1rem auto"
     }
 }));
 
@@ -28,45 +36,84 @@ const HomePage = props => {
     doAuthentication(props.history);
     const classes = useStyles();
     const [studyCards, setStudyCards] = useState([]);
-    const [numCourses, setNumCourses] = useState(0);
-    const [numKeyConcepts, setNumKeyConcepts] = useState(0);
+    const [hasMoreResult, setHasMoreResult] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [isViewingCreatedByMe, setIsViewingCreatedByMe] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
 
-    const getStudyCards = iPageNumber => {
-        const aStudyCardComponents = [];
-        let numKeyConcepts = 0;
-        axios
-            .get(ServerConfig.api.ip + getStudyCardApi + "?page=" + iPageNumber)
+    const getMyStudyCards = (iPageNumber, cancelToken, createdByMe) => {
+        setIsLoading(true);
+        getMyStudyCard(iPageNumber, cancelToken, createdByMe)
             .then(response => {
+                setIsLoading(false);
                 const aStudyCards = response.data.data;
-                aStudyCards.forEach(oStudyCard => {
-                    const oStudyCardComponent = (
-                        <Link
-                            to={"/detail?id=" + oStudyCard.id}
-                            className="cardLink"
-                            key={oStudyCard.id}
-                        >
-                            <StudyCard
-                                key={oStudyCard.id}
-                                title={oStudyCard.title}
-                                description={oStudyCard.description}
-                                school={oStudyCard.school}
-                                conceptCards={oStudyCard.conceptCards}
-                                username={oStudyCard.username}
-                            />
-                        </Link>
-                    );
-                    numKeyConcepts += oStudyCard.conceptCards.length;
-                    aStudyCardComponents.push(oStudyCardComponent);
+                if (aStudyCards.length === 0) {
+                    setHasMoreResult(false);
+                    return;
+                }
+                setStudyCards(aPrevStudyCards => {
+                    return aPrevStudyCards.concat(aStudyCards);
                 });
-                setStudyCards(aStudyCardComponents);
-                setNumCourses(aStudyCards.length);
-                setNumKeyConcepts(numKeyConcepts);
-            });
+            })
+            .catch(thrown => { });
+    };
+
+    const onClickLoadMoreHandler = () => {
+        setCurrentPage(prevPage => {
+            return prevPage + 1;
+        });
+    };
+
+    const renderLoadMoreButton = () => {
+        if (!hasMoreResult) {
+            return "That's all your cards :)";
+        } else {
+            return (
+                <Button
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                    onClick={onClickLoadMoreHandler}
+                    disabled={isLoading}
+                >
+                    More
+                </Button>
+            );
+        }
+    };
+
+    const renderLoadingCircularProgress = () => {
+        if (!isLoading) {
+            return null;
+        } else {
+            return <CircularProgress />;
+        }
+    };
+
+    const onChangeViewCreatedByMe = () => {
+        setIsViewingCreatedByMe(prevState => {
+            return !prevState;
+        });
+        setStudyCards([]);
+        setCurrentPage(0);
+        setHasMoreResult(true);
+    };
+
+    const onChangeEditModeHandler = () => {
+        setIsEditMode(prevState => {
+            return !prevState;
+        });
     };
 
     useEffect(() => {
-        getStudyCards(0);
-    }, []);
+        const cancelTokenSource = getAxioCancelTokenSource();
+        const cancelToken = cancelTokenSource.token;
+        getMyStudyCards(currentPage, cancelToken, isViewingCreatedByMe);
+        return () => {
+            cancelTokenSource.cancel();
+        }
+    }, [currentPage, isViewingCreatedByMe]);
 
     return (
         <div className="HomePage">
@@ -78,21 +125,41 @@ const HomePage = props => {
                     <Typography variant="h5">
                         <Box>Study Cards</Box>
                     </Typography>
-                    <Typography color="textSecondary">
-                        <Box component="span">
-                            {numCourses +
-                                " courses: " +
-                                numKeyConcepts +
-                                " key concepts"}
-                        </Box>
-                    </Typography>
                 </div>
                 <div style={{ flexGrow: 1 }}></div>
                 <div>
                     <img src={vanpandaLogo} className={classes.logo} alt="vanpanda_logo" />
                 </div>
             </div>
-            <div className="content">{studyCards}</div>
+            <div>
+                <Switch
+                    checked={isViewingCreatedByMe}
+                    onChange={onChangeViewCreatedByMe}
+                    color="primary"
+                />
+                <span>
+                    Created By Me
+                </span>
+            </div>
+            <div>
+                <Switch
+                    checked={isEditMode}
+                    onChange={onChangeEditModeHandler}
+                    color="primary"
+                />
+                <span>
+                    Edit Mode
+                </span>
+            </div>
+            <div className="content">
+                {renderStudyCards(studyCards, isEditMode)}
+            </div>
+            <div className={classes.loadMoreWrapper}>
+                {renderLoadMoreButton()}
+            </div>
+            <div className={classes.circularProgressWrapper}>
+                {renderLoadingCircularProgress()}
+            </div>
         </div>
     );
 

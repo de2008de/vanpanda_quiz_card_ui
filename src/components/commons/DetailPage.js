@@ -9,7 +9,7 @@ import ButtonCard from "../Card/ButtonCard";
 import qs from "query-string";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
-import { isAuthenticated } from "../../utils/auth";
+import { isAuthenticated, getUserIdFromToken } from "../../utils/auth";
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import bookSVG from "../../assets/svg/book.svg";
@@ -17,6 +17,10 @@ import cardSVG from "../../assets/svg/card.svg";
 import quizSVG from "../../assets/svg/quiz.svg";
 import { AppContext } from "../context/AppContext";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
+import { collectStudyCard, removeStudyCardFromCollection } from "../api/StudyCardsApiHelper";
+import { getAxioCancelTokenSource } from "../../helpers/general";
+import Switch from '@material-ui/core/Switch';
+import { Link } from "react-router-dom";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -45,6 +49,10 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         flexWrap: "wrap",
         margin: "0.5rem"
+    },
+    collectWarning: {
+        color: theme.palette.secondary.main,
+        marginLeft: "1rem"
     }
 }));
 
@@ -53,31 +61,52 @@ const DetailPage = props => {
     const studyCardId = qs.parse(props.location.search).id;
     const [studyCard, setStudyCard] = useState({});
     const [bookmarks, setBookmarks] = useState({});
+    const [isCollected, setIsCollected] = useState(false);
+    const [isSwitchReady, setIsSwitchReady] = useState(false);
+    const [showCollectWarning, setShowCollectWarning] = useState(false);
     const { setAppContext } = useContext(AppContext);
+    const userId = getUserIdFromToken(window.localStorage.getItem("token"));
 
-    const getStudyCardById = id => {
+    const getStudyCardById = (id, cancelToken) => {
+        const requestHeader = {
+            token: window.localStorage.getItem("token")
+        }
         axios
-            .get(ServerConfig.api.ip + sStudyCardApi + "/" + id)
+            .get(ServerConfig.api.ip + sStudyCardApi + "/" + id, {
+                headers: requestHeader,
+                cancelToken: cancelToken
+            })
             .then(response => {
                 const studyCard = response.data.data;
+                const metadata = response.data.metadata;
                 setStudyCard(studyCard);
+                setIsSwitchReady(true);
+                if (metadata.isCollected) {
+                    setIsCollected(true);
+                }
             })
-            .catch(() => { });
+            .catch(thrown => { });
     };
 
-    const callGetBookmarksApi = () => {
-        getBookmarks()
+    const callGetBookmarksApi = cancelToken => {
+        getBookmarks(cancelToken)
             .then(response => {
                 const bookmarks = response.data.data.bookmarks;
                 const bookmarkMap = convertBookmarkArrayToMap(bookmarks);
                 setBookmarks(bookmarkMap);
-            });
+            })
+            .catch(thrown => { });
     };
 
     useEffect(() => {
-        getStudyCardById(studyCardId);
+        const cancelTokenSource = getAxioCancelTokenSource();
+        const cancelToken = cancelTokenSource.token;
+        getStudyCardById(studyCardId, cancelToken);
         if (isAuthenticated()) {
-            callGetBookmarksApi();
+            callGetBookmarksApi(cancelToken);
+        }
+        return () => {
+            cancelTokenSource.cancel();
         }
     }, [studyCardId]);
 
@@ -160,6 +189,59 @@ const DetailPage = props => {
         props.history.push("/studyCard/study?id=" + studyCardId + "&type=multiple_choice");
     };
 
+    const onSwitchCollectHandler = () => {
+        const isOwnerTryingToRemoveCard = userId === studyCard.userId && isCollected;
+        if (!window.localStorage.getItem("token") || isOwnerTryingToRemoveCard) {
+            setShowCollectWarning(true);
+            return;
+        }
+        if (isCollected) {
+            removeStudyCardFromCollection(studyCardId);
+        } else {
+            collectStudyCard(studyCardId);
+        }
+        setIsCollected(prevState => {
+            return !prevState;
+        });
+    };
+
+    const renderCollectWarning = () => {
+        if (!showCollectWarning) {
+            return null;
+        }
+        if (userId === studyCard.userId) {
+            return (
+                <div className={classes.collectWarning}>
+                    Card owner is not allowed to un-collect their own cards.
+                </div>
+            );
+        } else {
+            return (
+                <div className={classes.collectWarning}>
+                    Please <Link to={"/login"}> Login </Link> to collect cards
+                </div>
+            );
+        }
+    };
+
+    const renderCollectSwitch = () => {
+        const switchText = isCollected ? "Collected" : "Collect";
+        return (
+            <div>
+                <Switch
+                    checked={isCollected}
+                    onChange={onSwitchCollectHandler}
+                    color="primary"
+                    disabled={!isSwitchReady}
+                />
+                <span>
+                    {switchText}
+                </span>
+                {renderCollectWarning()}
+            </div>
+        );
+    };
+
     return (
         <div className="DetailPage">
             <div className={classes.header}>
@@ -211,9 +293,12 @@ const DetailPage = props => {
                 />
                 <ButtonCard
                     svg={cardSVG}
-                    text="FLASHCARDS"
+                    text="CARDS"
                     onClickHandler={onClickFlashcardHandler}
                 />
+            </div>
+            <div>
+                {renderCollectSwitch()}
             </div>
             <div className="content">
                 {loadConceptCards()}

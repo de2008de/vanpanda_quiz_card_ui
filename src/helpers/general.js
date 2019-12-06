@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const debounce = (fnCallback, interval) => {
     var timeout;
     return (...args) => {
@@ -7,5 +9,10 @@ export const debounce = (fnCallback, interval) => {
         };
         clearTimeout(timeout);
         timeout = setTimeout(later, interval);
+        return timeout;
     };
+};
+
+export const getAxioCancelTokenSource = () => {
+    return axios.CancelToken.source();
 };

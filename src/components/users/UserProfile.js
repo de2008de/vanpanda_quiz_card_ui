@@ -7,7 +7,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import ServerConfig from "../../configs/ServerConfig";
 import { isAuthenticated } from "../../utils/auth";
 import axios from "axios";
-
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import FaceIcon from "@material-ui/icons/Face";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
@@ -16,6 +15,7 @@ import FingerprintIcon from '@material-ui/icons/Fingerprint';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ListIcon from '@material-ui/icons/List';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import { getAxioCancelTokenSource } from "../../helpers/general";
 
 const userProfileApi = "/api/v1/user/profile";
 
@@ -47,6 +47,8 @@ const UserProfile = props => {
         sProfileRequestUrl = sProfileRequestUrl + "/" + props.id;
     }
     useEffect(() => {
+        const cancelTokenSource = getAxioCancelTokenSource();
+        const cancelToken = cancelTokenSource.token;
         const getRequestHeader = {
             token: window.localStorage.getItem("token")
         };
@@ -55,7 +57,8 @@ const UserProfile = props => {
         }
         axios
             .get(sProfileRequestUrl, {
-                headers: getRequestHeader
+                headers: getRequestHeader,
+                cancelToken: cancelToken
             })
             .then(response => {
                 const oUserProfile = response.data.data;
@@ -65,7 +68,11 @@ const UserProfile = props => {
                         ...oUserProfile
                     };
                 });
-            });
+            })
+            .catch(thrown => {});
+            return () => {
+                cancelTokenSource.cancel();
+            }
     }, [sProfileRequestUrl, props.isPublic]);
 
     const generateTableRows = () => {
