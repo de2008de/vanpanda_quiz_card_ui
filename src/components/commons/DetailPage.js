@@ -9,7 +9,7 @@ import ButtonCard from "../Card/ButtonCard";
 import qs from "query-string";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
-import { isAuthenticated } from "../../utils/auth";
+import { isAuthenticated, getUserIdFromToken } from "../../utils/auth";
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import bookSVG from "../../assets/svg/book.svg";
@@ -62,8 +62,10 @@ const DetailPage = props => {
     const [studyCard, setStudyCard] = useState({});
     const [bookmarks, setBookmarks] = useState({});
     const [isCollected, setIsCollected] = useState(false);
+    const [isSwitchReady, setIsSwitchReady] = useState(false);
     const [showCollectWarning, setShowCollectWarning] = useState(false);
     const { setAppContext } = useContext(AppContext);
+    const userId = getUserIdFromToken(window.localStorage.getItem("token"));
 
     const getStudyCardById = (id, cancelToken) => {
         const requestHeader = {
@@ -78,6 +80,7 @@ const DetailPage = props => {
                 const studyCard = response.data.data;
                 const metadata = response.data.metadata;
                 setStudyCard(studyCard);
+                setIsSwitchReady(true);
                 if (metadata.isCollected) {
                     setIsCollected(true);
                 }
@@ -187,7 +190,8 @@ const DetailPage = props => {
     };
 
     const onSwitchCollectHandler = () => {
-        if (!window.localStorage.getItem("token")) {
+        const isOwnerTryingToRemoveCard = userId === studyCard.userId && isCollected;
+        if (!window.localStorage.getItem("token") || isOwnerTryingToRemoveCard) {
             setShowCollectWarning(true);
             return;
         }
@@ -201,6 +205,25 @@ const DetailPage = props => {
         });
     };
 
+    const renderCollectWarning = () => {
+        if (!showCollectWarning) {
+            return null;
+        }
+        if (userId === studyCard.userId) {
+            return (
+                <div className={classes.collectWarning}>
+                    Card owner is not allowed to un-collect their own cards.
+                </div>
+            );
+        } else {
+            return (
+                <div className={classes.collectWarning}>
+                    Please <Link to={"/login"}> Login </Link> to collect cards
+                </div>
+            );
+        }
+    };
+
     const renderCollectSwitch = () => {
         const switchText = isCollected ? "Collected" : "Collect";
         return (
@@ -209,18 +232,12 @@ const DetailPage = props => {
                     checked={isCollected}
                     onChange={onSwitchCollectHandler}
                     color="primary"
+                    disabled={!isSwitchReady}
                 />
                 <span>
                     {switchText}
                 </span>
-                {
-                    showCollectWarning ?
-                        <div className={classes.collectWarning}>
-                            Please <Link to={"/login"}> Login </Link> to collect cards
-                        </div>
-                        :
-                        null
-                }
+                {renderCollectWarning()}
             </div>
         );
     };
