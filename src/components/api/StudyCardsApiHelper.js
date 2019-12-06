@@ -26,6 +26,17 @@ export const getMyStudyCard = (iPageNumber, cancelToken, isCreatedByMe = true) =
         });
 };
 
+export const collectStudyCard = studyCardId => {
+    const requestHeader = {
+        token: window.localStorage.getItem("token")
+    };
+    return axios.post(ServerConfig.api.ip + cardApi + myStudyCardsApi, {
+        studyCardId: studyCardId
+    }, {
+        headers: requestHeader
+    });
+};
+
 export const removeStudyCardFromCollection = studyCardId => {
     const requestHeader = {
         token: window.localStorage.getItem("token")
