@@ -65,7 +65,11 @@ const DetailPage = props => {
     const [isSwitchReady, setIsSwitchReady] = useState(false);
     const [showCollectWarning, setShowCollectWarning] = useState(false);
     const { setAppContext } = useContext(AppContext);
-    const userId = getUserIdFromToken(window.localStorage.getItem("token"));
+    let userId = null;
+    const userToken = window.localStorage.getItem("token");
+    if (userToken) {
+        userId = getUserIdFromToken(userToken);
+    }
 
     const getStudyCardById = (id, cancelToken) => {
         const requestHeader = {
