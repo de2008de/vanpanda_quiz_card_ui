@@ -29,13 +29,15 @@ const useStyles = makeStyles(theme => ({
 const SearchBar = props => {
     const classes = useStyles();
     return (
-        <div className={classes.wrapper + " SearchBar"}>
+        <div className={classes.wrapper + " SearchBar"} onClick={props.onClickHandler}>
             <span className={classes.searchIcon}><SearchTwoToneIcon /></span>
             <div className={classes.searchInputWrapper}>
                 <input
+                    disabled={props.isInputDisabled}
                     type="text"
                     placeholder={props.placeholder}
                     className={classes.searchInput + " searchInput"}
+                    onChange={props.onChangeHandler}
                 />
             </div>
         </div>

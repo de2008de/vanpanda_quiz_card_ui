@@ -9,8 +9,10 @@ import ServerConfig from "../../configs/ServerConfig";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Chip from "@material-ui/core/Chip";
 import ErrorIcon from "@material-ui/icons/Error";
+import { validateSignupInput } from "../../helpers/validationHelper";
 
 const userSignUpApi = "/api/v1/user/signup";
+const INPUT_LENGTH_LIMIT = 100;
 
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -66,11 +68,12 @@ const SignUpPage = props => {
     const onSignUpHandler = () => {
         setIsSigningUp(true);
         setErrorMessages({});
-        if (input.password !== input.confirmPassword) {
-            setErrorMessages((prevState) => {
+        const oResult = validateSignupInput(input);
+        if (!oResult.success) {
+            setErrorMessages(prevErrorMessages => {
                 return {
-                    ...prevState,
-                    confirmPassword: "does not match"
+                    ...prevErrorMessages,
+                    ...oResult.errorMessages
                 };
             });
             setIsSigningUp(false);
@@ -78,9 +81,9 @@ const SignUpPage = props => {
         }
         axios
             .post(ServerConfig.api.ip + userSignUpApi, {
-                email: input.email,
-                username: input.username,
-                password: input.password
+                email: input.email.trim(),
+                username: input.username.trim(),
+                password: input.password.trim()
             })
             .then(response => {
                 setIsSigningUp(false);
@@ -129,6 +132,10 @@ const SignUpPage = props => {
                     onChange={onChangeHandler("email")}
                     margin="normal"
                     error={errorMessages.email ? true : false}
+                    inputProps = {{
+                        maxLength: INPUT_LENGTH_LIMIT,
+                        autoComplete: "off"
+                    }}
                 />
                 <TextField
                     id="username"
@@ -138,6 +145,10 @@ const SignUpPage = props => {
                     onChange={onChangeHandler("username")}
                     margin="normal"
                     error={errorMessages.username ? true : false}
+                    inputProps = {{
+                        maxLength: INPUT_LENGTH_LIMIT,
+                        autoComplete: "off"
+                    }}
                 />
                 <TextField
                     id="password"
@@ -148,6 +159,10 @@ const SignUpPage = props => {
                     onChange={onChangeHandler("password")}
                     margin="normal"
                     error={errorMessages.password ? true : false}
+                    inputProps = {{
+                        maxLength: INPUT_LENGTH_LIMIT,
+                        autoComplete: "off"
+                    }}
                 />
                 <TextField
                     id="confirmPassword"
@@ -158,6 +173,10 @@ const SignUpPage = props => {
                     onChange={onChangeHandler("confirmPassword")}
                     margin="normal"
                     error={errorMessages.confirmPassword ? true : false}
+                    inputProps = {{
+                        maxLength: INPUT_LENGTH_LIMIT,
+                        autoComplete: "off"
+                    }}
                 />
                 <Box component="div" className={classes.hintText}>
                     <Link to="/login">Have an account? Sign in here!</Link>

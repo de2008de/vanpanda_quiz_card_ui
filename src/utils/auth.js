@@ -31,3 +31,9 @@ export const isTokenExpired = (token) => {
         return false;
     }
 };
+
+export const getUserIdFromToken = token => {
+    const decoded_jwt = jwt_decode(token);
+    const userId = parseInt(decoded_jwt.aud);
+    return userId;
+};

@@ -12,6 +12,8 @@ import WritingIcon from "../../assets/svg/writing.svg";
 import axios from "axios";
 import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
+import { getAxioCancelTokenSource } from "../../helpers/general";
+import { isToggleOn } from "../../configs/FeatureToggle";
 
 const getStudyCardApi = "/api/v1/card/studycard";
 
@@ -23,7 +25,7 @@ const useStyles = makeStyles(theme => ({
         width: "auto",
         margin: "0.5rem 0.5rem 1rem 1rem"
     },
-    mailIcon: {
+    iconOnRightOfSearchBar: {
         marginLeft: "0.5rem"
     },
     featureIconsContainer: {
@@ -38,6 +40,10 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.primary.main,
         borderRadius: "12px",
         padding: "0.5rem"
+    },
+    loaderWrapper: {
+        display: "flex",
+        justifyContent: "center"
     }
 }));
 
@@ -45,6 +51,7 @@ const ExplorePage = props => {
     const classes = useStyles();
     const [studyCards, setStudyCards] = useState([]);
     const getSearchBarPlaceholder = () => {
+        // TODO: get hot keywords dynamically
         return "BC驾照笔试";
     };
 
@@ -62,10 +69,12 @@ const ExplorePage = props => {
         return staticContentPaths;
     };
 
-    const getStudyCards = iPageNumber => {
+    const getStudyCards = (iPageNumber, cancelToken) => {
         const aStudyCardComponents = [];
         axios
-            .get(ServerConfig.api.ip + getStudyCardApi + "?page=" + iPageNumber)
+            .get(ServerConfig.api.ip + getStudyCardApi + "?page=" + iPageNumber, {
+                cancelToken: cancelToken
+            })
             .then(response => {
                 const aStudyCards = response.data.data;
                 aStudyCards.forEach(oStudyCard => {
@@ -88,38 +97,71 @@ const ExplorePage = props => {
                     aStudyCardComponents.push(oStudyCardComponent);
                 });
                 setStudyCards(aStudyCardComponents);
-            });
+            })
+            .catch(thrown => { });
     };
 
     useEffect(() => {
-        getStudyCards(0);
+        const cancelTokenSource = getAxioCancelTokenSource();
+        const cancelToken = cancelTokenSource.token;
+        getStudyCards(0, cancelToken);
+        return () => {
+            cancelTokenSource.cancel();
+        }
     }, []);
+
+    const onClickSearchBarHandler = () => {
+        props.history.push("/search");
+    };
+
+    const renderExplorePageContent = () => {
+        return (
+            <div className="ExplorePageContent">
+                <div>
+                    <WCCarousel imgSrcArray={getCarouselImgArray()} />
+                </div>
+                {
+                    isToggleOn("HOME_FEATURE_ICONS") ?
+                        <div className={classes.featureIconsContainer}>
+                            <FeatureIcon src={GraduateIcon} text1="IELTS" text2="Test" />
+                            <FeatureIcon src={CarIcon} text1="Driver" text2="License" />
+                            <FeatureIcon src={ChatIcon} text1="Languages" />
+                            <FeatureIcon
+                                src={WritingIcon}
+                                text1="Immigration"
+                                text2="Test"
+                            />
+                        </div>
+                        :
+                        null
+                }
+                <div className={classes.recommendationContainer}>
+                    <div className={classes.recommendationTitle}>
+                        Create Your Own Card
+                    </div>
+                    <div>{studyCards}</div>
+                </div>
+            </div>
+        );
+    };
+
+    const renderObjectOnRightOfSearchBar = () => {
+        return (
+            <MailOutlineIcon className={classes.iconOnRightOfSearchBar} />
+        );
+    };
 
     return (
         <div className="ExplorePage">
             <div className={classes.searchBarWrapper}>
-                <SearchBar placeholder={getSearchBarPlaceholder()} />
-                <MailOutlineIcon className={classes.mailIcon} />
-            </div>
-            <div>
-                <WCCarousel imgSrcArray={getCarouselImgArray()} />
-            </div>
-            <div className={classes.featureIconsContainer}>
-                <FeatureIcon src={GraduateIcon} text1="IELTS" text2="Test" />
-                <FeatureIcon src={CarIcon} text1="Driver" text2="License" />
-                <FeatureIcon src={ChatIcon} text1="Languages" />
-                <FeatureIcon
-                    src={WritingIcon}
-                    text1="Immigration"
-                    text2="Test"
+                <SearchBar
+                    isInputDisabled={true}
+                    placeholder={getSearchBarPlaceholder()}
+                    onClickHandler={onClickSearchBarHandler}
                 />
+                {renderObjectOnRightOfSearchBar()}
             </div>
-            <div className={classes.recommendationContainer}>
-                <div className={classes.recommendationTitle}>
-                    Recommendations
-                </div>
-                <div>{studyCards}</div>
-            </div>
+            {renderExplorePageContent()}
         </div>
     );
 };
