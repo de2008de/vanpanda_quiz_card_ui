@@ -13,6 +13,7 @@ import axios from "axios";
 import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
 import { getAxioCancelTokenSource } from "../../helpers/general";
+import { isToggleOn } from "../../configs/FeatureToggle";
 
 const getStudyCardApi = "/api/v1/card/studycard";
 
@@ -119,20 +120,25 @@ const ExplorePage = props => {
                 <div>
                     <WCCarousel imgSrcArray={getCarouselImgArray()} />
                 </div>
-                <div className={classes.featureIconsContainer}>
-                    <FeatureIcon src={GraduateIcon} text1="IELTS" text2="Test" />
-                    <FeatureIcon src={CarIcon} text1="Driver" text2="License" />
-                    <FeatureIcon src={ChatIcon} text1="Languages" />
-                    <FeatureIcon
-                        src={WritingIcon}
-                        text1="Immigration"
-                        text2="Test"
-                    />
-                </div>
+                {
+                    isToggleOn("HOME_FEATURE_ICONS") ?
+                        <div className={classes.featureIconsContainer}>
+                            <FeatureIcon src={GraduateIcon} text1="IELTS" text2="Test" />
+                            <FeatureIcon src={CarIcon} text1="Driver" text2="License" />
+                            <FeatureIcon src={ChatIcon} text1="Languages" />
+                            <FeatureIcon
+                                src={WritingIcon}
+                                text1="Immigration"
+                                text2="Test"
+                            />
+                        </div>
+                        :
+                        null
+                }
                 <div className={classes.recommendationContainer}>
                     <div className={classes.recommendationTitle}>
-                        Latest Cards
-                        </div>
+                        Create Your Own Card
+                    </div>
                     <div>{studyCards}</div>
                 </div>
             </div>
