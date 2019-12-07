@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
         flexWrap: "wrap",
         margin: "0.5rem"
     },
-    collectWarning: {
+    warningText: {
         color: theme.palette.secondary.main,
         marginLeft: "1rem"
     }
@@ -64,6 +64,8 @@ const DetailPage = props => {
     const [isCollected, setIsCollected] = useState(false);
     const [isSwitchReady, setIsSwitchReady] = useState(false);
     const [showCollectWarning, setShowCollectWarning] = useState(false);
+    const [showWarning, setShowWarning] = useState(false);
+    const [warningText, setWarningText] = useState("");
     const { setAppContext } = useContext(AppContext);
     let userId = null;
     const userToken = window.localStorage.getItem("token");
@@ -183,6 +185,11 @@ const DetailPage = props => {
     }
 
     const onClickQuizHandler = () => {
+        if (studyCard.conceptCards.length < 2) {
+            setShowWarning("true");
+            setWarningText("Need at least 2 terms/definitions for Quiz");
+            return;
+        }
         setAppContext(prevState => {
             return {
                 ...prevState,
@@ -215,14 +222,24 @@ const DetailPage = props => {
         }
         if (userId === studyCard.userId) {
             return (
-                <div className={classes.collectWarning}>
+                <div className={classes.warningText}>
                     Card owner is not allowed to un-collect their own cards.
                 </div>
             );
         } else {
             return (
-                <div className={classes.collectWarning}>
+                <div className={classes.warningText}>
                     Please <Link to={"/login"}> Login </Link> to collect cards
+                </div>
+            );
+        }
+    };
+
+    const renderGeneralWarning = () => {
+        if (showWarning) {
+            return (
+                <div className={classes.warningText}>
+                    {warningText}
                 </div>
             );
         }
@@ -300,6 +317,9 @@ const DetailPage = props => {
                     text="CARDS"
                     onClickHandler={onClickFlashcardHandler}
                 />
+            </div>
+            <div>
+                {renderGeneralWarning()}
             </div>
             <div>
                 {renderCollectSwitch()}
