@@ -12,10 +12,10 @@ import FaceIcon from "@material-ui/icons/Face";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import PaymentIcon from "@material-ui/icons/Payment";
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ListIcon from '@material-ui/icons/List';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { getAxioCancelTokenSource } from "../../helpers/general";
+import { Link } from "react-router-dom";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const userProfileApi = "/api/v1/user/profile";
 
@@ -36,12 +36,23 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.text.secondary,
         display: "flex",
         alignItems: "center"
+    },
+    changePassword: {
+        display: "flex",
+        justifyItems: "right",
+        marginLeft: "1rem",
+        marginTop: "1rem"
+    },
+    loaderContainer: {
+        display: "flex",
+        justifyContent: "center"
     }
 }));
 
 const UserProfile = props => {
     const classes = useStyles();
     const [userProfile, setUserProfile] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
     let sProfileRequestUrl = ServerConfig.api.ip + userProfileApi;
     if (props.id) {
         sProfileRequestUrl = sProfileRequestUrl + "/" + props.id;
@@ -61,6 +72,7 @@ const UserProfile = props => {
                 cancelToken: cancelToken
             })
             .then(response => {
+                setIsLoading(false);
                 const oUserProfile = response.data.data;
                 setUserProfile(prevState => {
                     return {
@@ -69,29 +81,23 @@ const UserProfile = props => {
                     };
                 });
             })
-            .catch(thrown => {});
-            return () => {
-                cancelTokenSource.cancel();
-            }
+            .catch(thrown => { });
+        return () => {
+            cancelTokenSource.cancel();
+        }
     }, [sProfileRequestUrl, props.isPublic]);
 
     const generateTableRows = () => {
         const fieldDisplayNameMap = {
-            "verifiedIdentity": "Verified Member",
             "id": "ID",
             "username": "Username",
             "email": "Email",
-            "level": "Level",
-            "currentExp": "Current Exp.",
-            "nextLevelExp": "To Next Level",
             "credit": "Credit",
         };
         const fieldIconMap = {
             "id": <FingerprintIcon />,
             "username": <FaceIcon />,
-            "verifiedIdentity": <VerifiedUserIcon />,
             "email": <MailOutlineIcon />,
-            "level": <FavoriteBorderIcon />,
             "credit": <PaymentIcon />
         }
         const purcaseCreditButton = (
@@ -123,14 +129,25 @@ const UserProfile = props => {
         return aTableRows;
     };
 
+    const renderLoader = () => {
+        if (isLoading) {
+            return (
+                <div className={classes.loaderContainer}>
+                    <CircularProgress />
+                </div>
+            );
+        }
+    };
+
     return (
-        <div>
+        <div className="UserProfile">
             <div className={classes.accountCircleIconContainer}>
                 <AccountCircleIcon
                     className={classes.accountCircleIcon}
                     color="primary"
                 />
             </div>
+            {renderLoader()}
             <div className={classes.profileInfo}>
                 <Table>
                     <TableBody>
@@ -138,6 +155,14 @@ const UserProfile = props => {
                     </TableBody>
                 </Table>
             </div>
+            {
+                !props.isPublic ?
+                    <div className={classes.changePassword}>
+                        <Link to={"/profile/change_password"}> Change Password </Link>
+                    </div>
+                    :
+                    null
+            }
         </div>
     );
 }

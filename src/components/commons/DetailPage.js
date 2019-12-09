@@ -21,6 +21,7 @@ import { collectStudyCard, removeStudyCardFromCollection } from "../api/StudyCar
 import { getAxioCancelTokenSource } from "../../helpers/general";
 import Switch from '@material-ui/core/Switch';
 import { Link } from "react-router-dom";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -53,6 +54,10 @@ const useStyles = makeStyles(theme => ({
     warningText: {
         color: theme.palette.secondary.main,
         marginLeft: "1rem"
+    },
+    loaderContainer: {
+        display: "flex",
+        justifyContent: "center"
     }
 }));
 
@@ -66,6 +71,7 @@ const DetailPage = props => {
     const [showCollectWarning, setShowCollectWarning] = useState(false);
     const [showWarning, setShowWarning] = useState(false);
     const [warningText, setWarningText] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
     const { setAppContext } = useContext(AppContext);
     let userId = null;
     const userToken = window.localStorage.getItem("token");
@@ -83,6 +89,7 @@ const DetailPage = props => {
                 cancelToken: cancelToken
             })
             .then(response => {
+                setIsLoading(false);
                 const studyCard = response.data.data;
                 const metadata = response.data.metadata;
                 setStudyCard(studyCard);
@@ -102,6 +109,16 @@ const DetailPage = props => {
                 setBookmarks(bookmarkMap);
             })
             .catch(thrown => { });
+    };
+
+    const renderLoader = () => {
+        if (isLoading) {
+            return (
+                <div className={classes.loaderContainer}>
+                    <CircularProgress />
+                </div>
+            );
+        }
     };
 
     useEffect(() => {
@@ -324,6 +341,7 @@ const DetailPage = props => {
             <div>
                 {renderCollectSwitch()}
             </div>
+            {renderLoader()}
             <div className="content">
                 {loadConceptCards()}
             </div>

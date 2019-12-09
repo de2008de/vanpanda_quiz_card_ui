@@ -14,6 +14,7 @@ import StudyCard from "../Card/StudyCard";
 import { Link } from "react-router-dom";
 import { getAxioCancelTokenSource } from "../../helpers/general";
 import { isToggleOn } from "../../configs/FeatureToggle";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const getStudyCardApi = "/api/v1/card/studycard";
 
@@ -41,7 +42,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: "12px",
         padding: "0.5rem"
     },
-    loaderWrapper: {
+    loaderContainer: {
         display: "flex",
         justifyContent: "center"
     }
@@ -50,6 +51,7 @@ const useStyles = makeStyles(theme => ({
 const ExplorePage = props => {
     const classes = useStyles();
     const [studyCards, setStudyCards] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const getSearchBarPlaceholder = () => {
         // TODO: get hot keywords dynamically
         return "BC驾照笔试";
@@ -76,6 +78,7 @@ const ExplorePage = props => {
                 cancelToken: cancelToken
             })
             .then(response => {
+                setIsLoading(false);
                 const aStudyCards = response.data.data;
                 aStudyCards.forEach(oStudyCard => {
                     const oStudyCardComponent = (
@@ -114,6 +117,16 @@ const ExplorePage = props => {
         props.history.push("/search");
     };
 
+    const renderLoader = () => {
+        if (isLoading) {
+            return (
+                <div className={classes.loaderContainer}>
+                    <CircularProgress />
+                </div>
+            );
+        }
+    };
+
     const renderExplorePageContent = () => {
         return (
             <div className="ExplorePageContent">
@@ -137,8 +150,9 @@ const ExplorePage = props => {
                 }
                 <div className={classes.recommendationContainer}>
                     <div className={classes.recommendationTitle}>
-                        Create Your Own Card
+                        
                     </div>
+                    {renderLoader()}
                     <div>{studyCards}</div>
                 </div>
             </div>

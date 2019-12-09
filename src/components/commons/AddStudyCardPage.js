@@ -13,6 +13,7 @@ import ConceptCardInputField from "../Card/ConceptCardInputField";
 import TRANSLATED_ERROR_TEXT from "../../resources/translatedText/ErrorMessagesEn";
 import HTTP_RESPONSE_STATUS from "../../resources/http/HttpResponseStatus";
 import { CARD_LENGTH_LIMIT } from "../../resources/lengthLimit/CardLengthLimit";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const postStudyCardApi = "/api/v1/card/studycard";
 
@@ -41,6 +42,10 @@ const useStyles = makeStyles(theme => ({
     errorMessageContainer: {
         margin: "0.5rem",
         color: theme.palette.secondary.main
+    },
+    loaderContainer: {
+        display: "flex",
+        justifyContent: "center"
     }
 }));
 
@@ -324,6 +329,9 @@ const AddStudyCardPage = props => {
                 {getConceptCardInputFields()}
                 <div className={classes.errorMessageContainer}>
                     {showErrorMessage()}
+                </div>
+                <div className={classes.loaderContainer}>
+                    {isSubmitting ? <CircularProgress /> : null}
                 </div>
                 <Fab
                     variant="extended"
