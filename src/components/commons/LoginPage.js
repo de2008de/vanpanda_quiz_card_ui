@@ -116,6 +116,9 @@ const LoginPage = props => {
                     onChange={onChangeHandler("email")}
                     margin="normal"
                     error={errorMessages.email ? true : false}
+                    inputProps={{
+                        autoComplete: "off"
+                    }}
                 />
                 <TextField
                     id="password"
