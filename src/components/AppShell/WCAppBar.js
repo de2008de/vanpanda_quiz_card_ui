@@ -47,7 +47,7 @@ const WCAppBar = props => {
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
                         <Box component="span" className={classes.titleSpan}>
-                            大温熊猫
+                            Vanpanda Quiz Card
                         </Box>
                     </Typography>
                     <Link to="/search">
