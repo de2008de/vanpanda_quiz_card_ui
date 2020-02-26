@@ -54,7 +54,7 @@ const ExplorePage = props => {
     const [isLoading, setIsLoading] = useState(true);
     const getSearchBarPlaceholder = () => {
         // TODO: get hot keywords dynamically
-        return "BC驾照笔试";
+        return "Search for your cards";
     };
 
     const getCarouselImgArray = () => {
