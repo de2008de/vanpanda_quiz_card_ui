@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core";
-import vanpandaLogo from "../../assets/svg/vanpanda_logo.svg";
-import { doAuthentication } from "../../utils/auth";
+
 import Button from '@material-ui/core/Button';
+import Box from "@material-ui/core/Box";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { getMyStudyCard, renderStudyCards } from "../api/StudyCardsApiHelper";
-import "../../assets/css/Home/HomePage.css";
-import { getAxioCancelTokenSource } from "../../helpers/general";
 import Switch from '@material-ui/core/Switch';
+import Typography from "@material-ui/core/Typography";
+
+import { CancelToken, CancelTokenSource } from "axios";
+import { makeStyles } from "@material-ui/core";
+import { doAuthentication } from "../../utils/auth";
+import { getAxioCancelTokenSource } from "../../helpers/general";
+import { getMyStudyCard, renderStudyCards } from "../api/StudyCardsApiHelper";
+
+import { StudyCard } from "../../types/cards";
+
+import vanpandaLogo from "../../assets/svg/vanpanda_logo.svg";
+
+import "../../assets/css/Home/HomePage.css";
+
+interface Props {
+    history: History,
+};
 
 const useStyles = makeStyles(theme => ({
     headerContainer: {
@@ -32,43 +43,83 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const HomePage = props => {
-    doAuthentication(props.history);
-    const classes = useStyles();
-    const [studyCards, setStudyCards] = useState([]);
-    const [hasMoreResult, setHasMoreResult] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [isViewingCreatedByMe, setIsViewingCreatedByMe] = useState(false);
-    const [isEditMode, setIsEditMode] = useState(false);
+const HomePage = (props: Props) => {
 
-    const getMyStudyCards = (iPageNumber, cancelToken, createdByMe) => {
+    doAuthentication(props.history);
+
+    const classes = useStyles({});
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [hasMoreResult, setHasMoreResult] = useState(true);
+    const [isViewingCreatedByMe, setIsViewingCreatedByMe] = useState(false);
+    const [studyCards, setStudyCards] = useState<StudyCard[]>([]);
+
+    useEffect((): () => void  => {
+
+        const cancelTokenSource: CancelTokenSource = getAxioCancelTokenSource();
+        const cancelToken: CancelToken = cancelTokenSource.token;
+
+        getMyStudyCards(currentPage, cancelToken, isViewingCreatedByMe);
+
+        return () => {
+
+            cancelTokenSource.cancel();
+
+        }
+
+    }, [currentPage, isViewingCreatedByMe]);
+
+    const getMyStudyCards = (pageNumber: number, cancelToken: CancelToken, createdByMe: boolean): void => {
+        
         setIsLoading(true);
-        getMyStudyCard(iPageNumber, cancelToken, createdByMe)
+
+        getMyStudyCard(pageNumber, cancelToken, createdByMe)
             .then(response => {
+
                 setIsLoading(false);
-                const aStudyCards = response.data.data;
-                if (aStudyCards.length === 0) {
+
+                const studyCards: StudyCard[] = response.data.data;
+
+                if (studyCards.length === 0) {
+
                     setHasMoreResult(false);
                     return;
+
                 }
-                setStudyCards(aPrevStudyCards => {
-                    return aPrevStudyCards.concat(aStudyCards);
+
+                setStudyCards(prevStudyCards => {
+
+                    return prevStudyCards.concat(studyCards);
+
                 });
+
             })
             .catch(thrown => { });
+
     };
 
-    const onClickLoadMoreHandler = () => {
+    const onClickLoadMoreHandler = (): void => {
+
         setCurrentPage(prevPage => {
             return prevPage + 1;
         });
+
     };
 
-    const renderLoadMoreButton = () => {
+    const renderLoadMoreButton = (): JSX.Element => {
+
         if (!hasMoreResult) {
-            return "That's all your cards :)";
+
+            return (
+                <div>
+                    <p>That's all your cards :)</p>
+                </div>
+            );
+
         } else {
+
             return (
                 <Button
                     color="primary"
@@ -80,40 +131,38 @@ const HomePage = props => {
                     More
                 </Button>
             );
+            
         }
     };
 
-    const renderLoadingCircularProgress = () => {
+    const renderLoadingCircularProgress = (): JSX.Element | null => {
+
         if (!isLoading) {
+
             return null;
+
         } else {
+
             return <CircularProgress />;
+
         }
+
     };
 
-    const onChangeViewCreatedByMe = () => {
-        setIsViewingCreatedByMe(prevState => {
-            return !prevState;
-        });
+    const onChangeViewCreatedByMe = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
+
+        setIsViewingCreatedByMe(checked);
         setStudyCards([]);
         setCurrentPage(0);
         setHasMoreResult(true);
+
     };
 
-    const onChangeEditModeHandler = () => {
-        setIsEditMode(prevState => {
-            return !prevState;
-        });
-    };
+    const onChangeEditModeHandler = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
 
-    useEffect(() => {
-        const cancelTokenSource = getAxioCancelTokenSource();
-        const cancelToken = cancelTokenSource.token;
-        getMyStudyCards(currentPage, cancelToken, isViewingCreatedByMe);
-        return () => {
-            cancelTokenSource.cancel();
-        }
-    }, [currentPage, isViewingCreatedByMe]);
+        setIsEditMode(checked);
+
+    };
 
     return (
         <div className="HomePage">
