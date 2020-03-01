@@ -4,6 +4,8 @@ import Button from '@material-ui/core/Button';
 import Box from "@material-ui/core/Box";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Switch from '@material-ui/core/Switch';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Typography from "@material-ui/core/Typography";
 
 import { CancelToken, CancelTokenSource } from "axios";
@@ -54,9 +56,10 @@ const HomePage = (props: Props) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [hasMoreResult, setHasMoreResult] = useState(true);
     const [isViewingCreatedByMe, setIsViewingCreatedByMe] = useState(false);
+    const [tabValue, setTabValue] = useState("all");
     const [studyCards, setStudyCards] = useState<StudyCard[]>([]);
 
-    useEffect((): () => void  => {
+    useEffect((): () => void => {
 
         const cancelTokenSource: CancelTokenSource = getAxioCancelTokenSource();
         const cancelToken: CancelToken = cancelTokenSource.token;
@@ -72,7 +75,7 @@ const HomePage = (props: Props) => {
     }, [currentPage, isViewingCreatedByMe]);
 
     const getMyStudyCards = (pageNumber: number, cancelToken: CancelToken, createdByMe: boolean): void => {
-        
+
         setIsLoading(true);
 
         getMyStudyCard(pageNumber, cancelToken, createdByMe)
@@ -131,7 +134,7 @@ const HomePage = (props: Props) => {
                     More
                 </Button>
             );
-            
+
         }
     };
 
@@ -149,18 +152,19 @@ const HomePage = (props: Props) => {
 
     };
 
-    const onChangeViewCreatedByMe = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
-
-        setIsViewingCreatedByMe(checked);
-        setStudyCards([]);
-        setCurrentPage(0);
-        setHasMoreResult(true);
-
-    };
-
     const onChangeEditModeHandler = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
 
         setIsEditMode(checked);
+
+    };
+
+    const onTabChangeHandler = (event: React.ChangeEvent<{}>, value: any): void => {
+
+        setTabValue(value);
+        setIsViewingCreatedByMe(value === "createdByMe");
+        setStudyCards([]);
+        setCurrentPage(0);
+        setHasMoreResult(true);
 
     };
 
@@ -180,16 +184,7 @@ const HomePage = (props: Props) => {
                     <img src={vanpandaLogo} className={classes.logo} alt="vanpanda_logo" />
                 </div>
             </div>
-            <div>
-                <Switch
-                    checked={isViewingCreatedByMe}
-                    onChange={onChangeViewCreatedByMe}
-                    color="primary"
-                />
-                <span>
-                    Created By Me
-                </span>
-            </div>
+
             <div>
                 <Switch
                     checked={isEditMode}
@@ -200,6 +195,22 @@ const HomePage = (props: Props) => {
                     Edit Mode
                 </span>
             </div>
+
+            <div>
+                <Tabs
+                    value={tabValue}
+                    onChange={onTabChangeHandler}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    centered
+                >
+
+                    <Tab label="All" value="all" />
+                    <Tab label="created By Me" value="createdByMe" />
+
+                </Tabs>
+            </div>
+
             <div className="content">
                 {renderStudyCards(studyCards, isEditMode)}
             </div>
