@@ -1,15 +1,17 @@
 export type StudyCard = {
-    id: number,
+    [index: string],
+    id?: number,
     title: string,
     description: string | null,
     school?: string | null,
-    userId: number,
-    username: string,
-    conceptCards: ConceptCard,
+    userId?: number,
+    username?: string,
+    conceptCards: ConceptCard[],
 };
 
 export type ConceptCard = {
-    id: number,
+    [index: string],
+    id?: number,
     term: string,
     definition: string
 };

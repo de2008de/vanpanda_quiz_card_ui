@@ -1,21 +1,37 @@
-import React, { useState } from "react";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import PublishIcon from "@material-ui/icons/Publish";
-import axios from "axios";
-import { makeStyles } from "@material-ui/core/styles";
-import ServerConfig from "../../configs/ServerConfig";
-import { doAuthentication } from "../../utils/auth";
-import { Typography } from "@material-ui/core";
-import ConceptCardInputField from "../Card/ConceptCardInputField";
-import TRANSLATED_ERROR_TEXT from "../../resources/translatedText/ErrorMessagesEn";
-import HTTP_RESPONSE_STATUS from "../../resources/http/HttpResponseStatus";
-import { CARD_LENGTH_LIMIT } from "../../resources/lengthLimit/CardLengthLimit";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Fab from '@material-ui/core/Fab'
+import MenuItem from '@material-ui/core/MenuItem'
+import TextField from '@material-ui/core/TextField'
+import AddIcon from '@material-ui/icons/Add'
+import PublishIcon from '@material-ui/icons/Publish'
+import axios from 'axios'
+import React, { useState } from 'react'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { History, LocationState } from 'history'
+
+import ServerConfig from '../../configs/ServerConfig'
+import HTTP_RESPONSE_STATUS from '../../resources/http/HttpResponseStatus'
+import TRANSLATED_ERROR_TEXT from '../../resources/translatedText/ErrorMessagesEn'
+import ConceptCardInputField from '../Card/ConceptCardInputField'
+import { CARD_LENGTH_LIMIT } from '../../resources/lengthLimit/CardLengthLimit'
+import { ConceptCard, StudyCard } from '../../types/cards'
+import { doAuthentication } from '../../utils/auth'
 
 const postStudyCardApi = "/api/v1/card/studycard";
+
+interface Props {
+    history: History<LocationState>
+};
+
+interface input {
+    [index: string]: any
+};
+
+// Will store options on backend and render them dynamically
+interface SchoolOptions {
+    [index: string]: string
+};
 
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -49,10 +65,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const AddStudyCardPage = props => {
+const AddStudyCardPage = (props: Props) => {
+
     doAuthentication(props.history);
+
     const classes = useStyles();
-    const [input, setInput] = useState({
+
+    const [input, setInput] = useState<StudyCard>({
         title: "",
         description: "",
         school: "",
@@ -61,176 +80,237 @@ const AddStudyCardPage = props => {
             definition: ""
         }]
     });
-    const [errorMessages, setErrorMessages] = useState([]);
+    const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDescriptionHidden, setIsDescriptionHidden] = useState(true);
     const [isSchoolHidden, setIsSchoolHidden] = useState(true);
 
-    const onChangeHandler = sFieldName => {
-        return e => {
-            const oNewInput = {};
-            oNewInput[sFieldName] = e.target.value;
+    const getOnChangeHandler = (name: string) => {
+
+        return (event: React.ChangeEvent<HTMLInputElement>) => {
+
+            const input: input = {};
+            input[name] = event.target.value;
+
             setInput(prevState => {
+
                 return {
                     ...prevState,
-                    ...oNewInput
+                    ...input
                 };
+
             });
+
         };
+
     };
 
-    const onConceptCardChangeHandler = (index, sFieldName) => {
-        return e => {
-            const aConceptCards = input.conceptCards;
-            aConceptCards[index][sFieldName] = e.target.value;
+    const onConceptCardChangeHandler = (index: number, name: string) => {
+
+        return (event: React.ChangeEvent<HTMLInputElement>) => {
+
+            const conceptCards: ConceptCard[] = input.conceptCards;
+            conceptCards[index][name] = event.target.value;
+
             setInput(prevState => {
                 return {
                     ...prevState,
-                    conceptCards: aConceptCards
+                    conceptCards: conceptCards
                 };
             });
+
         };
+
     };
 
     const getSchoolOptions = () => {
-        const oOptions = {
+
+        const options: SchoolOptions = {
             null: "Not Applicable",
             sfu: "Simon Fraser University",
             ubc: "University of British Columbia"
         };
-        const aReturnOptions = [];
-        let key;
-        for (key in oOptions) {
-            const oOptionComponent = (
+
+        const optionElements: JSX.Element[] = [];
+
+        for (let key in options) {
+
+            const optionElement: JSX.Element = (
                 <MenuItem key={key} value={key}>
-                    {oOptions[key]}
+                    {options[key]}
                 </MenuItem>
             );
-            aReturnOptions.push(oOptionComponent);
+
+            optionElements.push(optionElement);
         }
-        return aReturnOptions;
+
+        return optionElements;
     };
 
     const addConceptCardOnClickHandler = () => {
-        const oConceptCardInput = {
+
+        const emptyConceptCard: ConceptCard = {
             term: "",
             definition: ""
         };
-        const aConceptCards = [...input.conceptCards];
-        aConceptCards.push(oConceptCardInput);
+
+        const conceptCards: ConceptCard[] = [...input.conceptCards];
+        conceptCards.push(emptyConceptCard);
+
         setInput(prevState => {
             return {
                 ...prevState,
-                conceptCards: aConceptCards
+                conceptCards: conceptCards
             };
         });
+
     };
 
-    const onDeleteHandler = index => {
+    const getOnDeleteHandler = (index: number) => {
+
         return () => {
-            const aConceptCards = [...input.conceptCards];
-            aConceptCards.splice(index, 1);
+
+            const conceptCards: ConceptCard[] = [...input.conceptCards];
+            conceptCards.splice(index, 1);
+
             setInput(prevState => {
                 return {
                     ...prevState,
-                    conceptCards: aConceptCards
+                    conceptCards: conceptCards
                 };
             });
+
         };
+
     };
 
-    const getConceptCardInputFields = () => {
-        const aConceptCardInputComponents = [];
+    const getConceptCardInputElements = () => {
+
+        const conceptCardInputElements: JSX.Element[] = [];
+
         input.conceptCards.forEach((oConceptCardInput, index) => {
-            const conceptCardComponent = (
+
+            const conceptCardElement = (
                 <ConceptCardInputField
                     key={index}
                     index={index}
                     input={input}
-                    onDeleteHandler={onDeleteHandler}
+                    onDeleteHandler={getOnDeleteHandler}
                     onConceptCardChangeHandler={onConceptCardChangeHandler}
                 />
             );
-            aConceptCardInputComponents.push(conceptCardComponent);
+
+            conceptCardInputElements.push(conceptCardElement);
         });
-        return aConceptCardInputComponents;
+
+        return conceptCardInputElements;
     };
 
     const showDescriptionField = () => {
+
         setIsDescriptionHidden(false);
+
     };
 
     const showSchoolField = () => {
+
         setIsSchoolHidden(false);
+
     };
 
     const showErrorMessage = () => {
-        const aErrorComponents = [];
+
+        const errorElements: JSX.Element[] = [];
+
         errorMessages.forEach((message, index) => {
-            const errorComponent = (
+
+            const errorElement = (
                 <Typography
                     key={index}
                 >
                     {message}
                 </Typography>
             );
-            aErrorComponents.push(errorComponent);
+
+            errorElements.push(errorElement);
         });
-        return aErrorComponents;
+
+        return errorElements;
     };
 
-    const addErrorMessage = message => {
+    const addErrorMessage = (message: string) => {
+
         setErrorMessages(prevState => {
-            const aErrorMessages = [...prevState];
-            aErrorMessages.push(message);
-            return aErrorMessages;
+
+            const errorMessages: string[] = [...prevState];
+            errorMessages.push(message);
+
+            return errorMessages;
+
         });
+
     };
 
     const clearErrorMessages = () => {
+
         setErrorMessages([]);
+
     };
 
-    const isConceptCardValid = oCard => {
-        let bIsValid = true;
-        if (oCard.term === null || oCard.term === undefined || oCard.term.trim() === "") {
+    const isConceptCardValid = (card: ConceptCard): boolean => {
+
+        let isValid: boolean = true;
+
+        if (card.term === null || card.term === undefined || card.term.trim() === "") {
             addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_TERM_REQUIRED);
-            bIsValid = false;
+            isValid = false;
         }
-        if (oCard.definition === null || oCard.definition === undefined || oCard.definition.trim() === "") {
+        if (card.definition === null || card.definition === undefined || card.definition.trim() === "") {
             addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_DEFINITION_REQUIRED);
-            bIsValid = false;
+            isValid = false;
         }
-        if (oCard.term.length > CARD_LENGTH_LIMIT.CONCEPT_CARD_TERM_LENGTH_LIMIT) {
+        if (card.term.length > CARD_LENGTH_LIMIT.CONCEPT_CARD_TERM_LENGTH_LIMIT) {
             addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_TERM_LENGTH_LIMIT_EXCEEDED);
-            bIsValid = false;
+            isValid = false;
         }
-        if (oCard.definition.length > CARD_LENGTH_LIMIT.CONCEPT_CARD_DEFINITION_LENGTH_LIMIT) {
+        if (card.definition.length > CARD_LENGTH_LIMIT.CONCEPT_CARD_DEFINITION_LENGTH_LIMIT) {
             addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_DEFINITION_LENGTH_LIMIT_EXCEEDED);
-            bIsValid = false;
+            isValid = false;
         }
-        return bIsValid;
+
+        return isValid;
     };
 
-    const isInputValid = () => {
-        let bIsValid = true;
+    const isInputValid = (): boolean => {
+
+        let isValid: boolean = true;
+
         if (!input.conceptCards || input.conceptCards.length === 0) {
             addErrorMessage(TRANSLATED_ERROR_TEXT.AT_LEAST_ONE_CONCEPT_CARD);
-            bIsValid = false;
+            isValid = false;
         }
+
         if (input.title === null || input.title === undefined || input.title.trim() === "") {
             addErrorMessage(TRANSLATED_ERROR_TEXT.STUDY_CARD_TITLE_REQUIRED);
-            bIsValid = false;
+            isValid = false;
         }
+
         if (input.conceptCards && input.conceptCards.length >= 0) {
+
             for (let i = 0; i < input.conceptCards.length; i++) {
+
                 const oConceptCard = input.conceptCards[i];
+
                 if (!isConceptCardValid(oConceptCard)) {
-                    bIsValid = false;
+
+                    isValid = false;
+
                 }
             }
+
         }
-        return bIsValid;
+
+        return isValid;
     };
 
     const onSubmitHandler = () => {
@@ -276,7 +356,7 @@ const AddStudyCardPage = props => {
                     label="Title"
                     className={classes.textField}
                     value={input.title}
-                    onChange={onChangeHandler("title")}
+                    onChange={getOnChangeHandler("title")}
                     margin="dense"
                     inputProps={{
                         maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT,
@@ -288,7 +368,7 @@ const AddStudyCardPage = props => {
                     label="Description"
                     className={classes.textField}
                     value={input.description}
-                    onChange={onChangeHandler("description")}
+                    onChange={getOnChangeHandler("description")}
                     margin="dense"
                     style={isDescriptionHidden ? { display: "none" } : {}}
                     inputProps={{
@@ -302,7 +382,7 @@ const AddStudyCardPage = props => {
                     label="School"
                     className={classes.textField}
                     value={input.school}
-                    onChange={onChangeHandler("school")}
+                    onChange={getOnChangeHandler("school")}
                     margin="dense"
                     style={isSchoolHidden ? { display: "none" } : {}}
                     inputProps={{
@@ -326,7 +406,7 @@ const AddStudyCardPage = props => {
                 >
                     + School
                 </div>
-                {getConceptCardInputFields()}
+                {getConceptCardInputElements()}
                 <div className={classes.errorMessageContainer}>
                     {showErrorMessage()}
                 </div>

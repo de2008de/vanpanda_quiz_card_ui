@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from "react";
+import '../../assets/css/Home/HomePage.css'
 
-import Button from '@material-ui/core/Button';
-import Box from "@material-ui/core/Box";
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Switch from '@material-ui/core/Switch';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import Typography from "@material-ui/core/Typography";
+import Box from '@material-ui/core/Box'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Switch from '@material-ui/core/Switch'
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+import Typography from '@material-ui/core/Typography'
+import React, { useEffect, useState } from 'react'
+import { makeStyles } from '@material-ui/core'
+import { CancelToken, CancelTokenSource } from 'axios'
+import { History, LocationState } from 'history'
 
-import { CancelToken, CancelTokenSource } from "axios";
-import { makeStyles } from "@material-ui/core";
-import { doAuthentication } from "../../utils/auth";
-import { getAxioCancelTokenSource } from "../../helpers/general";
-import { getMyStudyCard, renderStudyCards } from "../api/StudyCardsApiHelper";
-
-import { StudyCard } from "../../types/cards";
-
-import vanpandaLogo from "../../assets/svg/vanpanda_logo.svg";
-
-import "../../assets/css/Home/HomePage.css";
+import vanpandaLogo from '../../assets/svg/vanpanda_logo.svg'
+import { StudyCard } from '../../types/cards'
+import { getAxioCancelTokenSource } from '../../helpers/general'
+import { doAuthentication } from '../../utils/auth'
+import { getMyStudyCard, renderStudyCards } from '../api/StudyCardsApiHelper'
 
 interface Props {
-    history: History,
+    history: History<LocationState>,
 };
 
 const useStyles = makeStyles(theme => ({
