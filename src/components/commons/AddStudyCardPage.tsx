@@ -1,9 +1,8 @@
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Fab from '@material-ui/core/Fab'
-import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 import AddIcon from '@material-ui/icons/Add'
-import PublishIcon from '@material-ui/icons/Publish'
+import SendIcon from '@material-ui/icons/Send'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Typography } from '@material-ui/core'
@@ -28,26 +27,38 @@ interface input {
     [index: string]: any
 };
 
-// Will store options on backend and render them dynamically
-interface SchoolOptions {
-    [index: string]: string
-};
-
 const useStyles = makeStyles(theme => ({
+    header: {
+        backgroundColor: theme.palette.primary.dark,
+        backgroundImage: "url('/assets/img/textures/inspiration-geometry.png')",
+        height: "150px",
+        marginBottom: "5rem"
+    },
+    title: {
+        position: "relative",
+        top: "5rem",
+        backgroundColor: "#f5f5f6",
+        width: "90%",
+        margin: "0 auto",
+        paddingBottom: "1rem",
+        borderRadius: "5px",
+        boxShadow: "0px 5px #e0e1e2"
+    },
     textField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         display: "flex",
         width: "auto"
     },
-    fabButton: {
-        margin: "1rem 0.5rem 1rem 0.5rem"
+    buttonGroup: {
+        display: "flex",
+        justifyContent: "space-between"
     },
-    extendedIcon: {
-        marginRight: theme.spacing(1)
+    fabButton: {
+        margin: "1rem 1.5rem 1rem 1.5rem"
     },
     form: {
-        width: "95%",
+        width: "100%",
         margin: "auto"
     },
     showDescriptionOrSchool: {
@@ -82,8 +93,6 @@ const AddStudyCardPage = (props: Props) => {
     });
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isDescriptionHidden, setIsDescriptionHidden] = useState(true);
-    const [isSchoolHidden, setIsSchoolHidden] = useState(true);
 
     const getOnChangeHandler = (name: string) => {
 
@@ -121,30 +130,6 @@ const AddStudyCardPage = (props: Props) => {
 
         };
 
-    };
-
-    const getSchoolOptions = () => {
-
-        const options: SchoolOptions = {
-            null: "Not Applicable",
-            sfu: "Simon Fraser University",
-            ubc: "University of British Columbia"
-        };
-
-        const optionElements: JSX.Element[] = [];
-
-        for (let key in options) {
-
-            const optionElement: JSX.Element = (
-                <MenuItem key={key} value={key}>
-                    {options[key]}
-                </MenuItem>
-            );
-
-            optionElements.push(optionElement);
-        }
-
-        return optionElements;
     };
 
     const addConceptCardOnClickHandler = () => {
@@ -204,18 +189,6 @@ const AddStudyCardPage = (props: Props) => {
         });
 
         return conceptCardInputElements;
-    };
-
-    const showDescriptionField = () => {
-
-        setIsDescriptionHidden(false);
-
-    };
-
-    const showSchoolField = () => {
-
-        setIsSchoolHidden(false);
-
     };
 
     const showErrorMessage = () => {
@@ -349,63 +322,37 @@ const AddStudyCardPage = (props: Props) => {
     };
 
     return (
-        <div className="AddStudyCardPage">
+        <div className={"AddStudyCardPage"}>
             <form className={classes.form}>
-                <TextField
-                    id="title"
-                    label="Title"
-                    className={classes.textField}
-                    value={input.title}
-                    onChange={getOnChangeHandler("title")}
-                    margin="dense"
-                    inputProps={{
-                        maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT,
-                        autoComplete: "off"
-                    }}
-                />
-                <TextField
-                    id="description"
-                    label="Description"
-                    className={classes.textField}
-                    value={input.description}
-                    onChange={getOnChangeHandler("description")}
-                    margin="dense"
-                    style={isDescriptionHidden ? { display: "none" } : {}}
-                    inputProps={{
-                        maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT,
-                        autoComplete: "off"
-                    }}
-                />
-                <TextField
-                    id="school"
-                    select
-                    label="School"
-                    className={classes.textField}
-                    value={input.school}
-                    onChange={getOnChangeHandler("school")}
-                    margin="dense"
-                    style={isSchoolHidden ? { display: "none" } : {}}
-                    inputProps={{
-                        maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_SCHOOL_LIMIT,
-                        autoComplete: "off"
-                    }}
-                >
-                    {getSchoolOptions()}
-                </TextField>
-                <div
-                    className={classes.showDescriptionOrSchool}
-                    onClick={showDescriptionField}
-                    style={!isDescriptionHidden ? { display: "none" } : {}}
-                >
-                    + Description
+                <div className={classes.header}>
+                    <div className={classes.title}>
+                        <TextField
+                            id="title"
+                            label="Title"
+                            className={classes.textField}
+                            value={input.title}
+                            onChange={getOnChangeHandler("title")}
+                            margin="dense"
+                            inputProps={{
+                                maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT,
+                                autoComplete: "off"
+                            }}
+                        />
+                        <TextField
+                            id="description"
+                            label="Description"
+                            className={classes.textField}
+                            value={input.description}
+                            onChange={getOnChangeHandler("description")}
+                            margin="dense"
+                            inputProps={{
+                                maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT,
+                                autoComplete: "off"
+                            }}
+                        />
+                    </div>
                 </div>
-                <div
-                    className={classes.showDescriptionOrSchool}
-                    onClick={showSchoolField}
-                    style={!isSchoolHidden ? { display: "none" } : {}}
-                >
-                    + School
-                </div>
+
                 {getConceptCardInputElements()}
                 <div className={classes.errorMessageContainer}>
                     {showErrorMessage()}
@@ -413,29 +360,29 @@ const AddStudyCardPage = (props: Props) => {
                 <div className={classes.loaderContainer}>
                     {isSubmitting ? <CircularProgress /> : null}
                 </div>
-                <Fab
-                    variant="extended"
-                    size="small"
-                    color="secondary"
-                    aria-label="addConceptCard"
-                    className={classes.fabButton}
-                    onClick={addConceptCardOnClickHandler}
-                >
-                    <AddIcon className={classes.extendedIcon} />
-                    Add a Concept Card
-                </Fab>
-                <Fab
-                    variant="extended"
-                    size="small"
-                    color="primary"
-                    aria-label="submit"
-                    className={classes.fabButton}
-                    onClick={onSubmitHandler}
-                    disabled={isSubmitting ? true : false}
-                >
-                    <PublishIcon />
-                    Submit
-                </Fab>
+                <div className={classes.buttonGroup}>
+                    <Fab
+                        variant="round"
+                        size="large"
+                        color="primary"
+                        aria-label="submit"
+                        className={classes.fabButton}
+                        onClick={onSubmitHandler}
+                        disabled={isSubmitting ? true : false}
+                    >
+                        <SendIcon />
+                    </Fab>
+                    <Fab
+                        variant="round"
+                        size="large"
+                        color="secondary"
+                        aria-label="addConceptCard"
+                        className={classes.fabButton}
+                        onClick={addConceptCardOnClickHandler}
+                    >
+                        <AddIcon />
+                    </Fab>
+                </div>
             </form>
         </div>
     );
