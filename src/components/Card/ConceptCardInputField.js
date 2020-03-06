@@ -54,6 +54,7 @@ const ConceptCardInputField = props => {
                 component="div"
             >
                 <TextField
+                    required
                     label="Term"
                     className={classes.textField}
                     value={props.input.conceptCards[props.index].term}
@@ -68,6 +69,7 @@ const ConceptCardInputField = props => {
                     }}
                 />
                 <TextField
+                    required
                     multiline
                     label="Definition"
                     className={classes.textField}

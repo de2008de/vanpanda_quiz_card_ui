@@ -3,9 +3,9 @@ import Fab from '@material-ui/core/Fab'
 import TextField from '@material-ui/core/TextField'
 import AddIcon from '@material-ui/icons/Add'
 import SendIcon from '@material-ui/icons/Send'
+import MuiAlert from '@material-ui/lab/Alert'
 import axios from 'axios'
 import React, { useState } from 'react'
-import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { History, LocationState } from 'history'
 
@@ -191,18 +191,22 @@ const AddStudyCardPage = (props: Props) => {
         return conceptCardInputElements;
     };
 
-    const showErrorMessage = () => {
+    const showErrorMessage = (): JSX.Element[] => {
 
         const errorElements: JSX.Element[] = [];
 
         errorMessages.forEach((message, index) => {
 
             const errorElement = (
-                <Typography
+                <MuiAlert
+                    severity="error"
                     key={index}
+                    style={{ marginBottom: "0.8rem" }}
+                    elevation={3}
+                    variant="standard"
                 >
                     {message}
-                </Typography>
+                </MuiAlert>
             );
 
             errorElements.push(errorElement);
@@ -327,6 +331,7 @@ const AddStudyCardPage = (props: Props) => {
                 <div className={classes.header}>
                     <div className={classes.title}>
                         <TextField
+                            required
                             id="title"
                             label="Title"
                             className={classes.textField}

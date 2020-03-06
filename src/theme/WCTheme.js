@@ -17,12 +17,6 @@ const WCTheme = createMuiTheme({
             main: "#de7840",
             dark: "#d0643d",
             contrastText: "#fff"
-        },
-        error: {
-            light: "#fc3f5f",
-            main: "#f40045",
-            dark: "#d50036",
-            contrastText: "#fff"
         }
     },
     shape: {
