@@ -89,6 +89,7 @@ const ExplorePage = props => {
                         >
                             <StudyCard
                                 key={oStudyCard.id}
+                                id={oStudyCard.id}
                                 title={oStudyCard.title}
                                 description={oStudyCard.description}
                                 school={oStudyCard.school}

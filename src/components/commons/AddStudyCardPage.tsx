@@ -272,6 +272,21 @@ const AddStudyCardPage = (props: Props) => {
             isValid = false;
         }
 
+        if (input.title && input.title.length > 100) {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.STUDY_CARD_TITLE_LENGTH_LIMIT_EXCEEDED + " 100 characters");
+            isValid = false;
+        }
+
+        if (input.description && input.description.length > 200) {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT_EXCEEDED + " 200 characters");
+            isValid = false;
+        }
+
+        if (input.conceptCards && input.conceptCards.length > 100) {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_NUMBER_LIMIT_EXCEEDED + " 100 cards");
+            isValid = false;
+        }
+
         if (input.conceptCards && input.conceptCards.length >= 0) {
 
             for (let i = 0; i < input.conceptCards.length; i++) {
