@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         textAlign: "center",
-        fontSize: "3rem",
+        fontSize: "2rem",
         marginBottom: "2rem",
         fontFamily: "Noto Sans SC",
         opacity: 0.87
@@ -166,7 +166,7 @@ const HomePage = (props: Props) => {
 
                 <div className={classes.title}>
                     My Study Cards
-            </div>
+                </div>
 
                 <div>
                     <Tabs

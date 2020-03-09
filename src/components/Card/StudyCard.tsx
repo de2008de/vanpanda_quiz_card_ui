@@ -31,8 +31,7 @@ interface Props {
 const useStyles = makeStyles(theme => ({
     card: {
         width: "90%",
-        margin: "2rem auto",
-        color: "#fff"
+        margin: "2rem auto"
     },
     cardContent: {
         minHeight: "10rem",
@@ -69,7 +68,6 @@ const useStyles = makeStyles(theme => ({
         top: "0",
         right: "0.5rem",
         fontSize: "1rem",
-        color: "#fff",
         padding: "0.5rem 0.5rem 1rem 1rem",
         zIndex: 1000
     },
@@ -78,8 +76,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: "1.5rem",
         position: "absolute",
         bottom: "1rem",
-        right: "1rem",
-        color: "#fff"
+        right: "1rem"
     },
     numConceptCard: {
         textAlign: "center",
@@ -138,35 +135,13 @@ const StudyCard = (props: Props) => {
         removeStudyCardFromCollection(props.id);
     };
 
-    const getCardColor = (index?: number): string => {
+    const getCardColor = (cardColor?: string): string => {
 
-        if (index !== undefined) {
-            const mod = index % 3;
-
-            switch (mod) {
-                case 0:
-                    return "blue";
-                case 1:
-                    return "orange";
-                case 2:
-                    return "red";
-                default:
-                    return "blue";
-            }
+        if (!cardColor) {
+            return "default";
         }
 
-        const num = Math.floor(Math.random() * 3);
-
-        switch (num) {
-            case 0:
-                return "blue";
-            case 1:
-                return "orange";
-            case 2:
-                return "red";
-            default:
-                return "blue";
-        }
+        return cardColor;
 
     };
 
@@ -203,7 +178,7 @@ const StudyCard = (props: Props) => {
     return (
         <div>
             <Card 
-                className={classes.card + " StudyCard " + (props.cardColor || getCardColor(props.id))} 
+                className={classes.card + " StudyCard " + (getCardColor(props.cardColor))} 
                 style={{ overflow: "visible" }}
                 onClick={onCardClickHandler}
             >

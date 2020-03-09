@@ -29,25 +29,21 @@ interface input {
 
 const useStyles = makeStyles(theme => ({
     header: {
-        height: "150px",
-        marginBottom: "5rem",
         color: "#fff",
         background: "linear-gradient(to left, #1d77d1 0%, #5ca9f7 74%)",
-        padding: "1rem 0 1rem 0",
+        padding: "2rem 0 2rem 0",
         boxShadow: "0px 5px 10px 0px #8fc7ff"
     },
     pageTitle: {
         color: "#fff",
         opacity: 0.87,
-        fontSize: "3rem",
+        fontSize: "2rem",
         textAlign: "center"
     },
     title: {
-        position: "relative",
-        top: "2rem",
-        backgroundColor: "#f5f5f6",
+        backgroundColor: "#fff",
         width: "90%",
-        margin: "0 auto",
+        margin: "2rem auto",
         paddingBottom: "1rem",
         borderRadius: "5px",
         boxShadow: "0px 5px #e0e1e2"
@@ -357,33 +353,34 @@ const AddStudyCardPage = (props: Props) => {
                         Create a Study Card
                     </div>
 
-                    <div className={classes.title}>
-                        <TextField
-                            required
-                            id="title"
-                            label="Title"
-                            className={classes.textField}
-                            value={input.title}
-                            onChange={getOnChangeHandler("title")}
-                            margin="dense"
-                            inputProps={{
-                                maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT,
-                                autoComplete: "off"
-                            }}
-                        />
-                        <TextField
-                            id="description"
-                            label="Description"
-                            className={classes.textField}
-                            value={input.description}
-                            onChange={getOnChangeHandler("description")}
-                            margin="dense"
-                            inputProps={{
-                                maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT,
-                                autoComplete: "off"
-                            }}
-                        />
-                    </div>
+                </div>
+
+                <div className={classes.title}>
+                    <TextField
+                        required
+                        id="title"
+                        label="Title"
+                        className={classes.textField}
+                        value={input.title}
+                        onChange={getOnChangeHandler("title")}
+                        margin="dense"
+                        inputProps={{
+                            maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT,
+                            autoComplete: "off"
+                        }}
+                    />
+                    <TextField
+                        id="description"
+                        label="Description"
+                        className={classes.textField}
+                        value={input.description}
+                        onChange={getOnChangeHandler("description")}
+                        margin="dense"
+                        inputProps={{
+                            maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT,
+                            autoComplete: "off"
+                        }}
+                    />
                 </div>
 
                 {getConceptCardInputElements()}

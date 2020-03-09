@@ -1,4 +1,15 @@
+.StudyCard.default {
+    color: #000;
+    background: #fff;
+    box-shadow: 0px 0px 10px 0px #B7D2F5;
+}
+
+.StudyCard.default .halfCircle {
+    background: linear-gradient(315deg, #f8f8ff 0%, #f0fbff 90%);
+}
+
 .StudyCard.blue {
+    color: #fff;
     background: linear-gradient(315deg, #7EA0EE 0%, #86BBEE 74%);
     box-shadow: 0px 0px 10px 0px #B7D2F5;
 }
@@ -8,6 +19,7 @@
 }
 
 .StudyCard.orange {
+    color: #fff;
     background: linear-gradient(315deg, #F0A15E 0%, #F4B065 74%);
     box-shadow: 0px 0px 10px 0px #FDD3AD;
 }
@@ -17,6 +29,7 @@
 }
 
 .StudyCard.red {
+    color: #fff;
     background: linear-gradient(315deg, #EA5976 0%, #EF6793 74%);
     box-shadow: 0px 0px 10px 0px #FCBDCC;
 }
