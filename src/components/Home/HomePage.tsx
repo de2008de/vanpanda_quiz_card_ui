@@ -3,7 +3,6 @@ import '../../assets/css/Home/HomePage.css'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Switch from '@material-ui/core/Switch'
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 import Typography from '@material-ui/core/Typography'
@@ -51,7 +50,6 @@ const HomePage = (props: Props) => {
 
     const [currentPage, setCurrentPage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-    const [isEditMode, setIsEditMode] = useState(false);
     const [hasMoreResult, setHasMoreResult] = useState(true);
     const [isViewingCreatedByMe, setIsViewingCreatedByMe] = useState(false);
     const [tabValue, setTabValue] = useState("all");
@@ -150,12 +148,6 @@ const HomePage = (props: Props) => {
 
     };
 
-    const onChangeEditModeHandler = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
-
-        setIsEditMode(checked);
-
-    };
-
     const onTabChangeHandler = (event: React.ChangeEvent<{}>, value: any): void => {
 
         setTabValue(value);
@@ -184,17 +176,6 @@ const HomePage = (props: Props) => {
             </div>
 
             <div>
-                <Switch
-                    checked={isEditMode}
-                    onChange={onChangeEditModeHandler}
-                    color="primary"
-                />
-                <span>
-                    Edit Mode
-                </span>
-            </div>
-
-            <div>
                 <Tabs
                     value={tabValue}
                     onChange={onTabChangeHandler}
@@ -210,7 +191,7 @@ const HomePage = (props: Props) => {
             </div>
 
             <div className="content">
-                {renderStudyCards(studyCards, isEditMode)}
+                {renderStudyCards(studyCards, true, props.history)}
             </div>
             <div className={classes.loadMoreWrapper}>
                 {renderLoadMoreButton()}
