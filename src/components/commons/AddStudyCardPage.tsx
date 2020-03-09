@@ -29,14 +29,22 @@ interface input {
 
 const useStyles = makeStyles(theme => ({
     header: {
-        backgroundColor: theme.palette.primary.dark,
-        backgroundImage: "url('/assets/img/textures/inspiration-geometry.png')",
         height: "150px",
-        marginBottom: "5rem"
+        marginBottom: "5rem",
+        color: "#fff",
+        background: "linear-gradient(to left, #1d77d1 0%, #5ca9f7 74%)",
+        padding: "1rem 0 1rem 0",
+        boxShadow: "0px 5px 10px 0px #8fc7ff"
+    },
+    pageTitle: {
+        color: "#fff",
+        opacity: 0.87,
+        fontSize: "3rem",
+        textAlign: "center"
     },
     title: {
         position: "relative",
-        top: "5rem",
+        top: "2rem",
         backgroundColor: "#f5f5f6",
         width: "90%",
         margin: "0 auto",
@@ -344,6 +352,11 @@ const AddStudyCardPage = (props: Props) => {
         <div className={"AddStudyCardPage"}>
             <form className={classes.form}>
                 <div className={classes.header}>
+
+                    <div className={classes.pageTitle}>
+                        Create a Study Card
+                    </div>
+
                     <div className={classes.title}>
                         <TextField
                             required

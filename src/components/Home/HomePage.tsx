@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
         fontSize: "3rem",
         marginBottom: "2rem",
-        fontFamily: "Schoolbell",
+        fontFamily: "Noto Sans SC",
         opacity: 0.87
     },
     loadMoreWrapper: {
