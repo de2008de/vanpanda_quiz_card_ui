@@ -29,17 +29,21 @@ interface input {
 
 const useStyles = makeStyles(theme => ({
     header: {
-        backgroundColor: theme.palette.primary.dark,
-        backgroundImage: "url('/assets/img/textures/inspiration-geometry.png')",
-        height: "150px",
-        marginBottom: "5rem"
+        color: "#fff",
+        background: "linear-gradient(to left, #1d77d1 0%, #5ca9f7 74%)",
+        padding: "2rem 0 2rem 0",
+        boxShadow: "0px 5px 10px 0px #8fc7ff"
+    },
+    pageTitle: {
+        color: "#fff",
+        opacity: 0.87,
+        fontSize: "2rem",
+        textAlign: "center"
     },
     title: {
-        position: "relative",
-        top: "5rem",
-        backgroundColor: "#f5f5f6",
+        backgroundColor: "#fff",
         width: "90%",
-        margin: "0 auto",
+        margin: "2rem auto",
         paddingBottom: "1rem",
         borderRadius: "5px",
         boxShadow: "0px 5px #e0e1e2"
@@ -272,6 +276,21 @@ const AddStudyCardPage = (props: Props) => {
             isValid = false;
         }
 
+        if (input.title && input.title.length > 100) {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.STUDY_CARD_TITLE_LENGTH_LIMIT_EXCEEDED + " 100 characters");
+            isValid = false;
+        }
+
+        if (input.description && input.description.length > 200) {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT_EXCEEDED + " 200 characters");
+            isValid = false;
+        }
+
+        if (input.conceptCards && input.conceptCards.length > 100) {
+            addErrorMessage(TRANSLATED_ERROR_TEXT.CONCEPT_CARD_NUMBER_LIMIT_EXCEEDED + " 100 cards");
+            isValid = false;
+        }
+
         if (input.conceptCards && input.conceptCards.length >= 0) {
 
             for (let i = 0; i < input.conceptCards.length; i++) {
@@ -329,33 +348,39 @@ const AddStudyCardPage = (props: Props) => {
         <div className={"AddStudyCardPage"}>
             <form className={classes.form}>
                 <div className={classes.header}>
-                    <div className={classes.title}>
-                        <TextField
-                            required
-                            id="title"
-                            label="Title"
-                            className={classes.textField}
-                            value={input.title}
-                            onChange={getOnChangeHandler("title")}
-                            margin="dense"
-                            inputProps={{
-                                maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT,
-                                autoComplete: "off"
-                            }}
-                        />
-                        <TextField
-                            id="description"
-                            label="Description"
-                            className={classes.textField}
-                            value={input.description}
-                            onChange={getOnChangeHandler("description")}
-                            margin="dense"
-                            inputProps={{
-                                maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT,
-                                autoComplete: "off"
-                            }}
-                        />
+
+                    <div className={classes.pageTitle}>
+                        Create a Study Card
                     </div>
+
+                </div>
+
+                <div className={classes.title}>
+                    <TextField
+                        required
+                        id="title"
+                        label="Title"
+                        className={classes.textField}
+                        value={input.title}
+                        onChange={getOnChangeHandler("title")}
+                        margin="dense"
+                        inputProps={{
+                            maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_TITLE_LENGTH_LIMIT,
+                            autoComplete: "off"
+                        }}
+                    />
+                    <TextField
+                        id="description"
+                        label="Description"
+                        className={classes.textField}
+                        value={input.description}
+                        onChange={getOnChangeHandler("description")}
+                        margin="dense"
+                        inputProps={{
+                            maxLength: CARD_LENGTH_LIMIT.STUDY_CARD_DESCRIPTION_LENGTH_LIMIT,
+                            autoComplete: "off"
+                        }}
+                    />
                 </div>
 
                 {getConceptCardInputElements()}

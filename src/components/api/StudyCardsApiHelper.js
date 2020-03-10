@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 import StudyCard from "../Card/StudyCard";
-import { Link } from "react-router-dom";
 
 const cardApi = "/api/v1/card";
 const searchCardUrl = "/search/studycard";
@@ -68,26 +67,22 @@ export const searchStudyCard = (keyword, pageNumber = 0) => {
         );
 };
 
-export const renderStudyCards = (aStudyCards, isEditMode = false) => {
+export const renderStudyCards = (aStudyCards, isEditMode = false, history = null) => {
     const aStudyCardComponents = [];
     aStudyCards.forEach(oStudyCard => {
         const cardComponent = (
-            <Link
-                to={"/detail?id=" + oStudyCard.id}
-                className="cardLink"
+            <StudyCard
                 key={oStudyCard.id}
-            >
-                <StudyCard
-                    key={oStudyCard.id}
-                    id={oStudyCard.id}
-                    editMode={isEditMode}
-                    title={oStudyCard.title}
-                    description={oStudyCard.description}
-                    school={oStudyCard.school}
-                    conceptCards={oStudyCard.conceptCards}
-                    username={oStudyCard.username}
-                />
-            </Link>
+                id={oStudyCard.id}
+                history={history}
+                editMode={isEditMode}
+                title={oStudyCard.title}
+                description={oStudyCard.description}
+                school={oStudyCard.school}
+                conceptCards={oStudyCard.conceptCards}
+                username={oStudyCard.username}
+                userType={oStudyCard.userType}
+            />
         );
         aStudyCardComponents.push(cardComponent);
     });

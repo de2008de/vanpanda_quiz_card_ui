@@ -1,18 +1,14 @@
 import '../../assets/css/Home/HomePage.css'
 
-import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Switch from '@material-ui/core/Switch'
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
-import Typography from '@material-ui/core/Typography'
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { CancelToken, CancelTokenSource } from 'axios'
 import { History, LocationState } from 'history'
 
-import vanpandaLogo from '../../assets/svg/vanpanda_logo.svg'
 import { StudyCard } from '../../types/cards'
 import { getAxioCancelTokenSource } from '../../helpers/general'
 import { doAuthentication } from '../../utils/auth'
@@ -23,13 +19,18 @@ interface Props {
 };
 
 const useStyles = makeStyles(theme => ({
-    headerContainer: {
-        display: "flex",
-        flexWrap: "wrap",
-        margin: "1rem 1rem 0.5rem 1rem"
+    headerBackground: {
+        color: "#fff",
+        background: "linear-gradient(to left, #1d77d1 0%, #5ca9f7 74%)",
+        padding: "1rem 0 1rem 0",
+        boxShadow: "0px 5px 10px 0px #8fc7ff"
     },
-    logo: {
-        width: "6rem"
+    title: {
+        textAlign: "center",
+        fontSize: "2rem",
+        marginBottom: "2rem",
+        fontFamily: "Noto Sans SC",
+        opacity: 0.87
     },
     loadMoreWrapper: {
         display: "flex",
@@ -51,7 +52,6 @@ const HomePage = (props: Props) => {
 
     const [currentPage, setCurrentPage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-    const [isEditMode, setIsEditMode] = useState(false);
     const [hasMoreResult, setHasMoreResult] = useState(true);
     const [isViewingCreatedByMe, setIsViewingCreatedByMe] = useState(false);
     const [tabValue, setTabValue] = useState("all");
@@ -150,12 +150,6 @@ const HomePage = (props: Props) => {
 
     };
 
-    const onChangeEditModeHandler = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
-
-        setIsEditMode(checked);
-
-    };
-
     const onTabChangeHandler = (event: React.ChangeEvent<{}>, value: any): void => {
 
         setTabValue(value);
@@ -168,55 +162,40 @@ const HomePage = (props: Props) => {
 
     return (
         <div className="HomePage">
-            <div className={classes.headerContainer}>
-                <div>
-                    <Typography variant="h5">
-                        <Box fontWeight="bold">My</Box>
-                    </Typography>
-                    <Typography variant="h5">
-                        <Box>Study Cards</Box>
-                    </Typography>
+            <div className={classes.headerBackground}>
+
+                <div className={classes.title}>
+                    My Study Cards
                 </div>
-                <div style={{ flexGrow: 1 }}></div>
+
                 <div>
-                    <img src={vanpandaLogo} className={classes.logo} alt="vanpanda_logo" />
+                    <Tabs
+                        value={tabValue}
+                        onChange={onTabChangeHandler}
+                        textColor="inherit"
+                        centered
+                    >
+
+                        <Tab label="All" value="all" />
+                        <Tab label="created By Me" value="createdByMe" />
+
+                    </Tabs>
                 </div>
+
             </div>
 
-            <div>
-                <Switch
-                    checked={isEditMode}
-                    onChange={onChangeEditModeHandler}
-                    color="primary"
-                />
-                <span>
-                    Edit Mode
-                </span>
-            </div>
+            <div className="cards">
 
-            <div>
-                <Tabs
-                    value={tabValue}
-                    onChange={onTabChangeHandler}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    centered
-                >
+                <div className="content">
+                    {renderStudyCards(studyCards, true, props.history)}
+                </div>
+                <div className={classes.loadMoreWrapper}>
+                    {renderLoadMoreButton()}
+                </div>
+                <div className={classes.circularProgressWrapper}>
+                    {renderLoadingCircularProgress()}
+                </div>
 
-                    <Tab label="All" value="all" />
-                    <Tab label="created By Me" value="createdByMe" />
-
-                </Tabs>
-            </div>
-
-            <div className="content">
-                {renderStudyCards(studyCards, isEditMode)}
-            </div>
-            <div className={classes.loadMoreWrapper}>
-                {renderLoadMoreButton()}
-            </div>
-            <div className={classes.circularProgressWrapper}>
-                {renderLoadingCircularProgress()}
             </div>
         </div>
     );
