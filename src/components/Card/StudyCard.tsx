@@ -22,10 +22,10 @@ interface Props {
     history: History<LocationState>,
     title: string,
     username: string,
+    userType: number,
     description: string,
     conceptCards: ConceptCard[],
-    editMode: boolean,
-    cardColor: string
+    editMode: boolean
 };
 
 const useStyles = makeStyles(theme => ({
@@ -135,13 +135,20 @@ const StudyCard = (props: Props) => {
         removeStudyCardFromCollection(props.id);
     };
 
-    const getCardColor = (cardColor?: string): string => {
+    const getCardColor = (userType?: number): string => {
 
-        if (!cardColor) {
-            return "default";
+        switch (userType) {
+            case 0:
+                return "default";
+            case 1:
+                return "blue";
+            case 2:
+                return "orange";
+            case 3:
+                return "red";
+            default:
+                return "default";
         }
-
-        return cardColor;
 
     };
 
@@ -178,7 +185,7 @@ const StudyCard = (props: Props) => {
     return (
         <div>
             <Card 
-                className={classes.card + " StudyCard " + (getCardColor(props.cardColor))} 
+                className={classes.card + " StudyCard " + (getCardColor(props.userType))} 
                 style={{ overflow: "visible" }}
                 onClick={onCardClickHandler}
             >

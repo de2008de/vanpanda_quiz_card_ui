@@ -172,8 +172,7 @@ const HomePage = (props: Props) => {
                     <Tabs
                         value={tabValue}
                         onChange={onTabChangeHandler}
-                        indicatorColor="primary"
-                        textColor="#fff"
+                        textColor="inherit"
                         centered
                     >
 

@@ -95,6 +95,7 @@ const ExplorePage = props => {
                                 school={oStudyCard.school}
                                 conceptCards={oStudyCard.conceptCards}
                                 username={oStudyCard.username}
+                                userType={oStudyCard.userType}
                             />
                         </Link>
                     );

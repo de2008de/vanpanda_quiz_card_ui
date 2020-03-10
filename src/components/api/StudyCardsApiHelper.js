@@ -81,6 +81,7 @@ export const renderStudyCards = (aStudyCards, isEditMode = false, history = null
                 school={oStudyCard.school}
                 conceptCards={oStudyCard.conceptCards}
                 username={oStudyCard.username}
+                userType={oStudyCard.userType}
             />
         );
         aStudyCardComponents.push(cardComponent);
