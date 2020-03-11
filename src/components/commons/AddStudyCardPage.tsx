@@ -16,6 +16,7 @@ import ConceptCardInputField from '../Card/ConceptCardInputField'
 import { CARD_LENGTH_LIMIT } from '../../resources/lengthLimit/CardLengthLimit'
 import { ConceptCard, StudyCard } from '../../types/cards'
 import { doAuthentication } from '../../utils/auth'
+import { palette } from '../../theme/colorPalette'
 
 const postStudyCardApi = "/api/v1/card/studycard";
 
@@ -29,19 +30,18 @@ interface input {
 
 const useStyles = makeStyles(theme => ({
     header: {
-        color: "#fff",
-        background: "linear-gradient(to left, #1d77d1 0%, #5ca9f7 74%)",
+        background: palette.pageTitle.background,
         padding: "2rem 0 2rem 0",
-        boxShadow: "0px 5px 10px 0px #8fc7ff"
+        boxShadow: "0px 0px 10px 0px #e0e1e2"
     },
     pageTitle: {
-        color: "#fff",
+        color: palette.pageTitle.text,
         opacity: 0.87,
         fontSize: "2rem",
         textAlign: "center"
     },
     title: {
-        backgroundColor: "#fff",
+        backgroundColor: palette.addStudyCardPage.titleInput.background,
         width: "90%",
         margin: "2rem auto",
         paddingBottom: "1rem",
@@ -61,14 +61,25 @@ const useStyles = makeStyles(theme => ({
     fabButton: {
         margin: "1rem 1.5rem 1rem 1.5rem"
     },
+    sendIconWrapper: {
+        display: "flex",
+        opacity: 0.87,
+        color: palette.addStudyCardPage.buttons.submit.text
+    },
+    submitButton: {
+        background: palette.addStudyCardPage.buttons.submit.background
+    },
+    addIconWrapper: {
+        display: "flex",
+        opacity: 0.87,
+        color: palette.addStudyCardPage.buttons.addConceptCard.text
+    },
+    addConceptCardButton: {
+        background: palette.addStudyCardPage.buttons.addConceptCard.background
+    },
     form: {
         width: "100%",
         margin: "auto"
-    },
-    showDescriptionOrSchool: {
-        color: theme.palette.primary.main,
-        fontWeight: theme.typography.fontWeightMedium,
-        margin: "0.5rem"
     },
     errorMessageContainer: {
         margin: "0.5rem",
@@ -347,14 +358,6 @@ const AddStudyCardPage = (props: Props) => {
     return (
         <div className={"AddStudyCardPage"}>
             <form className={classes.form}>
-                <div className={classes.header}>
-
-                    <div className={classes.pageTitle}>
-                        Create a Study Card
-                    </div>
-
-                </div>
-
                 <div className={classes.title}>
                     <TextField
                         required
@@ -391,27 +394,38 @@ const AddStudyCardPage = (props: Props) => {
                     {isSubmitting ? <CircularProgress /> : null}
                 </div>
                 <div className={classes.buttonGroup}>
-                    <Fab
-                        variant="round"
-                        size="large"
-                        color="primary"
-                        aria-label="submit"
-                        className={classes.fabButton}
-                        onClick={onSubmitHandler}
-                        disabled={isSubmitting ? true : false}
-                    >
-                        <SendIcon />
-                    </Fab>
-                    <Fab
-                        variant="round"
-                        size="large"
-                        color="secondary"
-                        aria-label="addConceptCard"
-                        className={classes.fabButton}
-                        onClick={addConceptCardOnClickHandler}
-                    >
-                        <AddIcon />
-                    </Fab>
+
+                    <div>
+                        <Fab
+                            variant="round"
+                            size="large"
+                            color="inherit"
+                            aria-label="submit"
+                            className={classes.fabButton + " " + classes.submitButton}
+                            onClick={onSubmitHandler}
+                            disabled={isSubmitting ? true : false}
+                        >
+                            <div className={classes.sendIconWrapper}>
+                                <SendIcon color="inherit" />
+                            </div>
+                        </Fab>
+                    </div>
+
+                    <div>
+                        <Fab
+                            variant="round"
+                            size="large"
+                            color="inherit"
+                            aria-label="addConceptCard"
+                            className={classes.fabButton + " " + classes.addConceptCardButton}
+                            onClick={addConceptCardOnClickHandler}
+                        >
+                            <div className={classes.addIconWrapper}>
+                                <AddIcon color="inherit" />
+                            </div>
+                        </Fab>
+                    </div>
+
                 </div>
             </form>
         </div>

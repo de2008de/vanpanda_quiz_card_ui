@@ -1,14 +1,14 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
+import { makeStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import BookOutlined from "@material-ui/icons/BookOutlined";
+import SearchIcon from "@material-ui/icons/Search";
+import React from "react";
 import { Link } from "react-router-dom";
 import "../../assets/css/AppShell/WCAppBar.css";
+import { palette } from "../../theme/colorPalette";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -17,10 +17,14 @@ const useStyles = makeStyles(theme => ({
         position: "sticky",
         top: 0,
         left: 0,
-        width: "100%"
+        width: "100%",
+        background: palette.appBar.background,
+        color: palette.appBar.text,
+        boxShadow: "0px 0px 10px 0px #e0e1e2"
     },
     menuButton: {
-        marginRight: "0"
+        marginRight: "0",
+        opacity: 0.87
     },
     title: {
         flexGrow: 1,
@@ -32,7 +36,8 @@ const useStyles = makeStyles(theme => ({
         margin: "auto",
         display: "flex",
         alignItems: "center",
-        justifyItems: "center"
+        justifyItems: "center",
+        opacity: 0.87
     }
 }));
 
@@ -40,7 +45,7 @@ const WCAppBar = props => {
     const classes = useStyles();
     return (
         <div className={classes.root + " WCAppBar"}>
-            <AppBar position="static">
+            <div>
                 <Toolbar>
                     <IconButton className={classes.menuButton} color="inherit">
                         <BookOutlined />
@@ -56,7 +61,7 @@ const WCAppBar = props => {
                         </IconButton>
                     </Link>
                 </Toolbar>
-            </AppBar>
+            </div>
         </div>
     );
 };

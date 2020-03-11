@@ -1,10 +1,11 @@
-import React from "react";
-import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
-import DeleteIcon from '@material-ui/icons/Delete';
-import TextField from "@material-ui/core/TextField";
+import Card from "@material-ui/core/Card";
 import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import DeleteIcon from '@material-ui/icons/Delete';
+import React from "react";
 import { CARD_LENGTH_LIMIT } from "../../resources/lengthLimit/CardLengthLimit";
+import { palette } from "../../theme/colorPalette";
 
 const useStyles = makeStyles(theme => ({
     conceptCardInput: {
@@ -12,8 +13,8 @@ const useStyles = makeStyles(theme => ({
         padding: "1rem",
         position: "relative",
         boxShadow: "0 5px #e0e1e2",
-        backgroundColor: "#fcf3c8",
-        color: "#407ade"
+        backgroundColor: palette.addStudyCardPage.conceptCardInput.background,
+        color: palette.addStudyCardPage.conceptCardInput.text
     },
     textField: {
         marginLeft: theme.spacing(1),
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
         width: "auto"
     },
     deleteButton: {
-        color: "#407ade"
+        color: palette.addStudyCardPage.conceptCardInput.text
     },
     conceptCardHeader: {
         display: "flex",

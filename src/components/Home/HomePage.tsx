@@ -13,6 +13,7 @@ import { StudyCard } from '../../types/cards'
 import { getAxioCancelTokenSource } from '../../helpers/general'
 import { doAuthentication } from '../../utils/auth'
 import { getMyStudyCard, renderStudyCards } from '../api/StudyCardsApiHelper'
+import { palette } from '../../theme/colorPalette'
 
 interface Props {
     history: History<LocationState>,
@@ -20,10 +21,10 @@ interface Props {
 
 const useStyles = makeStyles(theme => ({
     headerBackground: {
-        color: "#fff",
-        background: "linear-gradient(to left, #1d77d1 0%, #5ca9f7 74%)",
+        color: palette.pageTitle.text,
+        background: palette.pageTitle.background,
         padding: "1rem 0 1rem 0",
-        boxShadow: "0px 5px 10px 0px #8fc7ff"
+        boxShadow: "0px 0px 10px 0px #e0e1e2"
     },
     title: {
         textAlign: "center",
@@ -163,10 +164,6 @@ const HomePage = (props: Props) => {
     return (
         <div className="HomePage">
             <div className={classes.headerBackground}>
-
-                <div className={classes.title}>
-                    My Study Cards
-                </div>
 
                 <div>
                     <Tabs
