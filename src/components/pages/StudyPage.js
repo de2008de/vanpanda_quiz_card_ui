@@ -14,7 +14,7 @@ import {
 } from "../api/BookmarkApiHelper";
 import { getRandomNumber } from "../../helpers/mathHelper";
 import { shuffleArray } from "../../helpers/arrayHelper";
-import GoBackArrow from "./GoBackArrow";
+import GoBackArrow from "../commons/GoBackArrow";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "../../assets/css/commons/StudyPage.css";
 

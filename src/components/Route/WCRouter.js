@@ -1,21 +1,21 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import DetailPage from "../commons/DetailPage";
+import DetailPage from "../pages/DetailPage";
 import MyCardPage from "../pages/MyCardPage";
-import BookmarkPage from "../commons/BookmarkPage";
-import AddStudyCardPage from '../commons/AddStudyCardPage';
-import SuccessPage from "../commons/SuccessPage";
-import LoginPage from "../commons/LoginPage";
-import SignUpPage from "../commons/SignUpPage";
-import ProfilePage from "../commons/ProfilePage";
-import PaymentPage from "../commons/PaymentPage";
+import BookmarkPage from "../pages/BookmarkPage";
+import AddStudyCardPage from '../pages/AddStudyCardPage';
+import SuccessPage from "../pages/SuccessPage";
+import LoginPage from "../pages/LoginPage";
+import SignUpPage from "../pages/SignUpPage";
+import ProfilePage from "../pages/ProfilePage";
+import PaymentPage from "../pages/PaymentPage";
 import PaymentCompletedPage from "../payment/PaymentCompletedPage";
-import PublicProfilePage from "../commons/PublicProfilePage";
-import StudyPage from "../commons/StudyPage";
-import FlashcardPage from "../commons/FlashcardPage";
-import StudyPageResult from "../commons/StudyPageResult";
+import PublicProfilePage from "../pages/PublicProfilePage";
+import StudyPage from "../pages/StudyPage";
+import FlashcardPage from "../pages/FlashcardPage";
+import StudyPageResult from "../pages/StudyPageResult";
 import SearchResultPage from "../search/SearchPage";
-import ChangePasswordPage from "../commons/ChangePasswordPage";
+import ChangePasswordPage from "../pages/ChangePasswordPage";
 
 const WCRouter = () => {
     return (

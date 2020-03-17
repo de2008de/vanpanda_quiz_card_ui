@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import GoBackArrow from "./GoBackArrow";
+import GoBackArrow from "../commons/GoBackArrow";
 import { makeStyles, Typography, Box } from "@material-ui/core";
 import WCBadge from "../Badge/WCBadge";
 import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
