@@ -5,7 +5,6 @@ import ServerConfig from "../../configs/ServerConfig";
 import qs from "query-string";
 import Flashcard from "../Card/Flashcard";
 import { makeStyles, Button, Typography } from "@material-ui/core";
-import GoBackArrow from "../commons/GoBackArrow";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -86,9 +85,6 @@ const FlashcardPage = props => {
 
     return (
         <div>
-            <GoBackArrow
-                history={props.history}
-            />
             <Flashcard
                 id="flashcard"
                 term={studyCard.conceptCards ? studyCard.conceptCards[indexOfCard].term : ""}

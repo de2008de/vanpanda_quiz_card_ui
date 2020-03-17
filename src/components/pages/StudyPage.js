@@ -14,7 +14,6 @@ import {
 } from "../api/BookmarkApiHelper";
 import { getRandomNumber } from "../../helpers/mathHelper";
 import { shuffleArray } from "../../helpers/arrayHelper";
-import GoBackArrow from "../commons/GoBackArrow";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "../../assets/css/commons/StudyPage.css";
 
@@ -412,7 +411,6 @@ const StudyPage = props => {
 
     return (
         <div className={classes.studyPage + " StudyPage"}>
-            <GoBackArrow history={props.history} />
             <TransitionGroup>
                 <CSSTransition
                     key={indexOfQuestion}

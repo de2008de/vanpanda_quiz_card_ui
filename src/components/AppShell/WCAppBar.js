@@ -3,12 +3,12 @@ import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import BookOutlined from "@material-ui/icons/BookOutlined";
 import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "../../assets/css/AppShell/WCAppBar.css";
 import { palette } from "../../theme/colorPalette";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -43,13 +43,21 @@ const useStyles = makeStyles(theme => ({
 
 const WCAppBar = props => {
     const classes = useStyles();
+    const history = useHistory();
+
+    const onClickArrowBackHandler = () => {
+        history.goBack();
+    };
+
     return (
         <div className={classes.root + " WCAppBar"}>
             <div>
                 <Toolbar>
-                    <IconButton className={classes.menuButton} color="inherit">
-                        <BookOutlined />
-                    </IconButton>
+                    <div onClick={onClickArrowBackHandler}>
+                        <IconButton className={classes.menuButton} color="inherit">
+                            <ArrowBackIcon />
+                        </IconButton>
+                    </div>
                     <Typography variant="h6" className={classes.title}>
                         <Box component="span" className={classes.titleSpan}>
                             Vanpanda Quiz Card
