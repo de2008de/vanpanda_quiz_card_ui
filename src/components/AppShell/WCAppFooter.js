@@ -21,10 +21,10 @@ const WCAppFooter = () => {
 
     return (
         <div className={"WCAppFooter " + classes.WCAppFooter}>
-            <Link to="/">
+            {/* <Link to="/">
                 <ExploreIcon color="inherit" />
-            </Link>
-            <Link to="/my_home">
+            </Link> */}
+            <Link to="/mycard">
                 <HomeIcon color="inherit" />
             </Link>
             <Link to="/bookmarks">

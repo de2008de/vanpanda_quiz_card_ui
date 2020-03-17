@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import DetailPage from "../commons/DetailPage";
-import HomePage from "../Home/HomePage";
+import MyCardPage from "../pages/MyCardPage";
 import BookmarkPage from "../commons/BookmarkPage";
 import AddStudyCardPage from '../commons/AddStudyCardPage';
 import SuccessPage from "../commons/SuccessPage";
@@ -14,16 +14,14 @@ import PublicProfilePage from "../commons/PublicProfilePage";
 import StudyPage from "../commons/StudyPage";
 import FlashcardPage from "../commons/FlashcardPage";
 import StudyPageResult from "../commons/StudyPageResult";
-import ExplorePage from "../explore/ExplorePage";
-import SearchResultPage from "../explore/SearchPage";
+import SearchResultPage from "../search/SearchPage";
 import ChangePasswordPage from "../commons/ChangePasswordPage";
 
 const WCRouter = () => {
     return (
         <div className="WCRouter">
             <Switch>
-                <Route path="/" exact component={ExplorePage} />
-                <Route path="/my_home" exact component={HomePage} />
+                <Route path="/mycard" exact component={MyCardPage} />
                 <Route path="/detail" component={DetailPage} />
                 <Route path="/bookmarks" component={BookmarkPage} />
                 <Route path="/addStudyCard" component={AddStudyCardPage} />
@@ -39,7 +37,7 @@ const WCRouter = () => {
                 <Route path="/studyCard/flashcard" component={FlashcardPage} />
                 <Route path="/search" exact component={SearchResultPage} />
                 <Route path="/profile/change_password" exact component={ChangePasswordPage} />
-                <Redirect to="/" />
+                <Redirect to="/mycard" />
             </Switch>
         </div>
     );

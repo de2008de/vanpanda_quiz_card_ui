@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const HomePage = (props: Props) => {
+const MyCardPage = (props: Props) => {
 
     doAuthentication(props.history);
 
@@ -199,4 +199,4 @@ const HomePage = (props: Props) => {
 
 }
 
-export default HomePage;
+export default MyCardPage;
