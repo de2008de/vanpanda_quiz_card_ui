@@ -78,7 +78,6 @@ export const renderStudyCards = (aStudyCards, isEditMode = false, history = null
                 editMode={isEditMode}
                 title={oStudyCard.title}
                 description={oStudyCard.description}
-                school={oStudyCard.school}
                 conceptCards={oStudyCard.conceptCards}
                 username={oStudyCard.username}
                 userType={oStudyCard.userType}

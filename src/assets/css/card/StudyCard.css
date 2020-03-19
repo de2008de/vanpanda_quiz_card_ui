@@ -50,3 +50,13 @@
 .StudyCard .author {
     opacity: 60%;
 }
+
+.StudyCard .conceptcard-text {
+    font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 375px) {
+    .StudyCard .conceptcard-text {
+        font-size: 1rem;
+    }
+}

@@ -1,35 +1,56 @@
 import React, { useState, useEffect, useContext } from "react";
-import { makeStyles, Typography, Box } from "@material-ui/core";
-import WCBadge from "../Badge/WCBadge";
-import SFULogoSVG from "../../assets/svg/sfu_logo.svg";
-import UBCLogoSVG from "../../assets/svg/ubc_logo.svg";
+import { makeStyles, Typography } from "@material-ui/core";
+import BookIcon from "../../assets/svg/books_gradient.svg";
 import DetailCard from "../Card/DetailCard";
-import ButtonCard from "../Card/ButtonCard";
+import BigButton from "../buttons/BigButton";
 import qs from "query-string";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 import { isAuthenticated, getUserIdFromToken } from "../../utils/auth";
-import Chip from '@material-ui/core/Chip';
-import FaceIcon from '@material-ui/icons/Face';
 import bookSVG from "../../assets/svg/book.svg";
+import bookmarkOutlined from "../../assets/svg/bookmark_outlined.svg";
+import bookmarkFilled from "../../assets/svg/bookmark_filled.svg";
 import cardSVG from "../../assets/svg/card.svg";
 import quizSVG from "../../assets/svg/quiz.svg";
 import { AppContext } from "../context/AppContext";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
 import { collectStudyCard, removeStudyCardFromCollection } from "../api/StudyCardsApiHelper";
 import { getAxioCancelTokenSource } from "../../helpers/general";
-import Switch from '@material-ui/core/Switch';
-import { Link } from "react-router-dom";
+import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { colors } from "../../theme/colorPalette";
+import PersonIcon from '@material-ui/icons/Person';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
     header: {
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+        padding: "1rem 0 0.5rem 0",
+        marginBottom: "0.5rem"
     },
-    headerTitleContainer: {
-        margin: "0.5rem 1rem"
+    headerContent: {
+        margin: "0.5rem 1rem",
+        position: "relative"
+    },
+    title: {
+        color: "#000",
+        opacity: "87%",
+        fontSize: "1.5rem"
+    },
+    descriptionContainer: {
+        marginBottom: "1rem"
+    },
+    description: {
+        color: "#000",
+        opacity: "60%"
+    },
+    bookIconConatiner: {
+        position: "absolute",
+        marginRight: "1rem",
+        right: "0",
+        bottom: "0"
     },
     arrowBack: {
         margin: "0.5rem"
@@ -37,18 +58,22 @@ const useStyles = makeStyles(theme => ({
     svg: {
         width: "3rem"
     },
-    infoBar: {
+    infoContainer: {
         margin: "0.5rem 0",
-        display: "flex",
-        alignItems: "center"
+        color: "#000",
+        opacity: "60%"
     },
-    author: {
-        margin: "0.5rem auto"
+    iconTextContainer: {
+        display: "flex",
+        alignItems: "center",
+        margin: "0.5rem 0"
     },
     buttonGroup: {
         display: "flex",
-        flexWrap: "wrap",
-        margin: "0.5rem"
+        flexWrap: "wrap"
+    },
+    button: {
+        flexGrow: 1
     },
     warningText: {
         color: theme.palette.secondary.main,
@@ -57,6 +82,9 @@ const useStyles = makeStyles(theme => ({
     loaderContainer: {
         display: "flex",
         justifyContent: "center"
+    },
+    iconContainer: {
+        marginRight: "0.5rem"
     }
 }));
 
@@ -66,10 +94,10 @@ const DetailPage = props => {
     const [studyCard, setStudyCard] = useState({});
     const [bookmarks, setBookmarks] = useState({});
     const [isCollected, setIsCollected] = useState(false);
-    const [isSwitchReady, setIsSwitchReady] = useState(false);
-    const [showCollectWarning, setShowCollectWarning] = useState(false);
-    const [showWarning, setShowWarning] = useState(false);
-    const [warningText, setWarningText] = useState("");
+    const [isStudyCardLoaded, setIsStudyCardLoaded] = useState(false);
+    const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+    const [snackBarMessage, setSnackBarMessage] = useState("");
+    const [expandDescription, setExpandDescription] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const { setAppContext } = useContext(AppContext);
     let userId = null;
@@ -92,7 +120,7 @@ const DetailPage = props => {
                 const studyCard = response.data.data;
                 const metadata = response.data.metadata;
                 setStudyCard(studyCard);
-                setIsSwitchReady(true);
+                setIsStudyCardLoaded(true);
                 if (metadata.isCollected) {
                     setIsCollected(true);
                 }
@@ -131,11 +159,6 @@ const DetailPage = props => {
             cancelTokenSource.cancel();
         }
     }, [studyCardId]);
-
-    const schoolLogos = {
-        sfu: SFULogoSVG,
-        ubc: UBCLogoSVG
-    };
 
     const boomarkOnClickCallback = conceptCardId => {
         return () => {
@@ -202,8 +225,7 @@ const DetailPage = props => {
 
     const onClickQuizHandler = () => {
         if (studyCard.conceptCards.length < 2) {
-            setShowWarning("true");
-            setWarningText("Need at least 2 terms/definitions for Quiz");
+            showSnackBar("Quiz requires at least two concept cards.");
             return;
         }
         setAppContext(prevState => {
@@ -216,12 +238,23 @@ const DetailPage = props => {
         props.history.push("/studyCard/study?id=" + studyCardId + "&type=multiple_choice");
     };
 
+    const showSnackBar = (text) => {
+
+        setIsSnackBarOpen(true);
+        setSnackBarMessage(text);
+
+    };
+
     const onSwitchCollectHandler = () => {
         const isOwnerTryingToRemoveCard = userId === studyCard.userId && isCollected;
-        if (!window.localStorage.getItem("token") || isOwnerTryingToRemoveCard) {
-            setShowCollectWarning(true);
+        if (isOwnerTryingToRemoveCard) {
+            showSnackBar("You are the owner. Owners can't unsave their cards.");
+            return;
+        } else if (!window.localStorage.getItem("token")) {
+            showSnackBar("Please sign in.");
             return;
         }
+
         if (isCollected) {
             removeStudyCardFromCollection(studyCardId);
         } else {
@@ -232,115 +265,152 @@ const DetailPage = props => {
         });
     };
 
-    const renderCollectWarning = () => {
-        if (!showCollectWarning) {
-            return null;
-        }
-        if (userId === studyCard.userId) {
-            return (
-                <div className={classes.warningText}>
-                    Card owner is not allowed to un-collect their own cards.
-                </div>
-            );
+    const renderCollectButton = () => {
+
+        let svg = null;
+        let text = null;
+        let clickHandler = null;
+
+        if (!isStudyCardLoaded) {
+            svg = bookmarkOutlined;
+            text = "Loading";
+            clickHandler = null;
+        } else if (isCollected) {
+            svg = bookmarkFilled;
+            text = "Saved";
+            clickHandler = onSwitchCollectHandler;
         } else {
-            return (
-                <div className={classes.warningText}>
-                    Please <Link to={"/login"}> Login </Link> to collect cards
-                </div>
-            );
+            svg = bookmarkOutlined;
+            text = "Save";
+            clickHandler = onSwitchCollectHandler;
         }
-    };
 
-    const renderGeneralWarning = () => {
-        if (showWarning) {
-            return (
-                <div className={classes.warningText}>
-                    {warningText}
-                </div>
-            );
-        }
-    };
-
-    const renderCollectSwitch = () => {
-        const switchText = isCollected ? "Collected" : "Collect";
         return (
-            <div>
-                <Switch
-                    checked={isCollected}
-                    onChange={onSwitchCollectHandler}
-                    color="primary"
-                    disabled={!isSwitchReady}
-                />
+            <BigButton
+                svg={svg}
+                text={text}
+                className={classes.button}
+                onClickHandler={clickHandler}
+            />
+        );
+    };
+
+    const renderExpandDescriptionButton = () => {
+
+        return (
+            <span style={{ padding: "0.5rem", color: colors.Tangerine }} onClick={() => { setExpandDescription(true) }}>
+                more
+            </span>
+        );
+
+    };
+
+    const getDescriptionOrEllipsis = () => {
+
+        const description = studyCard.description || "No description";
+
+        if (!expandDescription && description.length > 30) {
+
+            return (
                 <span>
-                    {switchText}
+                    <span className={classes.description}>
+                        {description.substring(0, 30) + " ..."}
+                    </span>
+                    {renderExpandDescriptionButton()}
                 </span>
-                {renderCollectWarning()}
+            );
+
+        } else {
+
+            return (
+                <span className={classes.description}>
+                    {description}
+                </span>
+            );
+
+        }
+
+    };
+
+    const renderNumConceptCards = () => {
+
+        const numConceptCards = studyCard.conceptCards ? studyCard.conceptCards.length : 0;
+
+        return (
+            <div className={classes.iconTextContainer}>
+                <div className={classes.iconContainer}> <MenuBookIcon /> </div> {numConceptCards} Concept Cards
             </div>
         );
+    };
+
+    const handlerSnackBarClose = () => {
+        setIsSnackBarOpen(false);
     };
 
     return (
         <div className="DetailPage">
             <div className={classes.header}>
-                <div className={classes.headerTitleContainer}>
-                    {/* This should be retrieved from data source */}
-                    <Typography variant="h5">{studyCard.title}</Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                        {studyCard.description}
+                <div className={classes.headerContent}>
+
+                    <Typography className={classes.title}>
+                        {studyCard.title}
                     </Typography>
-                    <Box className={classes.infoBar}>
-                        <WCBadge
-                            content={
-                                studyCard.conceptCards
-                                    ? studyCard.conceptCards.length
-                                    : 0
-                            }
-                            color="primary"
-                        />
-                        <span style={{ margin: "0.3rem" }}>Key Concepts</span>
-                        <div style={{ flexGrow: "1" }}></div>
-                        {schoolLogos[studyCard.school] ? <img className={classes.svg} src={schoolLogos[studyCard.school]} alt="school_logo" /> : ""}
-                    </Box>
-                    <Box>
-                        <Chip
-                            className={classes.author}
-                            icon={<FaceIcon />}
-                            label={"created by " + studyCard.username}
-                            clickable
-                            color="primary"
-                            variant="outlined"
-                            onClick={onClickAuthorHandler}
-                        />
-                    </Box>
+
+                    <Typography className={classes.descriptionContainer}>
+                        {getDescriptionOrEllipsis()}
+                    </Typography>
+
+
+                    <div className={classes.infoContainer}>
+
+                        {renderNumConceptCards()}
+
+                        <div className={classes.iconTextContainer} onClick={onClickAuthorHandler}>
+                            <div className={classes.iconContainer}> <PersonIcon /> </div> {studyCard.username}
+                        </div>
+
+                    </div>
+
+                    <div className={classes.bookIconConatiner}>
+                        <img style={{ width: "4rem", height: "4rem" }} src={BookIcon} alt="" />
+                    </div>
+
                 </div>
             </div>
             <div className={classes.buttonGroup}>
-                <ButtonCard
+                <BigButton
                     svg={quizSVG}
-                    text="QUIZ"
+                    text="Quiz"
+                    className={classes.button}
                     onClickHandler={onClickQuizHandler}
                 />
-                <ButtonCard
+                <BigButton
                     svg={bookSVG}
-                    text="TEST"
+                    text="Test"
+                    className={classes.button}
                     onClickHandler={onClickTestHandler}
                 />
-                <ButtonCard
+            </div>
+            <div className={classes.buttonGroup}>
+                <BigButton
                     svg={cardSVG}
-                    text="CARDS"
+                    text="Cards"
+                    className={classes.button}
                     onClickHandler={onClickFlashcardHandler}
                 />
-            </div>
-            <div>
-                {renderGeneralWarning()}
-            </div>
-            <div>
-                {renderCollectSwitch()}
+                {renderCollectButton()}
             </div>
             {renderLoader()}
             <div className="content">
                 {loadConceptCards()}
             </div>
+            <Snackbar
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                key={"snackbar"}
+                open={isSnackBarOpen}
+                onClose={handlerSnackBarClose}
+                message={snackBarMessage}
+            />
         </div>
     );
 };

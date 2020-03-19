@@ -1,7 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import BookmarksIcon from "@material-ui/icons/Bookmarks";
 import EditIcon from '@material-ui/icons/Edit';
-import ExploreIcon from '@material-ui/icons/Explore';
 import HomeIcon from "@material-ui/icons/Home";
 import PersonIcon from '@material-ui/icons/Person';
 import React from "react";
@@ -21,9 +20,6 @@ const WCAppFooter = () => {
 
     return (
         <div className={"WCAppFooter " + classes.WCAppFooter}>
-            {/* <Link to="/">
-                <ExploreIcon color="inherit" />
-            </Link> */}
             <Link to="/mycard">
                 <HomeIcon color="inherit" />
             </Link>

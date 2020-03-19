@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
         margin: "2rem auto"
     },
     cardContent: {
-        minHeight: "10rem",
+        minHeight: "11rem",
         position: "relative",
         zIndex: 100
     },
@@ -85,7 +85,6 @@ const useStyles = makeStyles(theme => ({
     },
     conceptCardText: {
         textAlignLast: "center",
-        fontSize: "1.2rem",
         opacity: 0.87
     }
 }));
@@ -211,7 +210,7 @@ const StudyCard = (props: Props) => {
                             <div className={classes.numConceptCard}>
                                 {props.conceptCards ? props.conceptCards.length : ""}
                             </div>
-                            <div className={classes.conceptCardText}>
+                            <div className={classes.conceptCardText + " conceptcard-text"}>
                                 Concept Card(s)
                             </div>
                         </div>
