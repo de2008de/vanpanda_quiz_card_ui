@@ -60,7 +60,7 @@ const WCAppBar = props => {
                     </div>
                     <Typography variant="h6" className={classes.title}>
                         <Box component="span" className={classes.titleSpan}>
-                            Vanpanda Quiz Card
+                            Quiz Card
                         </Box>
                     </Typography>
                     <Link to="/search">
