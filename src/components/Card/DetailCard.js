@@ -5,6 +5,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarIcon from '@material-ui/icons/Star';
 import { isAuthenticated } from "../../utils/auth";
 import { addBookmark, deleteBookmark } from "../api/BookmarkApiHelper";
+import { colors } from "../../theme/colorPalette";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles(theme => ({
         position: "relative"
     },
     buttonsContainer: {
+        color: colors.Tangerine,
         position: "absolute",
         right: "0",
         top: "0",
@@ -78,7 +80,7 @@ const DetailCard = props => {
             return (
                 <StarIcon
                     fontSize="large"
-                    color="secondary"
+                    color="inherit"
                     onClick={bookmarkOnClickHandler}
                 />
             );
@@ -86,7 +88,7 @@ const DetailCard = props => {
             return (
                 <StarBorderIcon
                     fontSize="large"
-                    color="primary"
+                    color="inherit"
                     onClick={bookmarkOnClickHandler}
                 />
             );
