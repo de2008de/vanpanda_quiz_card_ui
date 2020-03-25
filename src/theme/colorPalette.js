@@ -36,5 +36,6 @@ export const colors = {
     "Blue Gray": "#5D6C89",
     "Turquoise": "#36D6E7",
     "Tangerine": "#FEB06A",
-    "Cream": "#FBF6F3"
+    "Cream": "#FBF6F3",
+    "gradient": "linear-gradient(to right, #5d6c89, #3c6cc7, #5dbcc8)"
 };

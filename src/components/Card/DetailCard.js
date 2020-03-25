@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarIcon from '@material-ui/icons/Star';
 import { isAuthenticated } from "../../utils/auth";
@@ -26,10 +25,17 @@ const useStyles = makeStyles(theme => ({
         padding: "0.5rem"
     },
     term: {
-        fontFamily: theme.typography.fontFamily
+        fontFamily: theme.typography.fontFamily,
+        width: "90%",
+        color: "#000",
+        fontSize: "1.2rem",
+        opacity: "87%"
     },
     definition: {
-        padding: "0 1rem 0 0"
+        fontFamily: theme.typography.fontFamily,
+        padding: "0 1rem 0 0",
+        color: "#000",
+        opacity: "87%"
     },
     footer: {
         margin: "1rem 1rem 0 1rem",
@@ -99,12 +105,12 @@ const DetailCard = props => {
         <div className={classes.card + " DetailCard"}>
             <div className={classes.content}>
                 <div className={classes.term}>
-                    <Typography variant="h6">{props.term}</Typography>
+                    {props.term}
                 </div>
                 <div className={classes.definition}>
-                    <Typography variant="body1">{props.definition}</Typography>
+                    {props.definition}
                 </div>
-                <div className={classes.buttonsContainer}>
+                <div className={classes.buttonsContainer + " bookmark-icon"}>
                     {getBookmarkedIcon()}
                 </div>
             </div>

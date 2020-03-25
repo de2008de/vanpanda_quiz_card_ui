@@ -14,8 +14,7 @@ import {
 } from "../api/BookmarkApiHelper";
 import { getRandomNumber } from "../../helpers/mathHelper";
 import { shuffleArray } from "../../helpers/arrayHelper";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import "../../assets/css/commons/StudyPage.css";
+import "../../assets/css/commons/MultipleChoicePage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -43,19 +42,13 @@ const useStyles = makeStyles(theme => ({
     indexIndicator: {
         textAlign: "center"
     },
-    multipleChoiceButtonWrapper: {
-        margin: "1rem 0.5rem"
-    },
     multipleChoiceButton: {
         display: "block",
         width: "100%"
-    },
-    hintText: {
-        margin: "0.5rem 0.5rem"
     }
 }));
 
-const StudyPage = props => {
+const MultipleChoicePage = props => {
     const classes = useStyles();
     const { appContext } = useContext(AppContext);
     const [studyCard, setStudyCard] = useState({});
@@ -248,24 +241,19 @@ const StudyPage = props => {
         }
         const shuffledChoices = shuffleArray(choices);
         const choiceButtons = [];
-        shuffledChoices.forEach(choice => {
+        shuffledChoices.forEach((choice, index) => {
             const button = (
                 <div
-                    key={choice}
-                    className={classes.multipleChoiceButtonWrapper}
+                    key={index}
+                    className=" choice-wrapper"
+                    onClick={onClickMultipleChoiceButton(
+                        choice,
+                        multipleChoices.correctAnswer
+                    )}
                 >
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        size="large"
-                        className={classes.multipleChoiceButton}
-                        onClick={onClickMultipleChoiceButton(
-                            choice,
-                            multipleChoices.correctAnswer
-                        )}
-                    >
+                    <div className="choice-text">
                         {choice}
-                    </Button>
+                    </div>
                 </div>
             );
             choiceButtons.push(button);
@@ -304,10 +292,12 @@ const StudyPage = props => {
             <div>
                 {showDetailCard()}
                 <div>
-                    <Typography className={classes.hintText}>
-                        Please select an answer.
+                    <Typography className="hint-text">
+                        Multiple Choice
                     </Typography>
-                    {showMultipleChoices(studyCard)}
+                    <div className="multiple-choices-area" key={indexOfQuestion}>
+                        {showMultipleChoices(studyCard)}
+                    </div>
                 </div>
             </div>
         );
@@ -411,17 +401,9 @@ const StudyPage = props => {
 
     return (
         <div className={classes.studyPage + " StudyPage"}>
-            <TransitionGroup>
-                <CSSTransition
-                    key={indexOfQuestion}
-                    timeout={1000}
-                    classNames="question"
-                >
-                    {showQuestion()}
-                </CSSTransition>
-            </TransitionGroup>
+            {showQuestion()}
         </div>
     );
 };
 
-export default StudyPage;
+export default MultipleChoicePage;

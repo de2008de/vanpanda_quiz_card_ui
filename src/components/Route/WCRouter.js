@@ -11,7 +11,7 @@ import ProfilePage from "../pages/ProfilePage";
 import PaymentPage from "../pages/PaymentPage";
 import PaymentCompletedPage from "../payment/PaymentCompletedPage";
 import PublicProfilePage from "../pages/PublicProfilePage";
-import StudyPage from "../pages/StudyPage";
+import StudyPage from "../pages/MultipleChoicePage";
 import FlashcardPage from "../pages/FlashcardPage";
 import StudyPageResult from "../pages/StudyPageResult";
 import SearchResultPage from "../search/SearchPage";
