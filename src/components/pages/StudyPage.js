@@ -48,9 +48,9 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const MultipleChoicePage = props => {
+const StudyPage = props => {
     const classes = useStyles();
-    const { appContext } = useContext(AppContext);
+    const { appContext, setAppContext } = useContext(AppContext);
     const [studyCard, setStudyCard] = useState({});
     const [bookmarks, setBookmarks] = useState({});
     const [indexOfQuestion, setIndexOfQuestion] = useState(0);
@@ -58,10 +58,6 @@ const MultipleChoicePage = props => {
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const [showAnswer, setShowAnswer] = useState(false);
-    const [resultMap, setResultMap] = useState({
-        masteredConceptCard: [],
-        needImprovementConceptCard: []
-    });
     const studyCardId = qs.parse(props.location.search).id;
 
     useEffect(() => {
@@ -94,6 +90,21 @@ const MultipleChoicePage = props => {
             .catch(() => {});
     }, [appContext]);
 
+    useEffect(() => {
+        // init score result
+        setAppContext(prevState => {
+            const scoreResult = {
+                correctIds: [],
+                notCorrectIds: []
+            }
+
+            return {
+                ...prevState,
+                scoreResult
+            }
+        });
+    }, [setAppContext]);
+
     const userInputAnswerOnChange = correctAnswer => {
         return event => {
             const pendingAnswer = event.target.value;
@@ -125,13 +136,26 @@ const MultipleChoicePage = props => {
     const recordResult = (isAnswerCorrect = true) => {
         const conceptCardId = studyCard.conceptCards[indexOfQuestion].id;
         const didUserShowAnswer = showAnswer;
-        setResultMap(result => {
-            if (didUserShowAnswer || !isAnswerCorrect) {
-                result.needImprovementConceptCard.push(conceptCardId);
-            } else {
-                result.masteredConceptCard.push(conceptCardId);
+
+        const correctIds = [];
+        const notCorrectIds = [];
+
+        if (didUserShowAnswer || !isAnswerCorrect) {
+            notCorrectIds.push(conceptCardId);
+        } else {
+            correctIds.push(conceptCardId);
+        }
+
+        setAppContext(prevState => {
+            const scoreResult = {
+                correctIds: [...prevState.scoreResult.correctIds, ...correctIds],
+                notCorrectIds: [...prevState.scoreResult.notCorrectIds, ...notCorrectIds]
             }
-            return result;
+
+            return {
+                ...prevState,
+                scoreResult
+            }
         });
     };
 
@@ -151,7 +175,13 @@ const MultipleChoicePage = props => {
     };
 
     const getResultParamsString = () => {
-        const params = encodeURIComponent(JSON.stringify(resultMap));
+        let scoreResult = null;
+
+        if (appContext && appContext.scoreResult) {
+            scoreResult = appContext.scoreResult;
+        }
+
+        const params = encodeURIComponent(JSON.stringify(scoreResult));
         const paramString = "result=" + params + "&id=" + studyCardId;
         return paramString;
     };
@@ -164,7 +194,7 @@ const MultipleChoicePage = props => {
         const type = qs.parse(props.location.search).type;
         const params = getResultParamsString();
         props.history.push(
-            "/studyCard/study/result?" + params + "&type=" + type
+            "/studyCard/study/score?" + params + "&type=" + type
         );
     };
 
@@ -406,4 +436,4 @@ const MultipleChoicePage = props => {
     );
 };
 
-export default MultipleChoicePage;
+export default StudyPage;

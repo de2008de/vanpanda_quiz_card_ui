@@ -11,9 +11,9 @@ import ProfilePage from "../pages/ProfilePage";
 import PaymentPage from "../pages/PaymentPage";
 import PaymentCompletedPage from "../payment/PaymentCompletedPage";
 import PublicProfilePage from "../pages/PublicProfilePage";
-import StudyPage from "../pages/MultipleChoicePage";
+import StudyPage from "../pages/StudyPage";
 import FlashcardPage from "../pages/FlashcardPage";
-import StudyPageResult from "../pages/StudyPageResult";
+import ScoreResultPage from "../pages/ScoreResultPage";
 import SearchResultPage from "../search/SearchPage";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
 
@@ -33,7 +33,7 @@ const WCRouter = () => {
                 <Route path="/paymentCompleted" component={PaymentCompletedPage} />
                 <Route path="/payment" component={PaymentPage} />
                 <Route path="/studyCard/study" exact component={StudyPage} />
-                <Route path="/studyCard/study/result" component={StudyPageResult} />
+                <Route path="/studyCard/study/score" component={ScoreResultPage} />
                 <Route path="/studyCard/flashcard" component={FlashcardPage} />
                 <Route path="/search" exact component={SearchResultPage} />
                 <Route path="/profile/change_password" exact component={ChangePasswordPage} />

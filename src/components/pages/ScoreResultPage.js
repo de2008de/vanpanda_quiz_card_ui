@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import qs from "query-string";
 import DetailCard from "../Card/DetailCard";
-import Typography from '@material-ui/core/Typography';
-import WaterWaveCircle from "../indicator/WaterWaveCircle";
 import { makeStyles } from "@material-ui/core/styles";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { AppContext } from "../context/AppContext";
 import { convertConceptCardsArrayToMap } from "../api/StudyCardsApiHelper";
 import { getBookmarks, convertBookmarkArrayToMap } from "../api/BookmarkApiHelper";
-import Button from '@material-ui/core/Button';
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
+import { colors } from "../../theme/colorPalette";
+import BigButton from "../buttons/BigButton";
+import cardSVG from "../../assets/svg/card.svg";
+import quizSVG from "../../assets/svg/quiz.svg";
+import "../../assets/css/pages/ScoreResultPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
@@ -27,20 +29,17 @@ const useStyles = makeStyles(theme => ({
         flexWrap: "wrap",
         justifyContent: "center"
     },
-    buttonGroup: {
-        display: "flex",
-        flexWrap: "wrap",
-        margin: "0.5rem 1rem"
+    score: {
+        color: colors.Tangerine
     }
 }));
 
-const StudyPageResult = props => {
+const ScoreResultPage = props => {
     const classes = useStyles();
     const { appContext } = useContext(AppContext);
     const [tabIndex, setTabIndex] = useState(0);
     const [bookmarks, setBookmarks] = useState({});
     const [studyCard, setStudyCard] = useState({});
-    const result = JSON.parse(qs.parse(props.location.search).result);
     const studyCardId = qs.parse(props.location.search).id;
 
     useEffect(() => {
@@ -73,14 +72,25 @@ const StudyPageResult = props => {
             .catch(() => { });
     }, [appContext, studyCardId]);
 
-    const getTotalScore = result => {
-        const totalConceptCards = result.masteredConceptCard.length + result.needImprovementConceptCard.length;
-        const numMasteredConceptCard = result.masteredConceptCard.length;
-        const score = Math.ceil(numMasteredConceptCard / totalConceptCards * 100);
+    const getTotalScore = () => {
+        if (!appContext || !appContext.scoreResult) {
+            return 0;
+        }
+
+        const correctIds = appContext.scoreResult.correctIds;
+        const notCorrectIds = appContext.scoreResult.notCorrectIds;
+
+        if (correctIds.length + notCorrectIds.length === 0) {
+            return 0;
+        }
+
+        const totalConceptCards = correctIds.length + notCorrectIds.length;
+        const numCorrectIds = correctIds.length;
+        const score = Math.ceil(numCorrectIds / totalConceptCards * 100);
         return score;
     }
 
-    const score = getTotalScore(result);
+    const score = getTotalScore();
 
     const onTabChange = (event, index) => {
         setTabIndex(index);
@@ -111,18 +121,22 @@ const StudyPageResult = props => {
     };
 
     const showDetailCards = () => {
-        const MASTERED = "mastered"
-        const NEED_IMPROVEMENT = "need_improvement";
+        const CORRECT = "correct"
+        const NOT_CORRECT = "not correct";
         const tabIndexMap = {
-            0: MASTERED,
-            1: NEED_IMPROVEMENT
+            0: CORRECT,
+            1: NOT_CORRECT
         };
         const currentTab = tabIndexMap[tabIndex];
         let detailCardIds = [];
-        if (currentTab === MASTERED) {
-            detailCardIds = result.masteredConceptCard;
-        } else if (currentTab === NEED_IMPROVEMENT) {
-            detailCardIds = result.needImprovementConceptCard;
+        if (currentTab === CORRECT) {
+            if (appContext && appContext.scoreResult) {
+                detailCardIds = appContext.scoreResult.correctIds;
+            }
+        } else if (currentTab === NOT_CORRECT) {
+            if (appContext && appContext.scoreResult) {
+                detailCardIds = appContext.scoreResult.notCorrectIds;
+            }
         }
         if (!studyCard || !studyCard.conceptCards) {
             return false;
@@ -146,37 +160,36 @@ const StudyPageResult = props => {
             );
             detailCards.push(detailCardComponent);
         });
-        return detailCards;
+        return (
+            <div className="detailcard-container" key={tabIndex}>
+                {detailCards}
+            </div>
+        );
     };
 
     return (
         <div className="StudyPageResult">
-            <div className={classes.waterWaveContainer}>
-                <WaterWaveCircle
-                    percent={score}
+            <div className="score-card">
+                <div className="score-card-text">
+                    Your score is
+                    <div className={classes.score + " score-card-score"}>
+                        {score}%
+                    </div>
+                </div>
+            </div>
+            <div className="button-group">
+                <BigButton
+                    svg={cardSVG}
+                    text="Back"
+                    className="button"
+                    onClickHandler={onClickBackToStudyCard}
                 />
-            </div>
-            <div className={classes.scoreText}>
-                <Typography variant="h6">
-                    Your score is {score}%
-                </Typography>
-            </div>
-            <div className={classes.buttonGroup}>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={onClickBackToStudyCard}
-                >
-                    Back to Study Card
-                </Button>
-                <div style={{flexGrow: 1}}></div>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={onClickStudyAgain}
-                >
-                    Study Again
-                </Button>
+                <BigButton
+                    svg={quizSVG}
+                    text="Again"
+                    className="button"
+                    onClickHandler={onClickStudyAgain}
+                />
             </div>
             <div>
                 <div>
@@ -188,8 +201,8 @@ const StudyPageResult = props => {
                         variant="fullWidth"
                         aria-label="full width tabs example"
                     >
-                        <Tab label="Mastered" />
-                        <Tab label="Need Improvement" />
+                        <Tab label="CORRECT" />
+                        <Tab label="NOT CORRECT" />
                     </Tabs>
                 </div>
                 <div>
@@ -200,4 +213,4 @@ const StudyPageResult = props => {
     );
 };
 
-export default StudyPageResult;
+export default ScoreResultPage;
