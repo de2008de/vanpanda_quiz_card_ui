@@ -1,42 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { doAuthentication } from "../../utils/auth";
-import { makeStyles } from "@material-ui/core/styles";
-import Fab from "@material-ui/core/Fab";
 import UserProfile from "../users/UserProfile";
-
-const useStyles = makeStyles(theme => ({
-    logoutContainer: {
-        display: "flex",
-        justifyContent: "center",
-        margin: "1rem auto"
-    }
-}));
+import BigButton from "../buttons/BigButton";
+import "../../assets/css/pages/ProfilePage.css";
 
 const ProfilePage = props => {
     const [isLogout, setIsLogout] = useState(false);
     useEffect(() => {
         doAuthentication(props.history);
     }, [isLogout, props.history]);
-    const classes = useStyles();
     const onLogoutHandler = () => {
         window.localStorage.removeItem("token");
         setIsLogout(true);
+    };
+    const onClickChangePasswordHandler = () => {
+        const history = props.history;
+        history.push("/profile/change_password");
     };
     return (
         <div className="ProfilePage">
             <UserProfile
                 history={props.history}
             />
-            <div className={classes.logoutContainer}>
-                <Fab
-                    variant="extended"
-                    size="large"
-                    color="secondary"
-                    aria-label="logout"
-                    onClick={onLogoutHandler}
-                >
-                    Logout
-                </Fab>
+            <div className="button-group">
+                <BigButton
+                    svg={null}
+                    text="Change Password"
+                    className="button"
+                    onClickHandler={onClickChangePasswordHandler}
+                />
+                <BigButton
+                    svg={null}
+                    text="Sign out"
+                    className="button"
+                    onClickHandler={onLogoutHandler}
+                />
             </div>
         </div>
     );

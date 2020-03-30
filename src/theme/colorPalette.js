@@ -7,8 +7,8 @@ export const palette = {
         color: "#5D6C89"
     },
     pageTitle: {
-        background: "#FBF6F3",
-        text: "#5D6C89"
+        background: "#fff",
+        text: "#000"
     },
     addStudyCardPage: {
         titleInput: {
@@ -38,4 +38,8 @@ export const colors = {
     "Tangerine": "#FEB06A",
     "Cream": "#FBF6F3",
     "gradient": "linear-gradient(to right, #5d6c89, #3c6cc7, #5dbcc8)"
+};
+
+export const borders = {
+    "default": "1px solid #E0E0E0"
 };

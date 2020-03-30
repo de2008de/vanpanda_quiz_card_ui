@@ -1,0 +1,7 @@
+.ProfilePage .button-group {
+    display: flex;
+}
+
+.ProfilePage .button {
+    flex-grow: 1;
+}

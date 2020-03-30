@@ -8,7 +8,9 @@ const useStyles = makeStyles(theme => ({
         padding: "1rem 0",
         background: "#fff",
         borderRadius: "10px",
-        boxShadow: "0 5px 10px #e0e1e2"
+        boxShadow: "0 5px 10px #e0e1e2",
+        display: "flex",
+        justifyContent: "center"
     },
     content: {
         margin: "auto",
@@ -32,15 +34,24 @@ const useStyles = makeStyles(theme => ({
 
 const BigButton = props => {
     const classes = useStyles();
+    const renderSvg = () => {
+        if (!props.svg) {
+            return null;
+        } else {
+            return (
+                <div className={classes.svgContainer}>
+                    <img className={classes.svg} src={props.svg} alt="" />
+                </div>
+            );
+        }
+    };
     return (
         <div
             className={classes.button + " ButtonCard " + props.className}
             onClick={props.onClickHandler}
         >
             <div className={classes.content}>
-                <div className={classes.svgContainer}>
-                    <img className={classes.svg} src={props.svg} alt="" />
-                </div>
+                {renderSvg()}
                 <Typography
                     className={classes.text}
                 >

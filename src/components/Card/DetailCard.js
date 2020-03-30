@@ -4,14 +4,15 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarIcon from '@material-ui/icons/Star';
 import { isAuthenticated } from "../../utils/auth";
 import { addBookmark, deleteBookmark } from "../api/BookmarkApiHelper";
-import { colors } from "../../theme/colorPalette";
+import { colors, borders } from "../../theme/colorPalette";
 
 const useStyles = makeStyles(theme => ({
     card: {
         backgroundColor: "#fff",
         padding: "0.5rem",
-        margin: "0.5rem 0.5rem 1.5rem 0.5rem",
-        borderRadius: "10px"
+        margin: "0.5rem 0.5rem 0.5rem 0.5rem",
+        borderRadius: "10px",
+        border: borders.default
     },
     content: {
         padding: "1rem",

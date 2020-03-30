@@ -12,6 +12,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { History, LocationState } from 'history'
+import { borders } from "../../theme/colorPalette"
 
 import WCDialog from '../commons/WCDialog'
 import { removeStudyCardFromCollection } from '../api/StudyCardsApiHelper'
@@ -31,7 +32,8 @@ interface Props {
 const useStyles = makeStyles(theme => ({
     card: {
         width: "90%",
-        margin: "2rem auto"
+        margin: "1rem auto",
+        border: borders.default
     },
     cardContent: {
         minHeight: "11rem",

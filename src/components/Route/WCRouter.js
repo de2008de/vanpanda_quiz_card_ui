@@ -16,6 +16,7 @@ import FlashcardPage from "../pages/FlashcardPage";
 import ScoreResultPage from "../pages/ScoreResultPage";
 import SearchResultPage from "../search/SearchPage";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
+import { isToggleOn } from "../../configs/FeatureToggle";
 
 const WCRouter = () => {
     return (
@@ -31,7 +32,9 @@ const WCRouter = () => {
                 <Route path="/profile" exact component={ProfilePage} />
                 <Route path="/user/publicProfile" component={PublicProfilePage} />
                 <Route path="/paymentCompleted" component={PaymentCompletedPage} />
-                <Route path="/payment" component={PaymentPage} />
+
+                {isToggleOn("CREDIT_PURCHASE_FEATURE") ? <Route path="/payment" component={PaymentPage} /> : null}
+
                 <Route path="/studyCard/study" exact component={StudyPage} />
                 <Route path="/studyCard/study/score" component={ScoreResultPage} />
                 <Route path="/studyCard/flashcard" component={FlashcardPage} />
