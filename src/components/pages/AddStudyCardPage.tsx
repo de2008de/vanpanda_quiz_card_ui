@@ -16,7 +16,8 @@ import ConceptCardInputField from '../Card/ConceptCardInputField'
 import { CARD_LENGTH_LIMIT } from '../../resources/lengthLimit/CardLengthLimit'
 import { ConceptCard, StudyCard } from '../../types/cards'
 import { doAuthentication } from '../../utils/auth'
-import { palette } from '../../theme/colorPalette'
+import { palette, borders } from '../../theme/colorPalette'
+import "../../assets/css/pages/AddStudyCardPage.css";
 
 const postStudyCardApi = "/api/v1/card/studycard";
 
@@ -43,10 +44,11 @@ const useStyles = makeStyles(theme => ({
     title: {
         backgroundColor: palette.addStudyCardPage.titleInput.background,
         width: "90%",
-        margin: "2rem auto",
+        margin: "0.5rem auto",
         paddingBottom: "1rem",
         borderRadius: "5px",
-        boxShadow: "0px 5px #e0e1e2"
+        boxShadow: "0px 5px #e0e1e2",
+        border: borders.default
     },
     textField: {
         marginLeft: theme.spacing(1),
@@ -417,7 +419,7 @@ const AddStudyCardPage = (props: Props) => {
                             size="large"
                             color="inherit"
                             aria-label="addConceptCard"
-                            className={classes.fabButton + " " + classes.addConceptCardButton}
+                            className={classes.fabButton + " add-conceptcard-button " + classes.addConceptCardButton}
                             onClick={addConceptCardOnClickHandler}
                         >
                             <div className={classes.addIconWrapper}>

@@ -5,7 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import DeleteIcon from '@material-ui/icons/Delete';
 import React from "react";
 import { CARD_LENGTH_LIMIT } from "../../resources/lengthLimit/CardLengthLimit";
-import { palette } from "../../theme/colorPalette";
+import { palette, borders } from "../../theme/colorPalette";
 
 const useStyles = makeStyles(theme => ({
     conceptCardInput: {
@@ -14,7 +14,8 @@ const useStyles = makeStyles(theme => ({
         position: "relative",
         boxShadow: "0 5px #e0e1e2",
         backgroundColor: palette.addStudyCardPage.conceptCardInput.background,
-        color: palette.addStudyCardPage.conceptCardInput.text
+        color: palette.addStudyCardPage.conceptCardInput.text,
+        border: borders.default
     },
     textField: {
         marginLeft: theme.spacing(1),
@@ -28,7 +29,6 @@ const useStyles = makeStyles(theme => ({
     conceptCardHeader: {
         display: "flex",
         flexWrap: "wrap",
-        fontFamily: "Schoolbell",
         fontSize: "1.5rem",
         fontWeight: "bold"
     }
