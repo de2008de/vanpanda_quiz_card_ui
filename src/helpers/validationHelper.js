@@ -1,7 +1,5 @@
 export const validateSignupInput = oInput => {
     const EMAIL_MAX_LENGTH = 100;
-    const USERNAME_MIN_LENGTH = 4;
-    const USERNAME_MAX_LENGTH = 16;
     const PASSWORD_MIN_LENGTH = 6;
     const PASSWORD_MAX_LENGTH = 16;
     const oResult = {
@@ -12,43 +10,31 @@ export const validateSignupInput = oInput => {
     const email = oInput.email && oInput.email.trim();
     if (!email || email.length === 0) {
         oResult.success = false;
-        oResult.errorMessages.email = "is required";
+        oResult.errorMessages.email = "Email is required";
     } else if (!isEmailValid(email)) {
         oResult.success = false;
-        oResult.errorMessages.email = "format is invalid";
+        oResult.errorMessages.email = "Email format is invalid";
     } else if (email.length > EMAIL_MAX_LENGTH) {
         oResult.success = false;
-        oResult.errorMessages.email = "is too long";
-    }
-
-    const username = oInput.username && oInput.username.trim();
-    if (!username || username.length === 0) {
-        oResult.success = false;
-        oResult.errorMessages.username = "is required";
-    } else if (username.length < USERNAME_MIN_LENGTH || username.length > USERNAME_MAX_LENGTH) {
-        oResult.success = false;
-        oResult.errorMessages.username = "length must between " + USERNAME_MIN_LENGTH + " and " + USERNAME_MAX_LENGTH;
-    } else if (!isUsernameValid(username)) {
-        oResult.success = false;
-        oResult.errorMessages.username = "alphanumeric only";
+        oResult.errorMessages.email = "Email is too long";
     }
 
     const password = oInput.password;
     if (!password || password.length === 0) {
         oResult.success = false;
-        oResult.errorMessages.password = "is required";
+        oResult.errorMessages.password = "Password is required";
     } else if (oInput.password.length < PASSWORD_MIN_LENGTH || oInput.password.length > PASSWORD_MAX_LENGTH) {
         oResult.success = false;
-        oResult.errorMessages.password = "length must between " + PASSWORD_MIN_LENGTH + " and " + PASSWORD_MAX_LENGTH;
+        oResult.errorMessages.password = "Password length must between " + PASSWORD_MIN_LENGTH + " and " + PASSWORD_MAX_LENGTH;
     }
     
     const confirmPassword = oInput.confirmPassword && oInput.confirmPassword.trim();
     if (!confirmPassword ||confirmPassword.length === 0) {
         oResult.success = false;
-        oResult.errorMessages.confirmPassword = "please confirm password";
+        oResult.errorMessages.confirmPassword = "Please confirm password";
     } else if (password !== confirmPassword) {
         oResult.success = false;
-        oResult.errorMessages.confirmPassword = "does not match";
+        oResult.errorMessages.confirmPassword = "Confirm password does not match";
     }
 
     return oResult;
@@ -57,11 +43,5 @@ export const validateSignupInput = oInput => {
 const isEmailValid = sEmail => {
     const format = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     const isValid = format.test(sEmail);
-    return isValid;
-};
-
-const isUsernameValid = sUsername => {
-    const format = /^[a-zA-Z0-9]+$/;
-    const isValid = format.test(sUsername);
     return isValid;
 };

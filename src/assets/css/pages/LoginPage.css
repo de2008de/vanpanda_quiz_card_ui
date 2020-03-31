@@ -1,0 +1,45 @@
+.LoginPage .button-group {
+    margin-top: 0.5rem;
+}
+
+.LoginPage .forgot-password-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 2rem 1rem
+}
+
+.LoginPage a {
+    color: #459fed;
+    text-decoration: none;
+}
+
+.LoginPage .sign-up-text {
+    margin-top: 2rem;
+    text-align: center;
+    color: "#000";
+    opacity: 87%
+}
+
+.LoginPage .button-group .button {
+    flex-grow: 1;
+    background-position: center;
+    transition: background 0.8s;
+    color: #fff;
+    background: #3899ec;
+}
+
+.LoginPage .button-group .button:hover {
+    background: #3899ec radial-gradient(circle, transparent 1%, #3899ec 1%) center/15000%;
+}
+
+.LoginPage .button-group .button:active {
+    background-color: #6cb6f1;
+    background-size: 100%;
+    transition: background 0s;
+}
+
+.LoginPage .loader-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

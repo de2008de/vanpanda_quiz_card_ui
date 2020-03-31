@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
         height: "3rem"
     },
     text: {
-        color: "#000",
         textAlign: "center"
     }
 }));
@@ -53,6 +52,7 @@ const BigButton = props => {
                 {renderSvg()}
                 <Typography
                     className={classes.text}
+                    style={{color: "inherit"}}
                 >
                     {props.text}
                 </Typography>

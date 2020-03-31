@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
-import Fab from "@material-ui/core/Fab";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import Chip from "@material-ui/core/Chip";
-import ErrorIcon from "@material-ui/icons/Error";
-import Box from "@material-ui/core/Box";
+import BigButton from "../buttons/BigButton";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from "react-router-dom";
+import "../../assets/css/pages/LoginPage.css";
 
 const userLoginApi = "/api/v1/user/login";
 
@@ -18,26 +16,10 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1),
         width: "80%"
     },
-    fabButton: {
-        margin: "1rem 0.5rem 1rem 0.5rem"
-    },
     form: {
         width: "90%",
         margin: "auto",
         position: "relative"
-    },
-    chip: {
-        margin: "0.3rem"
-    },
-    hintText: {
-        marginLeft: theme.spacing(1),
-        marginTop: theme.spacing(1)
-    },
-    logo: {
-        width: "4rem",
-        position: "absolute",
-        bottom: 0,
-        right: 0
     }
 }));
 
@@ -64,6 +46,33 @@ const LoginPage = props => {
     const onLoginHandler = () => {
         setIsLogining(true);
         setErrorMessages({});
+
+        let hasError = false;
+        if (!input.email) {
+            setErrorMessages(prevState => {
+                return {
+                    ...prevState,
+                    email: "Email is required"
+                };
+            });
+            hasError = true;
+        }
+ 
+        if (!input.password) {
+            setErrorMessages(prevState => {
+                return {
+                    ...prevState,
+                    password: "Password is required"
+                };
+            });
+            hasError = true;
+        }
+
+        if (hasError) {
+            setIsLogining(false);
+            return;
+        }
+
         axios
             .post(ServerConfig.api.ip + userLoginApi, {
                 email: input.email,
@@ -77,36 +86,42 @@ const LoginPage = props => {
             })
             .catch(response => {
                 setIsLogining(false);
-                const oErrorMessages = response.response.data.errorMessages;
+                const generalErrorMessage = response.response.data.errorMessages.general;
                 setErrorMessages(prevState => {
                     return {
                         ...prevState,
-                        ...oErrorMessages
+                        general: generalErrorMessage
                     };
                 });
             });
     };
-    const loadErrorMessages = () => {
-        const aErrorChips = [];
-        let key;
-        for (key in errorMessages) {
-            const oChip = (
-                <div key={key}>
-                    <Chip
-                        className={classes.chip}
-                        icon={<ErrorIcon />}
-                        color="secondary"
-                        label={key + ": " + errorMessages[key]}
-                        variant="outlined"
-                    />
-                </div>
-            );
-            aErrorChips.push(oChip);
+    const renderLoader = () => {
+        return (
+            <div className="loader-wrapper">
+                <CircularProgress />
+            </div>
+        );
+    };
+    const renderSignInBtn = () => {
+        if (isLogining) {
+            return renderLoader();
         }
-        return aErrorChips;
+
+        return (
+            <BigButton
+                svg={null}
+                text={"Sign In"}
+                className="button"
+                onClickHandler={onLoginHandler}
+                disabled={isLogining ? true : false}
+            />
+        );
     };
     return (
         <div className="LoginPage">
+            <div className="sign-up-text">
+                New to QuizCard? <Link to="/signup">Sign Up</Link>
+            </div>
             <form className={classes.form}>
                 <TextField
                     id="email"
@@ -115,10 +130,11 @@ const LoginPage = props => {
                     value={input.email}
                     onChange={onChangeHandler("email")}
                     margin="normal"
-                    error={errorMessages.email ? true : false}
                     inputProps={{
                         autoComplete: "off"
                     }}
+                    error={!!errorMessages.email || !!errorMessages.general}
+                    helperText={errorMessages.email || errorMessages.general}
                 />
                 <TextField
                     id="password"
@@ -128,26 +144,17 @@ const LoginPage = props => {
                     value={input.password}
                     onChange={onChangeHandler("password")}
                     margin="normal"
-                    error={errorMessages.password ? true : false}
+                    error={!!errorMessages.password}
+                    helperText={errorMessages.password}
                 />
-                <Box component="div" className={classes.hintText}>
-                    <Link to="/signup">No account? Create one for free!</Link>
-                </Box>
-                <Box component="div">
-                    <Fab
-                        variant="extended"
-                        size="small"
-                        color="primary"
-                        aria-label="login"
-                        className={classes.fabButton}
-                        onClick={onLoginHandler}
-                        disabled={isLogining ? true : false}
-                    >
-                        <ExitToAppIcon />
-                        Login
-                    </Fab>
-                </Box>
-                {loadErrorMessages()}
+                <div className="forgot-password-wrapper">
+                    <Link to="/forgot_password">
+                        Forgot Password?
+                    </Link>
+                </div>
+                <div className="button-group">
+                    {renderSignInBtn()}
+                </div>
             </form>
         </div>
     );
