@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
-import Chip from "@material-ui/core/Chip";
-import ErrorIcon from "@material-ui/icons/Error";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
+import BigButton from "../buttons/BigButton";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import DoneIcon from '@material-ui/icons/Done';
+import "../../assets/css/pages/ChangePasswordPage.css";
 
 const userPasswordApi = "/api/v1/user/password";
 
@@ -15,18 +15,6 @@ const useStyles = makeStyles(theme => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: "80%"
-    },
-    buttonContainer: {
-        display: "flex",
-        justifyContent: "center",
-        margin: "1rem"
-    },
-    chip: {
-        margin: "0.3rem"
-    },
-    messagesArea: {
-        display: "flex",
-        justifyContent: "center"
     }
 }));
 
@@ -53,46 +41,12 @@ const ChangePasswordPage = props => {
             });
         };
     };
-    const loadErrorMessages = () => {
-        const aErrorChips = [];
-        let key;
-        for (key in errorMessages) {
-            const oChip = (
-                <div key={key}>
-                    <Chip
-                        className={classes.chip}
-                        icon={<ErrorIcon />}
-                        color="secondary"
-                        label={key + ": " + errorMessages[key]}
-                        variant="outlined"
-                    />
-                </div>
-            );
-            aErrorChips.push(oChip);
-        }
-        return aErrorChips;
-    };
-
-    const renderSuccessMessage = () => {
-        if (successMessage) {
-            return (
-                <div>
-                    <Chip
-                        className={classes.chip}
-                        color="primary"
-                        label={successMessage}
-                        variant="default"
-                    />
-                </div>
-            );
-        }
-    };
-
     const onChangePasswordHandler = () => {
         setErrorMessages({});
+        let hasError = false;
         if (!input.currentPassword) {
             const error = {
-                currentPassword: "is required"
+                currentPassword: "Current password is required"
             };
             setErrorMessages(prevState => {
                 return {
@@ -100,12 +54,25 @@ const ChangePasswordPage = props => {
                     ...error
                 };
             });
-            return;
+            hasError = true;
+        }
+
+        if (!input.newPassword) {
+            const error = {
+                newPassword: "New password is required"
+            };
+            setErrorMessages(prevState => {
+                return {
+                    ...prevState,
+                    ...error
+                };
+            });
+            hasError = true;
         }
 
         if (input.newPassword !== input.confirmNewPassword) {
             const error = {
-                confirmNewPassword: "does not match"
+                confirmNewPassword: "Confirm password does not match"
             };
             setErrorMessages(prevState => {
                 return {
@@ -113,6 +80,10 @@ const ChangePasswordPage = props => {
                     ...error
                 };
             });
+            hasError = true;
+        }
+
+        if (hasError) {
             return;
         }
 
@@ -150,6 +121,39 @@ const ChangePasswordPage = props => {
                 });
             });
     };
+    const renderLoader = () => {
+        return (
+            <div className="loader-wrapper">
+                <CircularProgress />
+            </div>
+        );
+    };
+    const renderSuccessMessage = () => {
+        return (
+            <div className="done-icon">
+                <DoneIcon fontSize="large" />
+            </div>
+        );
+    };
+    const renderChangePasswordBtn = () => {
+        if (isWaiting) {
+            return renderLoader();
+        }
+
+        if (successMessage) {
+            return renderSuccessMessage();
+        }
+
+        return (
+            <BigButton
+                svg={null}
+                text={"Change"}
+                className="button"
+                onClickHandler={onChangePasswordHandler}
+                disabled={isWaiting || isSuccess}
+            />
+        );
+    };
     return (
         <div className="ChangePasswordPage">
             <div>
@@ -161,7 +165,8 @@ const ChangePasswordPage = props => {
                     value={input.password}
                     onChange={onChangeHandler("currentPassword")}
                     margin="normal"
-                    error={errorMessages.currentPassword ? true : false}
+                    error={!!errorMessages.currentPassword}
+                    helperText={errorMessages.currentPassword}
                 />
                 <TextField
                     id="newPassword"
@@ -171,7 +176,8 @@ const ChangePasswordPage = props => {
                     value={input.password}
                     onChange={onChangeHandler("newPassword")}
                     margin="normal"
-                    error={errorMessages.newPassword ? true : false}
+                    error={!!errorMessages.newPassword}
+                    helperText={errorMessages.newPassword}
                 />
                 <TextField
                     id="confirmNewPassword"
@@ -181,24 +187,12 @@ const ChangePasswordPage = props => {
                     value={input.password}
                     onChange={onChangeHandler("confirmNewPassword")}
                     margin="normal"
-                    error={errorMessages.confirmNewPassword ? true : false}
+                    error={!!errorMessages.confirmNewPassword}
+                    helperText={errorMessages.confirmNewPassword}
                 />
             </div>
-            <div className={classes.messagesArea}>
-                {loadErrorMessages()}
-                {renderSuccessMessage()}
-                {isWaiting ? <CircularProgress /> : null}
-            </div>
-            <div className={classes.buttonContainer}>
-                <Button
-                    color="primary"
-                    variant="contained"
-                    size="large"
-                    onClick={onChangePasswordHandler}
-                    disabled={isWaiting || isSuccess}
-                >
-                    Change Password
-                </Button>
+            <div className="button-group">
+                {renderChangePasswordBtn()}
             </div>
         </div>
     );
