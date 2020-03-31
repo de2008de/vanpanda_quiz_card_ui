@@ -4,16 +4,13 @@ import axios from "axios";
 import ServerConfig from "../../configs/ServerConfig";
 import qs from "query-string";
 import Flashcard from "../Card/Flashcard";
-import { makeStyles, Button, Typography } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
+import BigButton from "../buttons/BigButton";
+import "../../assets/css/pages/FlashCardPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
-    buttonGroup: {
-        margin: "0.5rem 2rem 2rem 2rem",
-        display: "flex",
-        flexWrap: "wrap"
-    },
     cardNumberIndicator: {
         textAlign: "center",
         margin: "0.5rem auto"
@@ -79,12 +76,8 @@ const FlashcardPage = props => {
         setIsFlipped(!isFlipped);
     }
 
-    const onClickBackToSummaryPage = () => {
-        props.history.push("/detail?id=" + studyCardId);
-    }
-
     return (
-        <div>
+        <div className="FlashCardPage">
             <Flashcard
                 id="flashcard"
                 term={studyCard.conceptCards ? studyCard.conceptCards[indexOfCard].term : ""}
@@ -95,13 +88,19 @@ const FlashcardPage = props => {
             <div className={classes.cardNumberIndicator}>
                 <Typography variant="subtitle1">{(indexOfCard + 1) + " of " + (studyCard.conceptCards && studyCard.conceptCards.length)}</Typography>
             </div>
-            <div className={classes.buttonGroup}>
-                <Button className={classes.button} variant="contained" color="primary" size="large" onClick={onClickPrevious}>Previous</Button>
-                <div style={{ flexGrow: 1 }}></div>
-                <Button className={classes.button} variant="contained" color="primary" size="large" onClick={onClickNext}>Next</Button>
-            </div>
-            <div className={classes.buttonGroup}>
-                <Button className={classes.button} variant="contained" color="secondary" onClick={onClickBackToSummaryPage}>Back to Summary Page</Button>
+            <div className="button-group">
+                <BigButton
+                    svg={null}
+                    text="Previous"
+                    className="button"
+                    onClickHandler={onClickPrevious}
+                />
+                <BigButton
+                    svg={null}
+                    text="Next"
+                    className="button"
+                    onClickHandler={onClickNext}
+                />
             </div>
         </div>
     );
