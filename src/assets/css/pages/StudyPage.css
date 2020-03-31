@@ -72,3 +72,11 @@
     color: #000;
     opacity: 87%;
 }
+
+.StudyPage .written-questions .button-group {
+    display: flex;
+}
+
+.StudyPage .written-questions .button-group .BigButton {
+    flex-grow: 1;
+}

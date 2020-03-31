@@ -27,7 +27,6 @@ const useStyles = makeStyles(theme => ({
     },
     text: {
         color: "#000",
-        opacity: "87%",
         textAlign: "center"
     }
 }));
@@ -47,10 +46,10 @@ const BigButton = props => {
     };
     return (
         <div
-            className={classes.button + " ButtonCard " + props.className}
-            onClick={props.onClickHandler}
+            className={classes.button + " BigButton " + props.className}
+            onClick={props.disabled ? null : props.onClickHandler}
         >
-            <div className={classes.content}>
+            <div className={classes.content} style={{opacity: props.disabled ? 0.3 : 0.87}}>
                 {renderSvg()}
                 <Typography
                     className={classes.text}

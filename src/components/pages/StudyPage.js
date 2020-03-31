@@ -6,7 +6,6 @@ import qs from "query-string";
 import DetailCard from "../Card/DetailCard";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     getBookmarks,
@@ -14,30 +13,33 @@ import {
 } from "../api/BookmarkApiHelper";
 import { getRandomNumber } from "../../helpers/mathHelper";
 import { shuffleArray } from "../../helpers/arrayHelper";
-import "../../assets/css/commons/MultipleChoicePage.css";
+import BigButton from "../buttons/BigButton";
+import { borders, colors } from "../../theme/colorPalette";
+import DoneIcon from '@material-ui/icons/Done';
+import "../../assets/css/pages/StudyPage.css";
 
 const sStudyCardApi = "/api/v1/card/studycard";
 
 const useStyles = makeStyles(theme => ({
     answerFieldWrapper: {
-        margin: "0.5rem"
+        margin: "0.5rem",
+        display: "flex"
     },
     textField: {
         display: "flex",
         width: "100%"
     },
-    doNotKnowContainer: {
-        textAlign: "right"
-    },
-    doNotKnow: {
-        textDecoration: "underline",
-        color: theme.palette.secondary.main,
-        margin: "0.5rem 0"
-    },
-    helperTextContainer: {
+    tickIconWrapper: {
+        color: "#00E676",
         display: "flex",
-        alignItems: "center",
-        margin: "0.5rem 0"
+        alignItems: "center"
+    },
+    answerCard: {
+        background: colors.Cream,
+        border: borders.default,
+        margin: "0.5rem",
+        padding: "1rem",
+        borderRadius: "10px"
     },
     indexIndicator: {
         textAlign: "center"
@@ -56,7 +58,6 @@ const StudyPage = props => {
     const [indexOfQuestion, setIndexOfQuestion] = useState(0);
     const [userInputAnswer, setUserInputAsnwer] = useState("");
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
-    const [showResult, setShowResult] = useState(false);
     const [showAnswer, setShowAnswer] = useState(false);
     const studyCardId = qs.parse(props.location.search).id;
 
@@ -115,10 +116,6 @@ const StudyPage = props => {
             ) {
                 setIsAnswerCorrect(true);
                 recordResult();
-                const totalNumQuestions = studyCard.conceptCards.length;
-                if (indexOfQuestion === totalNumQuestions - 1) {
-                    setShowResult(true);
-                }
             }
         };
     };
@@ -129,7 +126,8 @@ const StudyPage = props => {
         setShowAnswer(false);
     };
 
-    const onClickIDontKnow = () => {
+    const onClickShowAnswer = () => {
+        recordResult(false);
         setShowAnswer(true);
     };
 
@@ -333,87 +331,91 @@ const StudyPage = props => {
         );
     };
 
+    const getCorrectAnswer = () => {
+        return studyCard.conceptCards[indexOfQuestion].term;
+    };
+
+    const renderWrittenQuestionButtons = () => {
+        const buttons = [];
+
+        const showAnswerBtn = (
+            <BigButton
+                svg={null}
+                text={"Show Answer"}
+                onClickHandler={onClickShowAnswer}
+                disabled={showAnswer}
+            />
+        );
+
+        const nextQuestionBtn = (
+            <BigButton
+                svg={null}
+                text={"Next Question"}
+                onClickHandler={onClickNextQuestion}
+                disabled={!showAnswer && !isAnswerCorrect}
+            />
+        );
+
+        const showScoreBtn = (
+            <BigButton
+                svg={null}
+                text={"Show Score"}
+                onClickHandler={onClickShowResult}
+                disabled={!showAnswer && !isAnswerCorrect}
+            />
+        );
+
+        buttons.push(showAnswerBtn);
+        const totalNumQuestions = studyCard.conceptCards.length
+        if (indexOfQuestion === totalNumQuestions - 1) {
+            buttons.push(showScoreBtn);
+        } else {
+            buttons.push(nextQuestionBtn);
+        }
+
+        return (
+            <div className="button-group">
+                {buttons}
+            </div>
+        );
+    };
+
+    const showWrittenQuestionAnswer = () => {
+        if (!showAnswer) {
+            return null;
+        }
+
+        return (
+            <div className={classes.answerCard}>
+                {getCorrectAnswer()}
+            </div>
+        );
+    };
+
     const showWrittenQuestion = () => {
         if (!studyCard.conceptCards) {
             return <div></div>;
         }
-        const conceptCard = studyCard.conceptCards[indexOfQuestion];
-        const correctAnswer = conceptCard.term;
         return (
-            <div>
+            <div className="written-questions">
                 {showDetailCard()}
+                {showWrittenQuestionAnswer()}
                 <div className={classes.answerFieldWrapper}>
-                    {showAnswer ? (
-                        <div className={classes.answer}>
-                            <Typography color="primary">
-                                Answer is: {correctAnswer}.
-                            </Typography>
-                        </div>
-                    ) : (
-                        ""
-                    )}
                     <TextField
-                        label={
-                            showAnswer
-                                ? '"' + correctAnswer + '" type it here'
-                                : "Type your answer"
-                        }
-                        error={showAnswer && !isAnswerCorrect}
                         value={userInputAnswer}
-                        onChange={userInputAnswerOnChange(correctAnswer)}
+                        onChange={userInputAnswerOnChange(getCorrectAnswer())}
                         margin="normal"
                         className={classes.textField + " answer-text-field"}
                         inputProps={{
                             autoComplete: "off"
                         }}
-                        disabled={isAnswerCorrect}
+                        disabled={(showAnswer && !isAnswerCorrect) || isAnswerCorrect}
                     />
-                    {isAnswerCorrect ? (
-                        <div className={classes.helperTextContainer}>
-                            <Typography
-                                component="span"
-                                className={classes.helperText}
-                                variant="subtitle1"
-                                color="primary"
-                            >
-                                CORRECT!
-                            </Typography>
-                            <div style={{ flexGrow: 1 }}></div>
-                            {!showResult ? (
-                                <Button
-                                    color="primary"
-                                    variant="outlined"
-                                    onClick={onClickNextQuestion}
-                                >
-                                    Next
-                                </Button>
-                            ) : (
-                                <Button
-                                    color="secondary"
-                                    variant="contained"
-                                    onClick={onClickShowResult}
-                                >
-                                    Show Result
-                                </Button>
-                            )}
-                        </div>
-                    ) : (
-                        ""
-                    )}
-                    <div className={classes.doNotKnowContainer}>
-                        {!isAnswerCorrect ? (
-                            <Typography
-                                component="span"
-                                className={classes.doNotKnow}
-                                onClick={onClickIDontKnow}
-                            >
-                                I don't know
-                            </Typography>
-                        ) : (
-                            ""
-                        )}
+                    <div className={classes.tickIconWrapper}>
+                        {isAnswerCorrect ? <DoneIcon color="inherit" /> : null}
                     </div>
                 </div>
+                {renderWrittenQuestionButtons()}
             </div>
         );
     };
