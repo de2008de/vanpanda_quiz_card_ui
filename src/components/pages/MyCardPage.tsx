@@ -13,7 +13,7 @@ import { StudyCard } from '../../types/cards'
 import { getAxioCancelTokenSource } from '../../helpers/general'
 import { doAuthentication } from '../../utils/auth'
 import { getMyStudyCard, renderStudyCards } from '../api/StudyCardsApiHelper'
-import { palette } from '../../theme/colorPalette'
+import { borders, palette } from '../../theme/colorPalette'
 
 interface Props {
     history: History<LocationState>,
@@ -37,6 +37,12 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         justifyContent: "center",
         margin: "1rem auto"
+    },
+    loadMoreBtn: {
+        background: "#fff",
+        color: "#000",
+        opacity: 0.87,
+        border: borders.default
     },
     circularProgressWrapper: {
         display: "flex",
@@ -124,9 +130,9 @@ const MyCardPage = (props: Props) => {
 
             return (
                 <Button
-                    color="primary"
-                    variant="contained"
+                    color="inherit"
                     size="large"
+                    className={classes.loadMoreBtn}
                     onClick={onClickLoadMoreHandler}
                     disabled={isLoading}
                 >
