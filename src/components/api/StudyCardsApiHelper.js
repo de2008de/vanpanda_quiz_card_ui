@@ -67,14 +67,13 @@ export const searchStudyCard = (keyword, pageNumber = 0) => {
         );
 };
 
-export const renderStudyCards = (aStudyCards, isEditMode = false, history = null) => {
+export const renderStudyCards = (aStudyCards, isEditMode = false) => {
     const aStudyCardComponents = [];
     aStudyCards.forEach(oStudyCard => {
         const cardComponent = (
             <StudyCard
                 key={oStudyCard.id}
                 id={oStudyCard.id}
-                history={history}
                 editMode={isEditMode}
                 title={oStudyCard.title}
                 description={oStudyCard.description}

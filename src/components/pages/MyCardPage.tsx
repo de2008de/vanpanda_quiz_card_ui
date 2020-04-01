@@ -184,7 +184,7 @@ const MyCardPage = (props: Props) => {
             <div className="cards">
 
                 <div className="content">
-                    {renderStudyCards(studyCards, true, props.history)}
+                    {renderStudyCards(studyCards, true)}
                 </div>
                 <div className={classes.loadMoreWrapper}>
                     {renderLoadMoreButton()}

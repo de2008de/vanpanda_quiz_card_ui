@@ -13,6 +13,7 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { History, LocationState } from 'history'
 import { borders } from "../../theme/colorPalette"
+import { useHistory } from "react-router-dom";
 
 import WCDialog from '../commons/WCDialog'
 import { removeStudyCardFromCollection } from '../api/StudyCardsApiHelper'
@@ -98,6 +99,7 @@ const StudyCard = (props: Props) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isRemoved, setIsRemoved] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const history: History = useHistory();
 
     const onClickOptionHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
 
@@ -154,13 +156,7 @@ const StudyCard = (props: Props) => {
     };
 
     const onCardClickHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-
-        if (!props.history) {
-            return;
-        }
-
-        props.history.push("/detail?id=" + props.id);
-
+        history.push("/detail?id=" + props.id);
     };
 
     const handleOptionMenuClose = () => {
