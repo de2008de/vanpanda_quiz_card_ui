@@ -32,7 +32,8 @@ const styles = {
     goTopButtonWrapper: {
         position: "fixed",
         bottom: "15%",
-        right: "5%"
+        right: "5%",
+        zIndex: 1000
     }
 };
 
