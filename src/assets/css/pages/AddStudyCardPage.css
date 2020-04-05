@@ -1,3 +1,38 @@
 .AddStudyCardPage .add-conceptcard-button:hover {
     background-color: #5D6C89;
 }
+
+.AddStudyCardPage .hint-text {
+    color: "#000";
+    opacity: 60%;
+    font-size: 2rem;
+    margin: 1rem;
+}
+
+.AddStudyCardPage .upload-btn {
+    flex-grow: 1;
+    background-position: center;
+    transition: background 0.8s;
+    color: #fff;
+    background: #3899ec;
+    width: 30%;
+}
+
+.AddStudyCardPage .upload-btn:hover {
+    background: #3899ec radial-gradient(circle, transparent 1%, #3899ec 1%) center/15000%;
+}
+
+.AddStudyCardPage .upload-btn:active {
+    background-color: #6cb6f1;
+    background-size: 100%;
+    transition: background 0s;
+}
+
+.AddStudyCardPage .or-text {
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.AddStudyCardPage .upload-file-area {
+    margin: auto 1rem;
+}

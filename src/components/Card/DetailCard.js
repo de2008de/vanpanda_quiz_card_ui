@@ -36,7 +36,8 @@ const useStyles = makeStyles(theme => ({
         fontFamily: theme.typography.fontFamily,
         padding: "0 1rem 0 0",
         color: "#000",
-        opacity: "87%"
+        opacity: "87%",
+        whiteSpace: "pre-wrap"
     },
     footer: {
         margin: "1rem 1rem 0 1rem",
@@ -102,6 +103,18 @@ const DetailCard = props => {
         }
     };
 
+    const renderImage = () => {
+        if (!props.img) {
+            return null;
+        }
+
+        return (
+            <div>
+                <img style={{width: "100%", height: "100%"}} src={props.img} referrerPolicy="no-referrer" alt="" />
+            </div>
+        );
+    };
+
     return (
         <div className={classes.card + " DetailCard"}>
             <div className={classes.content}>
@@ -109,6 +122,7 @@ const DetailCard = props => {
                     {props.term}
                 </div>
                 <div className={classes.definition}>
+                    {renderImage()}
                     {props.definition}
                 </div>
                 <div className={classes.buttonsContainer + " bookmark-icon"}>

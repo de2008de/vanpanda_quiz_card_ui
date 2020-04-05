@@ -17,6 +17,7 @@ import { CARD_LENGTH_LIMIT } from '../../resources/lengthLimit/CardLengthLimit'
 import { ConceptCard, StudyCard } from '../../types/cards'
 import { doAuthentication } from '../../utils/auth'
 import { palette, borders } from '../../theme/colorPalette'
+import { parseExcel } from "../../utils/excelUtil"
 import "../../assets/css/pages/AddStudyCardPage.css";
 
 const postStudyCardApi = "/api/v1/card/studycard";
@@ -43,8 +44,7 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         backgroundColor: palette.addStudyCardPage.titleInput.background,
-        width: "90%",
-        margin: "0.5rem auto",
+        margin: "auto 1rem",
         paddingBottom: "1rem",
         borderRadius: "5px",
         boxShadow: "0px 5px #e0e1e2",
@@ -357,8 +357,55 @@ const AddStudyCardPage = (props: Props) => {
             });
     };
 
+    const onSubmitFile = (event: any): void => {
+        event.preventDefault();
+        event.stopPropagation();
+        const input: HTMLInputElement = document.getElementById('myfile') as HTMLInputElement;
+        if (!input.files) {
+            return;
+        }
+        const file = input.files[0];
+        parseExcel(file).then((rows: any) => {
+            // assume term is col 0, and definition is col 1
+            // assume the first row is header, so skip
+            const conceptCards: ConceptCard[] = [];
+            for (let i = 1; i < rows.length; i++) {
+                const conceptCard: ConceptCard = {
+                    term: "",
+                    definition: "",
+                    img: null
+                };
+                conceptCard.term = rows[i][0];
+                conceptCard.definition = rows[i][1];
+
+                // assume image link is col 2
+                if (rows[i].length >= 3) {
+                    conceptCard.img = rows[i][2];
+                }
+                
+                conceptCards.push(conceptCard);
+            }
+            setInput(prevState => {
+                return {
+                    ...prevState,
+                    conceptCards: conceptCards
+                };
+            });
+        });
+    };
+
     return (
         <div className={"AddStudyCardPage"}>
+            <div className="hint-text">Upload an Excel file</div>
+            <div className="upload-file-area">
+                <form>
+                    <input type="file" name="myfile" id="myfile" onChange={onSubmitFile} />
+                </form>
+            </div>
+            <div className="or-text">
+                OR
+            </div>
+            <div className="hint-text">Fill in your cards</div>
             <form className={classes.form}>
                 <div className={classes.title}>
                     <TextField

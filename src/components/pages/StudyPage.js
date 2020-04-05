@@ -304,6 +304,7 @@ const StudyPage = props => {
                     boomarkOnClickCallback={boomarkOnClickCallback(
                         conceptCardId
                     )}
+                    img={conceptCard.img}
                 />
                 <Typography className={classes.indexIndicator}>
                     {indexOfQuestion + 1 + " of " + totalNumQuestions}

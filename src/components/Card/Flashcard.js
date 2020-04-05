@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
     cardBackContent: {
         position: "relative",
         overflow: "hidden",
-        boxSizing: "border-box"
+        boxSizing: "border-box",
+        height: "90%"
     },
     cardFront: {
         position: "absolute",
@@ -43,12 +44,26 @@ const useStyles = makeStyles(theme => ({
         height: "100%",
         color: "#000",
         opacity: "87%",
-        marginTop: "0.5rem"
+        marginTop: "0.5rem",
+        whiteSpace: "pre-wrap"
     }
 }));
 
 const Flashcard = props => {
     const classes = useStyles();
+
+    const renderImage = () => {
+        if (!props.img) {
+            return null;
+        }
+    
+        return (
+            <div>
+                <img style={{width: "100%", height: "100%"}} src={props.img} referrerPolicy="no-referrer" alt="" />
+            </div>
+        );
+    };
+
     return (
         <div className="card-scene" id={props.id}>
             <div
@@ -71,6 +86,7 @@ const Flashcard = props => {
                             <Typography color="inherit">DEFINITION</Typography>
                         </div>
                         <div className={classes.cardParagraph}>
+                            {renderImage()}
                             {props.definition}
                         </div>
                     </div>

@@ -189,6 +189,7 @@ const DetailPage = props => {
                     term={oConceptCard.term}
                     definition={oConceptCard.definition}
                     boomarkOnClickCallback={boomarkOnClickCallback(oConceptCard.id)}
+                    img={oConceptCard.img}
                 />
             );
             aDetailCards.push(oDetailCard);

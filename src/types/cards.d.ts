@@ -13,5 +13,6 @@ export type ConceptCard = {
     [index: string],
     id?: number,
     term: string,
-    definition: string
+    definition: string,
+    img?: string | null
 };

@@ -82,6 +82,7 @@ const FlashcardPage = props => {
                 id="flashcard"
                 term={studyCard.conceptCards ? studyCard.conceptCards[indexOfCard].term : ""}
                 definition={studyCard.conceptCards ? studyCard.conceptCards[indexOfCard].definition : ""}
+                img={studyCard.conceptCards ? studyCard.conceptCards[indexOfCard].img : null}
                 isFlipped={isFlipped}
                 onClickHandler={onClickCardHandler}
             />
