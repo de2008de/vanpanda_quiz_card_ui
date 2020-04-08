@@ -5,3 +5,7 @@
 .ProfilePage .button {
     flex-grow: 1;
 }
+
+.ProfilePage .button.sign-out {
+    background: #FEB06A;
+}

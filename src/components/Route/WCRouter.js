@@ -16,6 +16,7 @@ import FlashcardPage from "../pages/FlashcardPage";
 import ScoreResultPage from "../pages/ScoreResultPage";
 import SearchResultPage from "../search/SearchPage";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
+import ChangeUsernamePage from "../pages/ChangeUsernamePage";
 import { isToggleOn } from "../../configs/FeatureToggle";
 
 const WCRouter = () => {
@@ -40,6 +41,7 @@ const WCRouter = () => {
                 <Route path="/studyCard/flashcard" component={FlashcardPage} />
                 <Route path="/search" exact component={SearchResultPage} />
                 <Route path="/profile/change_password" exact component={ChangePasswordPage} />
+                <Route path="/profile/change_username" exact component={ChangeUsernamePage} />
                 <Redirect to="/mycard" />
             </Switch>
         </div>

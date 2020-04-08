@@ -6,6 +6,7 @@ import "../../assets/css/pages/ProfilePage.css";
 
 const ProfilePage = props => {
     const [isLogout, setIsLogout] = useState(false);
+    const history = props.history;
     useEffect(() => {
         doAuthentication(props.history);
     }, [isLogout, props.history]);
@@ -14,8 +15,10 @@ const ProfilePage = props => {
         setIsLogout(true);
     };
     const onClickChangePasswordHandler = () => {
-        const history = props.history;
         history.push("/profile/change_password");
+    };
+    const onChangeUsernameHandler = () => {
+        history.push("/profile/change_username");
     };
     return (
         <div className="ProfilePage">
@@ -31,8 +34,16 @@ const ProfilePage = props => {
                 />
                 <BigButton
                     svg={null}
-                    text="Sign out"
+                    text="Change Username"
                     className="button"
+                    onClickHandler={onChangeUsernameHandler}
+                />
+            </div>
+            <div className="button-group">
+                <BigButton
+                    svg={null}
+                    text="Sign out"
+                    className="button sign-out"
                     onClickHandler={onLogoutHandler}
                 />
             </div>
