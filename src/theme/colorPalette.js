@@ -1,7 +1,7 @@
 export const palette = {
     appBar: {
-        background: "#5D6C89",
-        text: "#fff"
+        background: "#fff",
+        text: "#000"
     },
     appFooter: {
         color: "#5D6C89"
