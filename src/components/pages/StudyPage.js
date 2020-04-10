@@ -67,8 +67,13 @@ const StudyPage = props => {
             setStudyCard(appContext.studyCard);
             return;
         }
+        const requestHeader = {
+            token: window.localStorage.getItem("token")
+        }
         axios
-            .get(ServerConfig.api.ip + sStudyCardApi + "/" + studyCardId)
+            .get(ServerConfig.api.ip + sStudyCardApi + "/" + studyCardId, {
+                headers: requestHeader
+            })
             .then(response => {
                 const studyCard = response.data.data;
                 setStudyCard(studyCard);
