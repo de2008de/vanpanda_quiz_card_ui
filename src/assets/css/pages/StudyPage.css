@@ -1,0 +1,82 @@
+.StudyPage .DetailCard {
+    margin: 0.5rem;
+}
+
+.StudyPage .answer-text-field {
+    margin-top: 0;
+}
+
+@keyframes card-question-enter {
+    0% {
+        opacity: 0;
+        transform: translateY(-100);
+    }
+    100% {
+        transform: translateY(0) ;
+        opacity: 1;
+    }
+}
+
+.StudyPage .DetailCard {
+    animation-duration: 1s;
+    animation-name: card-question-enter;
+}
+
+.StudyPage .multiple-choices-area {
+    animation-duration: 1s;
+    animation-name: card-question-enter;
+}
+
+@keyframes heart-beat {
+    0% {
+        transform: scale(0.9);
+    }
+    60% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.StudyPage .bookmark-icon {
+    animation-name: heart-beat;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 2s;
+    animation-iteration-count: 2;
+}
+
+.StudyPage .choice-wrapper {
+    background-color: #fff;
+    margin: 1rem 0.5rem;
+    padding: 1.5rem 1rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 2rem;
+    flex-grow: 1;
+    box-shadow: 0 5px 10px #e0e1e2;
+}
+
+.StudyPage .choice-text {
+    text-align: center;
+    color: #000;
+    opacity: 87%;
+}
+
+.StudyPage .hint-text {
+    margin: 0.5rem 0.5rem;
+    text-align: center;
+    color: #000;
+    opacity: 87%;
+}
+
+.StudyPage .written-questions .button-group {
+    display: flex;
+}
+
+.StudyPage .written-questions .button-group .BigButton {
+    flex-grow: 1;
+}

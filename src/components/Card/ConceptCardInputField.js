@@ -1,18 +1,21 @@
-import React from "react";
-import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
-import { Typography } from "@material-ui/core";
+import Card from "@material-ui/core/Card";
 import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import DeleteIcon from '@material-ui/icons/Delete';
+import React from "react";
 import { CARD_LENGTH_LIMIT } from "../../resources/lengthLimit/CardLengthLimit";
+import { palette, borders } from "../../theme/colorPalette";
 
 const useStyles = makeStyles(theme => ({
     conceptCardInput: {
         margin: "1rem 1rem",
         padding: "1rem",
-        borderRadius: "1rem 0.1rem 1rem 0.3rem",
         position: "relative",
-        border: "solid " + theme.palette.primary.light
+        boxShadow: "0 5px #e0e1e2",
+        backgroundColor: palette.addStudyCardPage.conceptCardInput.background,
+        color: palette.addStudyCardPage.conceptCardInput.text,
+        border: borders.default
     },
     textField: {
         marginLeft: theme.spacing(1),
@@ -21,12 +24,13 @@ const useStyles = makeStyles(theme => ({
         width: "auto"
     },
     deleteButton: {
-        color: theme.palette.secondary.main,
-        textDecoration: "underline"
+        color: palette.addStudyCardPage.conceptCardInput.text
     },
     conceptCardHeader: {
         display: "flex",
-        flexWrap: "wrap"
+        flexWrap: "wrap",
+        fontSize: "1.5rem",
+        fontWeight: "bold"
     }
 }));
 
@@ -35,25 +39,23 @@ const ConceptCardInputField = props => {
     return (
         <Card className={classes.conceptCardInput}>
             <div className={classes.conceptCardHeader}>
-                <Typography
-                    variant="overline"
-                >
+                <div>
                     Concept Card
-                </Typography>
+                </div>
                 <div style={{ flexGrow: "1" }}>
                 </div>
-                <Typography
-                    variant="overline"
+                <div
                     className={classes.deleteButton}
                     onClick={props.onDeleteHandler(props.index)}
                 >
-                    delete
-                </Typography>
+                    <DeleteIcon />
+                </div>
             </div>
             <Box
                 component="div"
             >
                 <TextField
+                    required
                     label="Term"
                     className={classes.textField}
                     value={props.input.conceptCards[props.index].term}
@@ -68,6 +70,7 @@ const ConceptCardInputField = props => {
                     }}
                 />
                 <TextField
+                    required
                     multiline
                     label="Definition"
                     className={classes.textField}

@@ -1,0 +1,41 @@
+.StudyPageResult .score-card {
+    background: #fff;
+    margin: 0.5rem;
+    padding: 1rem;
+}
+
+.StudyPageResult .score-card .score-card-text {
+    text-align: center;
+    color: #000;
+    opacity: 87%;
+}
+
+.StudyPageResult .score-card .score-card-score {
+    font-size: 3rem;
+}
+
+.StudyPageResult .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.StudyPageResult .button {
+    flex-grow: 1;
+}
+
+@keyframes card-enter {
+    0% {
+        opacity: 0;
+        transform: translateY(-100);
+    }
+    100% {
+        transform: translateY(0) ;
+        opacity: 1;
+    }
+}
+
+.StudyPageResult .detailcard-container {
+    animation-duration: 1s;
+    animation-name: card-question-enter;
+}

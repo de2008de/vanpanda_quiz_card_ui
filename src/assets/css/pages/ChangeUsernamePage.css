@@ -1,0 +1,29 @@
+.ChangeUsernamePage .button-group .button {
+    flex-grow: 1;
+    background-position: center;
+    transition: background 0.8s;
+    color: #fff;
+    background: #3899ec;
+}
+
+.ChangeUsernamePage .button-group .button:hover {
+    background: #3899ec radial-gradient(circle, transparent 1%, #3899ec 1%) center/15000%;
+}
+
+.ChangeUsernamePage .button-group .button:active {
+    background-color: #6cb6f1;
+    background-size: 100%;
+    transition: background 0s;
+}
+
+.ChangeUsernamePage .loader-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ChangeUsernamePage .done-icon {
+    color: #00E676;
+    display: flex;
+    justify-content: center;
+}

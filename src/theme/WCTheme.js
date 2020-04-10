@@ -7,21 +7,15 @@ const WCTheme = createMuiTheme({
     },
     palette: {
         primary: {
-            light: "#def3f3",
-            main: "#1cb9b6",
-            dark: "#009a93",
+            light: "#58a5f0",
+            main: "#0277bd",
+            dark: "#004c8c",
             contrastText: "#fff"
         },
         secondary: {
-            light: "#ffebee",
-            main: "#b91c1f",
-            dark: "#a30f13",
-            contrastText: "#fff"
-        },
-        error: {
-            light: "#fc3f5f",
-            main: "#f40045",
-            dark: "#d50036",
+            light: "#4aaca3",
+            main: "#017c74",
+            dark: "#004f49",
             contrastText: "#fff"
         }
     },

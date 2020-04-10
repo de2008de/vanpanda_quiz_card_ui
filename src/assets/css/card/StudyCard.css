@@ -1,19 +1,62 @@
-.StudyCard .remove-button {
-    perspective: 600px;
-    animation: appear 1s forwards;
+.StudyCard.default {
+    color: #000;
+    background: #fff;
+    box-shadow: none;
 }
 
-@keyframes appear {
-    0% {
-        transform: rotate3d(0,0,1,15deg) translate3d(0,-100vh,0);
-    }
-    30% {
-        transform: rotate3d(0,0,0,0deg) translate3d(0,0,0);
-    }
-    65% {
-        transform: rotate3d(0,0,0,0deg) translate3d(0,0,0) scale3d(1,1,1);
-    }
-    80% {
-        transform: rotate3d(0,0,1,-5deg) scale3d(1.05,1.05,1);
+.StudyCard.default .halfCircle {
+    background: linear-gradient(315deg, #f8f8ff 0%, #f0fbff 90%);
+}
+
+.StudyCard.blue {
+    color: #fff;
+    background: linear-gradient(315deg, #7EA0EE 0%, #86BBEE 74%);
+    box-shadow: 0px 0px 10px 0px #B7D2F5;
+}
+
+.StudyCard.blue .halfCircle {
+    background: linear-gradient(315deg, #7E9CF1 0%, #89B9F3 40%);
+}
+
+.StudyCard.orange {
+    color: #fff;
+    background: linear-gradient(315deg, #F0A15E 0%, #F4B065 74%);
+    box-shadow: 0px 0px 10px 0px #FDD3AD;
+}
+
+.StudyCard.orange .halfCircle {
+    background: linear-gradient(315deg, #ECA568 0%, #F5B068 40%);
+}
+
+.StudyCard.red {
+    color: #fff;
+    background: linear-gradient(315deg, #EA5976 0%, #EF6793 74%);
+    box-shadow: 0px 0px 10px 0px #FCBDCC;
+}
+
+.StudyCard.red .halfCircle {
+    background: linear-gradient(315deg, #E56375 0%, #EF6A8F 40%);
+}
+
+.StudyCard .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    opacity: 60%;
+}
+
+.StudyCard .author {
+    opacity: 60%;
+}
+
+.StudyCard .conceptcard-text {
+    font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 375px) {
+    .StudyCard .conceptcard-text {
+        font-size: 1rem;
     }
 }

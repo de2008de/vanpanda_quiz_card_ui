@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import AppShell from "./components/AppShell/AppShell";
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import { ThemeProvider } from '@material-ui/core/styles';
 import WCTheme from "./theme/WCTheme";
 import { BrowserRouter } from "react-router-dom";
 import { AppContext } from "./components/context/AppContext";
@@ -17,11 +17,11 @@ function App() {
     return (
         <div className="App">
             <AppContext.Provider value={appContextValue}>
-                <MuiThemeProvider theme={WCTheme}>
+                <ThemeProvider theme={WCTheme}>
                     <BrowserRouter>
                         <AppShell />
                     </BrowserRouter>
-                </MuiThemeProvider>
+                </ThemeProvider>
             </AppContext.Provider>
         </div>
     );

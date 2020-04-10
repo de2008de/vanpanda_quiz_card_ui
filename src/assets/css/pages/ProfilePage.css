@@ -1,0 +1,11 @@
+.ProfilePage .button-group {
+    display: flex;
+}
+
+.ProfilePage .button {
+    flex-grow: 1;
+}
+
+.ProfilePage .button.sign-out {
+    background: #FEB06A;
+}

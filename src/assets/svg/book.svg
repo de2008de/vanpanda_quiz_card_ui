@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
@@ -21,7 +22,35 @@
    id="metadata47"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
-   id="defs45" /><sodipodi:namedview
+   id="defs45">
+   <linearGradient
+   id="linearGradient6276">
+  <stop
+   id="stop6270"
+   stop-color="#f9a86d"
+   offset="0"
+   style="stop-color:#5d6c89;stop-opacity:0.9952153" />
+  <stop
+   style="stop-color:#3c6cc7;stop-opacity:1"
+   id="stop6272"
+   stop-color="#f05361"
+   offset=".503" />
+  <stop
+   id="stop6274"
+   stop-color="#b72563"
+   offset="1"
+   style="stop-color:#5dbcc8;stop-opacity:1" />
+   </linearGradient>
+   <linearGradient
+   inkscape:collect="always"
+   xlink:href="#linearGradient6276"
+   id="linearGradient841"
+   x1="7"
+   y1="30"
+   x2="53"
+   y2="30"
+   gradientUnits="userSpaceOnUse" /></defs>
+   <sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -30,42 +59,42 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1920"
-   inkscape:window-height="1001"
+   inkscape:window-width="2400"
+   inkscape:window-height="1271"
    id="namedview43"
    showgrid="false"
    inkscape:zoom="3.9333333"
-   inkscape:cx="30"
+   inkscape:cx="-12.838983"
    inkscape:cy="30"
-   inkscape:window-x="-9"
+   inkscape:window-x="2391"
    inkscape:window-y="-9"
    inkscape:window-maximized="1"
    inkscape:current-layer="Capa_1" />
 <g
    id="g10"
-   style="fill:#1cb9b6;fill-opacity:1">
+   style="fill:url(#linearGradient841);fill-opacity:1.0">
 	<path
    d="M17,0H7v60h10h36V0H17z M9,58V2h6v56H9z M51,58H17V2h34V58z"
    id="path2"
-   style="fill:#1cb9b6;fill-opacity:1" />
+   style="fill:url(#linearGradient841);fill-opacity:1.0" />
 	<path
    d="M46,24V10H22v14H46z M24,12h20v10H24V12z"
    id="path4"
-   style="fill:#1cb9b6;fill-opacity:1" />
+   style="fill:url(#linearGradient841);fill-opacity:1.0" />
 	<rect
    x="27"
    y="14"
    width="14"
    height="2"
    id="rect6"
-   style="fill:#1cb9b6;fill-opacity:1" />
+   style="fill:url(#linearGradient841);fill-opacity:1.0" />
 	<rect
    x="27"
    y="18"
    width="14"
    height="2"
    id="rect8"
-   style="fill:#1cb9b6;fill-opacity:1" />
+   style="fill:url(#linearGradient841);fill-opacity:1.0" />
 </g>
 <g
    id="g12">

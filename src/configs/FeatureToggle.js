@@ -1,5 +1,5 @@
 const toggles = {
-    HOME_FEATURE_ICONS: false
+    CREDIT_PURCHASE_FEATURE: false
 };
 
 export const isToggleOn = name => {

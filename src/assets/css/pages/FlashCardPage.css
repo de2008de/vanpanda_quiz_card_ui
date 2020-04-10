@@ -1,0 +1,21 @@
+.FlashCardPage .button-group {
+    margin: 0.5rem 2rem 2rem 2rem;
+    display: flex;
+    flex-wrap: wrap
+}
+
+.FlashCardPage .button-group .button {
+    flex-grow: 1;
+    background-position: center;
+    transition: background 0.8s;
+}
+
+.FlashCardPage .button-group .button:hover {
+    background: #fff radial-gradient(circle, transparent 1%, #FAFAFA 1%) center/15000%;
+}
+
+.FlashCardPage .button-group .button:active {
+    background-color: #FAFAFA;
+    background-size: 100%;
+    transition: background 0s;
+}

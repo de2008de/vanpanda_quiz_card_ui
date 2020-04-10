@@ -4,24 +4,32 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
     card: {
-        borderStyle: "dashed",
-        borderColor: "#bab4b2",
-        borderWidth: "2px",
+        // borderStyle: "dashed",
+        // borderColor: "#bab4b2",
+        // borderWidth: "2px",
+        background: "#fff",
+        // background: "linear-gradient(to right, #ffffff 0%, #ffcc99 100%)",
         width: "6rem",
+        padding: "0 0.5rem",
         height: "4rem",
         textAlign: "left",
         lineHeight: "0.8rem",
-        fontSize: "0.8rem",
-        fontWeight: "bold",
-        color: theme.palette.text.secondary,
-        backgroundColor: "inherit",
-        padding: "0.5rem",
+        fontSize: "1rem",
+        // fontWeight: "bold",
+        color: "inherit",
+        // backgroundColor: "inherit",
+        // padding: "0.5rem",
         margin: "0.2rem",
-        display: "inline-flex"
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center"
     },
     text: {
+        lineHeight: "2rem",
+        whiteSpace: "nowrap",
         textOverflow: "ellipsis",
-        overflow: "hidden"
+        overflow: "hidden",
+        opacity: "60%"
     }
 }));
 
