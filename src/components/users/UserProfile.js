@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     },
     fieldHead: {
         color: "#000",
-        opacity: "67%",
+        opacity: 0.67,
         display: "flex",
         alignItems: "center"
     },

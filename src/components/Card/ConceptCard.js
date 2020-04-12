@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
         overflow: "hidden",
-        opacity: "60%"
+        opacity: 0.6
     }
 }));
 

@@ -44,11 +44,11 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2; /* number of lines to show */
-    opacity: 60%;
+    opacity: 0.6;
 }
 
 .StudyCard .author {
-    opacity: 60%;
+    opacity: 0.6;
 }
 
 .StudyCard .conceptcard-text {

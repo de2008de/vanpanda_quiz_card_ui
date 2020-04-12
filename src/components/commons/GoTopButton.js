@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
         padding: "0.5rem",
         borderRadius: "20%",
         color: "#000",
-        opacity: "87%",
+        opacity: 0.87,
         border: borders.default
     }
 }));

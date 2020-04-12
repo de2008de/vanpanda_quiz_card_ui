@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         color: "#000",
-        opacity: "87%",
+        opacity: 0.87,
         fontSize: "1.5rem"
     },
     descriptionContainer: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     },
     description: {
         color: "#000",
-        opacity: "60%"
+        opacity: 0.6
     },
     bookIconConatiner: {
         position: "absolute",
@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
     infoContainer: {
         margin: "0.5rem 0",
         color: "#000",
-        opacity: "60%"
+        opacity: 0.6
     },
     iconTextContainer: {
         display: "flex",

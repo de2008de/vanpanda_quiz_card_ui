@@ -30,13 +30,13 @@ const useStyles = makeStyles(theme => ({
         width: "90%",
         color: "#000",
         fontSize: "1.2rem",
-        opacity: "87%"
+        opacity: 0.87
     },
     definition: {
         fontFamily: theme.typography.fontFamily,
         padding: "0 1rem 0 0",
         color: "#000",
-        opacity: "87%",
+        opacity: 0.87,
         whiteSpace: "pre-wrap"
     },
     footer: {
