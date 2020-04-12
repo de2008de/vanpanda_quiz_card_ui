@@ -9,6 +9,7 @@ import { Link, useHistory } from "react-router-dom";
 import "../../assets/css/AppShell/WCAppBar.css";
 import { palette } from "../../theme/colorPalette";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { isToggleOn } from "../../configs/FeatureToggle";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,6 +50,19 @@ const WCAppBar = props => {
         history.goBack();
     };
 
+    const renderSearchIcon = () => {
+        if (!isToggleOn("SEARCH")) {
+            return null;
+        }
+        return (
+            <Link to="/search">
+                <IconButton className={classes.menuButton} color="inherit">
+                    <SearchIcon />
+                </IconButton>
+            </Link>
+        );
+    };
+
     return (
         <div className={classes.root + " WCAppBar"}>
             <div>
@@ -63,11 +77,7 @@ const WCAppBar = props => {
                             Quiz Card
                         </Box>
                     </Typography>
-                    <Link to="/search">
-                        <IconButton className={classes.menuButton} color="inherit">
-                            <SearchIcon />
-                        </IconButton>
-                    </Link>
+                    {renderSearchIcon()}
                 </Toolbar>
             </div>
         </div>
