@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     },
     cardTitle: {
         color: "#000",
-        opacity: "60%"
+        opacity: 0.6
     },
     cardBack: {
         transform: "rotateY(180deg)"
@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
         overflowY: "auto",
         height: "100%",
         color: "#000",
-        opacity: "87%",
+        opacity: 0.87,
         marginTop: "0.5rem",
         whiteSpace: "pre-wrap"
     }
