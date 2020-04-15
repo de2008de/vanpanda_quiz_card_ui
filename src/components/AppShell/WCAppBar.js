@@ -51,14 +51,21 @@ const WCAppBar = props => {
     };
 
     const renderSearchIcon = () => {
+        const searchIcon = (
+            <IconButton className={classes.menuButton} color="inherit">
+                    <SearchIcon />
+            </IconButton>
+        );
         if (!isToggleOn("SEARCH")) {
-            return null;
+            return (
+                <div style={{opacity: 0}}>
+                    {searchIcon}
+                </div>
+            );
         }
         return (
             <Link to="/search">
-                <IconButton className={classes.menuButton} color="inherit">
-                    <SearchIcon />
-                </IconButton>
+                {searchIcon}
             </Link>
         );
     };
