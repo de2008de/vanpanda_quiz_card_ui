@@ -7,8 +7,6 @@ const useStyles = makeStyles(theme => ({
     flashCard: {
         border: borders.default,
         borderRadius: "2rem",
-        width: "100%",
-        height: "100%",
         overflow: "hidden"
     },
     cardTitle: {
@@ -26,7 +24,6 @@ const useStyles = makeStyles(theme => ({
         position: "relative",
         overflow: "hidden",
         boxSizing: "border-box",
-        height: "90%"
     },
     cardFront: {
         position: "absolute",
@@ -36,12 +33,11 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center"
     },
     cardFrontContent: {
-        height: "90%",
         overflow: "hidden"
     },
     cardParagraph: {
         overflowY: "auto",
-        height: "100%",
+        height: "50vh",
         color: "#000",
         opacity: 0.87,
         marginTop: "0.5rem",

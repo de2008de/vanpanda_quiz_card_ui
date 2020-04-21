@@ -41,10 +41,7 @@
     position: relative;
     transform-style: preserve-3d;
     transform: rotateY(180deg);
-    margin: 0.5rem auto;
-    height: 50vh;
-    width: 90%;
-    max-width: 500px;
+    margin: 0.5rem 1rem;
 }
 
 .FlashcardContainer.card-flipped {
