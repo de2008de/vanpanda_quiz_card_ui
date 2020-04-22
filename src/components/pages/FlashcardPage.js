@@ -22,7 +22,6 @@ const FlashcardPage = props => {
     const { appContext } = useContext(AppContext);
     const [studyCard, setStudyCard] = useState({});
     const [indexOfCard, setIndexOfCard] = useState(0);
-    const [isFlipped, setIsFlipped] = useState(props.isFlipped);
     const studyCardId = qs.parse(props.location.search).id;
 
     useEffect(() => {
@@ -31,24 +30,19 @@ const FlashcardPage = props => {
             setStudyCard(appContext.studyCard);
             return;
         }
+        const headers = {
+            token: window.localStorage.getItem("token")
+        };
         axios
-            .get(ServerConfig.api.ip + sStudyCardApi + "/" + studyCardId)
+            .get(ServerConfig.api.ip + sStudyCardApi + "/" + studyCardId, {
+                headers: headers
+            })
             .then(response => {
                 const studyCard = response.data.data;
                 setStudyCard(studyCard);
             })
             .catch(() => { });
     }, [appContext, studyCardId]);
-
-    const runNewCardAppearAnimation = () => {
-        if (document.getElementById("flashcard").classList.contains("card-scene")) {
-            document.getElementById("flashcard").classList.remove("card-scene");
-            document.getElementById("flashcard").classList.add("card-scene2");
-        } else {
-            document.getElementById("flashcard").classList.remove("card-scene2");
-            document.getElementById("flashcard").classList.add("card-scene");
-        }
-    };
 
     const onClickNext = () => {
         const maxNumberOfCards = studyCard.conceptCards.length;
@@ -57,8 +51,6 @@ const FlashcardPage = props => {
         } else {
             setIndexOfCard(indexOfCard + 1);
         }
-        runNewCardAppearAnimation();
-        setIsFlipped(false);
     }
 
     const onClickPrevious = () => {
@@ -68,23 +60,16 @@ const FlashcardPage = props => {
         } else {
             setIndexOfCard(indexOfCard - 1);
         }
-        runNewCardAppearAnimation();
-        setIsFlipped(false);
-    }
-
-    const onClickCardHandler = () => {
-        setIsFlipped(!isFlipped);
     }
 
     return (
         <div className="FlashCardPage">
             <Flashcard
                 id="flashcard"
+                key={indexOfCard}
                 term={studyCard.conceptCards ? studyCard.conceptCards[indexOfCard].term : ""}
                 definition={studyCard.conceptCards ? studyCard.conceptCards[indexOfCard].definition : ""}
                 img={studyCard.conceptCards ? studyCard.conceptCards[indexOfCard].img : null}
-                isFlipped={isFlipped}
-                onClickHandler={onClickCardHandler}
             />
             <div className={classes.cardNumberIndicator}>
                 <Typography variant="subtitle1">{(indexOfCard + 1) + " of " + (studyCard.conceptCards && studyCard.conceptCards.length)}</Typography>
