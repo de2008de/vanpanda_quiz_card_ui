@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
 import { borders } from "../../theme/colorPalette";
 import "../../assets/css/card/Flashcard.css";
@@ -13,28 +13,12 @@ const useStyles = makeStyles(theme => ({
         color: "#000",
         opacity: 0.6
     },
-    cardBack: {
-        transform: "rotateY(180deg)"
-    },
     cardContent: {
         padding: "1rem",
-        backgroundColor: "#fff"
-    },
-    cardBackContent: {
+        backgroundColor: "#fff",
         position: "relative",
         overflow: "hidden",
         boxSizing: "border-box",
-    },
-    cardFront: {
-        position: "absolute",
-        width: "100%",
-        top: 0,
-        left: 0,
-        display: "flex",
-        alignItems: "center"
-    },
-    cardFrontContent: {
-        overflow: "hidden"
     },
     cardParagraph: {
         overflowY: "auto",
@@ -48,47 +32,72 @@ const useStyles = makeStyles(theme => ({
 
 const Flashcard = props => {
     const classes = useStyles();
+    const [isFrontSide, setIsFrontSide] = useState(true);
 
     const renderImage = () => {
         if (!props.img) {
             return null;
         }
-    
+
         return (
             <div>
-                <img style={{width: "100%", height: "100%"}} src={props.img} referrerPolicy="no-referrer" alt="" />
+                <img style={{ width: "100%", height: "100%" }} src={props.img} referrerPolicy="no-referrer" alt="" />
             </div>
         );
     };
 
+    const renderContent = () => {
+        if (isFrontSide) {
+            return (
+                <div
+                    key="front"
+                    className={"FlashcardContainer"}
+                    onClick={onClickHandler}
+                >
+                    <div className={classes.flashCard + " card-face"}>
+                        <div className={classes.cardContent}>
+                            <div className={classes.cardTitle}>
+                                <Typography color="inherit">TERM</Typography>
+                            </div>
+                            <div className={classes.cardParagraph}>
+                                {props.term}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <div
+                    key="back"
+                    className={"FlashcardContainer"}
+                    onClick={onClickHandler}
+                >
+                    <div className={classes.flashCard + " card-face"}>
+                        <div className={classes.cardContent}>
+                            <div className={classes.cardTitle}>
+                                <Typography color="inherit">DEFINITION</Typography>
+                            </div>
+                            <div className={classes.cardParagraph}>
+                                {renderImage()}
+                                {props.definition}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    };
+
+    const onClickHandler = () => {
+        setIsFrontSide(prevState => {
+            return !prevState;
+        });
+    };
+
     return (
         <div className="card-scene" id={props.id}>
-            <div
-                className={"FlashcardContainer " + (props.isFlipped ? "card-flipped" : "card-unflipped")}
-                onClick={props.onClickHandler}
-            >
-                <div className={classes.flashCard + " " + classes.cardBack + " card-face"}>
-                    <div className={classes.cardContent + " " + classes.cardBackContent}>
-                        <div className={classes.cardTitle}>
-                            <Typography color="inherit">TERM</Typography>
-                        </div>
-                        <div className={classes.cardParagraph}>
-                            {props.term}
-                        </div>
-                    </div>
-                </div>
-                <div className={classes.flashCard + " " + classes.cardFront + " card-face"}>
-                    <div className={classes.cardContent + " " + classes.cardFrontContent}>
-                        <div className={classes.cardTitle}>
-                            <Typography color="inherit">DEFINITION</Typography>
-                        </div>
-                        <div className={classes.cardParagraph}>
-                            {renderImage()}
-                            {props.definition}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {renderContent()}
         </div>
     );
 }
